@@ -1,0 +1,36 @@
+// ==== TeamPage.css ====
+.team-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.team-card h5 {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.team-card small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+@media (max-width: 576px) {
+  .team-card {
+    padding: 1rem;
+  }
+
+  .team-card img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}

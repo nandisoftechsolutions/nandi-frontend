@@ -1,0 +1,131 @@
+/* AdminDashboard.css - Modernized */
+
+/* Wrapper & Layout */
+.dash-wrapper {
+  background-color: #f5f8fc;
+  min-height: 100vh;
+}
+
+.dash-container {
+  display: flex;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+}
+
+.dash-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Sidebar */
+.dash-sidebar {
+  width: 250px;
+  background: #1c2734;
+  color: #ecf0f1;
+  min-height: 100%;
+}
+
+.dash-profile img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #3498db;
+}
+
+.dash-profile h5 {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.dash-link {
+  color: #ecf0f1;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.dash-link:hover,
+.dash-link.active {
+  background: #3498db;
+  color: #ffffff;
+}
+
+.dash-link i {
+  margin-right: 10px;
+}
+
+/* Main Content */
+.dash-main {
+  padding: 2rem;
+  background: #fafcff;
+  flex-grow: 1;
+}
+
+.dash-stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+}
+
+.dash-stat-card:hover {
+  background: #3498db;
+  color: #ffffff;
+  transform: translateY(-5px);
+}
+
+.dash-stat-card i {
+  font-size: 2.5rem;
+  color: #3498db;
+  transition: color 0.3s;
+}
+
+.dash-stat-card:hover i {
+  color: #ffffff;
+}
+
+.dash-stat-card h6 {
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.dash-stat-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0 0;
+}
+
+/* Button Styling */
+.btn-outline-dark {
+  border-color: #ccc;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-dark:hover {
+  background: #3498db;
+  color: #fff;
+  border-color: #3498db;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dash-container {
+    flex-direction: column;
+  }
+
+  .dash-sidebar {
+    width: 100%;
+  }
+
+  .dash-main {
+    padding: 1rem;
+  }
+}

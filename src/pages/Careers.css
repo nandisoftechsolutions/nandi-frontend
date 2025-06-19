@@ -1,0 +1,87 @@
+/* Careers Page Styling */
+.careers-page {
+  background-color: #f8f9fa;
+}
+
+.careers-page h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.careers-page p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.card-text {
+  font-size: 0.95rem;
+}
+
+.card .btn {
+  border-radius: 20px;
+}
+
+/* Application Form Styling */
+.application-form {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.application-form label {
+  font-weight: 500;
+}
+
+.application-form input[type="text"],
+.application-form input[type="email"],
+.application-form input[type="tel"],
+.application-form input[type="file"] {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  font-size: 0.95rem;
+}
+
+.application-form input[type="file"] {
+  padding: 6px 10px;
+}
+
+.application-form button {
+  border-radius: 30px;
+  font-weight: 600;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+.alert {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Responsive Text Centering for Smaller Screens */
+@media (max-width: 576px) {
+  .careers-page h1 {
+    font-size: 2rem;
+  }
+
+  .application-form {
+    padding: 1rem;
+  }
+}

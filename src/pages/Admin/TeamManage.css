@@ -1,0 +1,73 @@
+/* TeamManage.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body h5 {
+  font-weight: 600;
+  color: #333;
+}
+
+.card-body p {
+  margin: 0;
+  color: #6c757d;
+}
+
+.card-body small {
+  display: block;
+  color: #999;
+  margin-top: 5px;
+}
+
+input.form-control,
+select.form-select {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.btn {
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+label {
+  font-weight: 500;
+}
+
+.card img {
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card img:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 768px) {
+  .card-body h5 {
+    font-size: 16px;
+  }
+
+  .card-body p,
+  .card-body small {
+    font-size: 13px;
+  }
+
+  .team-card {
+    padding: 1rem;
+  }
+}

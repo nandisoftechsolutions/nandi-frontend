@@ -1,0 +1,87 @@
+/* Full-page background wrapper */
+.admin-login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Glass effect card for the form */
+.admin-login-form {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 40px 35px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333;
+  text-align: center;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Heading */
+.admin-login-form h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Input fields */
+.admin-login-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-login-form input:focus {
+  border-color: #ff4081;
+  box-shadow: 0 0 8px rgba(255, 64, 129, 0.3);
+  outline: none;
+}
+
+/* Button styles */
+.admin-login-form button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-login-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(120, 115, 245, 0.4);
+}
+
+/* Error message */
+.admin-error-msg {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}

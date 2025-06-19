@@ -1,0 +1,36 @@
+.services-container {
+ 
+  background-color:rgba(166, 166, 166, 0.42);
+  
+}
+
+.services-heading {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #333;
+  border-bottom: 3px solid #007bff;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.service-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border:0.1px solid #000;
+}
+
+.service-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background-color: #f0f9ff;
+  box-shadow: 0 12px 24px rgba(0, 123, 255, 0.2);
+}
+
+.service-icon {
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .service-card {
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+}

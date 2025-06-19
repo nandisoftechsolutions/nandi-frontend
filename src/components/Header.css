@@ -1,0 +1,65 @@
+/* Initial Header Style */
+.tops-info-bar {
+  background-color:rgb(55, 68, 69);
+  transition: all 0.6s ease;
+  color:rgba(246, 242, 242, 0.84);
+}
+
+.admi{
+  content:center;
+ 
+  
+  gap:10%;
+}
+
+
+
+/* Initially, navbar below the header */
+.navbar {
+  background-color: transparent;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: none;
+  margin-top: 30px; /* Add some space below the header */
+}
+
+.navbar-shadow {
+  box-shadow: 0 4px 10px rgb(231, 222, 222);
+}
+
+.card-scrolled {
+  background-color: white !important;
+}
+
+.navbar .nav-link {
+  font-weight: bold;
+  color:rgb(223, 236, 236);
+}
+
+.navbar .nav-link.active {
+  color: #f39c12;
+}
+
+/* Hide the header on scroll */
+.tops-hide {
+  display: none;
+}
+
+/* Fixed navbar after scroll */
+.navbar.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050; /* Keep the navbar above other elements */
+}
+/* Ensure the header has no top margin */
+
+
+/* Other styles for the header */
+.top-info-bar .container-fluid {
+  padding-top: 0 !important; /* Remove padding on the container */
+}
+
+
+
