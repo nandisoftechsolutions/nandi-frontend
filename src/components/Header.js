@@ -6,8 +6,9 @@ const Header = () => {
   return (
     <div className="tops-info-bar" id="topInfoBar">
      
-      <div className="containers-fluid d-flex justify-content-between align-items-center ">
-        {/* Left Info */}
+      <div className="container-fluid d-flex justify-content-between align-items-center">
+
+       
         <div className="admi d-flex align-items-center gap-3 left-info">
           <i className="info bi bi-geo-alt-fill"></i>
           <span >Vijayapura - 586101</span>
@@ -16,7 +17,7 @@ const Header = () => {
           <a href="/Adminlogin" className="admi btn btn-outline-danger btn-sm "><RiAdminFill/>Admin</a>
         </div>
 
-        {/* Right Icons and Quote Button */}
+       
         <div className="d-flex align-items-center gap-3 right-icons mt-2 mt-sm-0">
           <a href="https://facebook.com" target="_blank" rel="noreferrer"><i className="bi bi-facebook"></i></a>
           <a href="https://twitter.com" target="_blank" rel="noreferrer"><i className="bi bi-twitter-x"></i></a>

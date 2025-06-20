@@ -1,10 +1,8 @@
-// File: ProjectManager.js
-
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminNavbar from './Components/AdminNavbar';
-import './ProjectManager.css'; // Make sure this file exists
+import './ProjectManager.css';
 
 const ProjectManager = () => {
   const [projects, setProjects] = useState([]);

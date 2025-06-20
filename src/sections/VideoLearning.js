@@ -7,7 +7,7 @@ function VideoLearning() {
   const [videos, setVideos] = useState([]);
   const [username, setUsername] = useState(localStorage.getItem('username'));
   const navigate = useNavigate();
-  const scrollRef = useRef(null); // For scrolling
+  const scrollRef = useRef(null); 
 
   useEffect(() => {
     fetchVideos();
@@ -32,7 +32,7 @@ function VideoLearning() {
   const scroll = (direction) => {
     const { current } = scrollRef;
     if (current) {
-      const scrollAmount = 320; // Adjust as per card width
+      const scrollAmount = 320;
       current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
@@ -45,12 +45,12 @@ function VideoLearning() {
       <h2 className="text-center mb-4 fw-bold">📚 Course Videos</h2>
       <hr/>
       <div className="scroll-wrapper position-relative">
-        {/* Left Scroll Button */}
+        
         <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>
           &#10094;
         </button>
 
-        {/* Scrollable Video Cards */}
+       
         <div className="scroll-container" ref={scrollRef}>
           {videos.map((video) => (
             <div key={video.id} className="blog-card">
@@ -93,7 +93,6 @@ function VideoLearning() {
           ))}
         </div>
 
-        {/* Right Scroll Button */}
         <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>
           &#10095;
         </button>

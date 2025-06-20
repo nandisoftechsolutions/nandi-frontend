@@ -30,10 +30,7 @@ import ManageBlogs from './pages/Admin/manageBlogs';
 import TeamPage from './pages/TeamPage';
 import TeamManage from './pages/Admin/TeamManage';
 import ManageMassage from './pages/Admin/ManageMassage';
-import AddEmployee from './pages/Admin/bestsheet/AddEmployee';
-import EmployeeList from './pages/Admin/bestsheet/EmployeeList';
-import LeaveList from './pages/Admin/bestsheet/LeaveList';
-import RequestLeave from './pages/Admin/bestsheet/RequestLeave';
+
 import ManageUser from './pages/Admin/ManageUser';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -57,10 +54,7 @@ const AppWrapper = () => {
     '/manageblogs',
     '/teammanage',
     '/managemassage',
-    '/addemployee',
-    '/employeelist',
-    '/leavelist',
-    '/requestleave',
+    
     '/manageuser',
     '/manageadmins',
     '/manageateachers',
@@ -81,7 +75,7 @@ const AppWrapper = () => {
 
       <div className="page-content">
         <Routes>
-          {/* Public Routes */}
+         
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -104,11 +98,11 @@ const AppWrapper = () => {
 
 
 
-          {/* OTP Flow */}
+         
          <Route path="/forgot-password" element={<ForgotPassword />} />
          <Route path="/reset-password" element={<ResetPassword />} />
 
-          {/* Admin Routes */}
+         
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/orders" element={<OrderManagement />} />
@@ -118,16 +112,13 @@ const AppWrapper = () => {
           <Route path="/manageblogs" element={<ManageBlogs />} />
           <Route path="/teammanage" element={<TeamManage />} />
           <Route path="/managemassage" element={<ManageMassage />} />
-          <Route path="/addemployee" element={<AddEmployee />} />
-          <Route path="/employeelist" element={<EmployeeList />} />
-          <Route path="/leavelist" element={<LeaveList />} />
-          <Route path="/requestleave" element={<RequestLeave />} />
+        
           <Route path="/manageuser" element={<ManageUser />} />
           <Route path="/manageadmins" element={<ManageAdmin/>}/>
           <Route path="/teacherslogin" element={<TeacherLogin/>}/>
           <Route path="/manageteachers" element={<TeacherManage/>}/>
 
-          {/* Fallback Route */}
+          
           <Route path="*" element={<h2 className="text-center mt-5">404 - Page Not Found</h2>} />
         </Routes>
       </div>

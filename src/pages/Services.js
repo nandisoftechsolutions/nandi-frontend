@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./Services.css";
 
+import servicesBg from "../assets/bgimage/servicesbg.png"; // ✅ FIXED
+
 const Services = () => {
   const navigate = useNavigate();
 
@@ -46,7 +48,7 @@ const Services = () => {
         className="text-white d-flex align-items-center justify-content-center text-center"
         style={{
           height: "60vh",
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${require("../assets/bgimage/servicesbg.png")})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${servicesBg})`, // ✅ FIXED
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

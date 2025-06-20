@@ -40,7 +40,7 @@ function Portfolio() {
       <p className="text-center text-muted mb-4 px-4">
         A collection of our web, mobile, and software projects, showcasing our skills and creativity.
       </p>
-      <hr />
+      <hr/>
 
       <div className="text-center mb-4">
         {serviceTypes.map(type => (
@@ -92,7 +92,7 @@ function Portfolio() {
         <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>&#10095;</button>
       </div>
 
-      <hr />
+      <hr/>
     </div>
   );
 }

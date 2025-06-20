@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import './BlogsSection.css'; // Make sure this file is in the same folder
+import './BlogsSection.css';
 
 function BlogsSection() {
   const [blogs, setBlogs] = useState([]);
@@ -36,62 +36,66 @@ function BlogsSection() {
   };
 
   return (
-    <div className="blogs-section-wrapper">
-      <h2 className="text-center mb-2">Our Blog</h2>
-      <p className="text-center text-muted mb-4 px-4">
-        Explore insightful articles, tutorials, and videos on web development, design, and tech tips from our team of experienced developers.
-      </p>
-      <hr />
+    <section className="blogs-section-wrapper py-5 bg-light">
+      <div className="container">
+        <h2 className="text-center fw-bold text-primary">Our Blog</h2>
+        <p className="text-center text-muted mb-4">
+          Explore insightful tutorials and tech updates by our developers.
+        </p>
+        <hr />
 
-      <div className="text-center mb-4">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            className={`btn btn-outline-secondary mx-1 ${filter === cat ? 'active' : ''}`}
-            onClick={() => setFilter(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <div className="scroll-wrapper">
-        <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>&#10094;</button>
-
-        <div className="scroll-container" ref={scrollRef}>
-          {filteredBlogs.map(blog => (
-            <a
-              key={blog.id}
-              href={blog.video_link || '#'}
-              target="_blank"
-              rel="noreferrer"
-              className="blog-card"
+        <div className="text-center mb-4">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={`btn btn-outline-secondary mx-1 ${filter === cat ? 'active' : ''}`}
+              onClick={() => setFilter(cat)}
             >
-              {blog.thumbnail && (
-                <div className="image-wrapper">
-                  <img
-                    src={`http://localhost:5000/uploads/${blog.thumbnail}`}
-                    alt={blog.title}
-                    className="card-img-top"
-                  />
-                  <div className="play-button-overlay">
-                    <i className="bi bi-play-circle-fill play-icon"></i>
-                  </div>
-                </div>
-              )}
-              <div className="cards-body">
-                <h5 className="cards-title">{blog.title}</h5>
-                <p className="cards-text">{blog.content?.slice(0, 100)}...</p>
-              </div>
-            </a>
+              {cat}
+            </button>
           ))}
         </div>
 
-        <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>&#10095;</button>
-      </div>
+        <div className="scroll-wrapper position-relative">
+          <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>&#10094;</button>
 
-      <hr />
-    </div>
+          <div className="scroll-container" ref={scrollRef}>
+            {filteredBlogs.map(blog => (
+              <a
+                key={blog.id}
+                href={blog.video_link || '#'}
+                target="_blank"
+                rel="noreferrer"
+                className="blog-card text-decoration-none"
+              >
+                {blog.thumbnail && (
+                  <div className="image-wrapper">
+                    <img
+                      src={`http://localhost:5000/uploads/${blog.thumbnail}`}
+                      alt={blog.title}
+                      className="card-img-top"
+                    />
+                    <div className="play-button-overlay">
+                      <i className="bi bi-play-circle-fill play-icon"></i>
+                    </div>
+                  </div>
+                )}
+                <div className="cards-body p-3">
+                  <h5 className="cards-title fw-semibold">{blog.title}</h5>
+                  <p className="cards-text text-muted">
+                    {blog.content?.slice(0, 100)}...
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>&#10095;</button>
+        </div>
+
+        <hr />
+      </div>
+    </section>
   );
 }
 

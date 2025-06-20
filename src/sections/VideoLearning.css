@@ -22,11 +22,11 @@
   gap: 1.5rem;
   padding: 10px;
   flex-grow: 1;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none; 
 }
 
 .blog-card {
@@ -118,7 +118,7 @@
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Tablets and small desktops */
+
 @media (max-width: 992px) {
   .blog-card {
     width: 75vw;
@@ -126,7 +126,7 @@
   }
 }
 
-/* Large Phones */
+
 @media (max-width: 768px) {
   .scroll-wrapper {
     flex-direction: column;
@@ -150,7 +150,7 @@
   }
 }
 
-/* Small Phones */
+
 @media (max-width: 576px) {
   .blog-card {
     width: 92vw;

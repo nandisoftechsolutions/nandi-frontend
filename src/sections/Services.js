@@ -41,7 +41,7 @@ const Services = () => {
 
   return (
     <div className="services-container">
-      {/* Heading row */}
+     
       
       <div className="row justify-content-center mb-2">
   <div className="col-12 text-center">
@@ -52,7 +52,7 @@ const Services = () => {
   </div>
 </div>
 
-      {/* Cards row */}
+     
       <div className="row justify-content-center gap-3">
         {servicesList.map(({ icon, title, description }, idx) => (
           <div

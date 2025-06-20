@@ -23,23 +23,23 @@
 }
 
 .card-hover-3:hover {
-  background: linear-gradient(to right,rgb(3, 2, 3),rgb(0, 0, 0));
+  background: linear-gradient(to right, rgb(3, 2, 3), rgb(0, 0, 0));
   box-shadow: 0 8px 24px rgba(156, 39, 176, 0.3);
   border: 2px solid #ab47bc;
 }
 
 .cardfounder {
-    background: linear-gradient(to right,rgb(50, 3, 71),rgba(63, 45, 3, 0.89));
+  background: linear-gradient(to right, rgb(50, 3, 71), rgba(63, 45, 3, 0.89));
   border-radius: 1rem;
-  border-color:rgb(42, 96, 6);
+  border-color: rgb(42, 96, 6);
   transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
-.cardfounder:hover{
-    background: linear-gradient(to right,rgb(62, 154, 152),rgb(68, 4, 79));
+.cardfounder:hover {
+  background: linear-gradient(to right, rgb(62, 154, 152), rgb(68, 4, 79));
   box-shadow: 0 8px 24px rgba(39, 144, 176, 0.98);
-  border: 2px solidrgb(77, 26, 36);
+  border: 2px solid rgb(77, 26, 36); /* ✅ Fixed: added missing space */
 }
 
 .timeline-list li {
@@ -57,8 +57,8 @@
   border: 2px solid #00acc1;
 }
 
-.cardmission{
-     background: linear-gradient(to right,rgb(12, 9, 7),rgba(14, 12, 10, 0.89));
+.cardmission {
+  background: linear-gradient(to right, rgb(12, 9, 7), rgba(14, 12, 10, 0.89));
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
   overflow: hidden;

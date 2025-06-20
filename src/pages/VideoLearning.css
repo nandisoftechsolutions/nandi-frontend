@@ -1,13 +1,10 @@
-/* VideoLearning.css */
-
-/* Container & Section Divider */
 .container hr {
-  border-top: 2px solid #343a40; /* dark separator */
+  border-top: 2px solid #343a40; 
   width: 80%;
   margin: 3rem auto;
 }
 
-/* Course Section Heading */
+
 h2.fw-bold.text-dark {
   font-size: 1.75rem;
   border-bottom: 2px solid #007bff;
@@ -16,7 +13,7 @@ h2.fw-bold.text-dark {
   margin-bottom: 1.5rem;
 }
 
-/* Card Container */
+
 .video-card {
   border-radius: 12px;
   overflow: hidden;
@@ -36,7 +33,7 @@ h2.fw-bold.text-dark {
   box-shadow: 0 12px 24px rgba(0, 123, 255, 0.15);
 }
 
-/* Image Wrapper */
+
 .video-card-img-wrapper {
   position: relative;
   height: 200px;
@@ -56,7 +53,7 @@ h2.fw-bold.text-dark {
   transform: scale(1.05);
 }
 
-/* Play Button */
+
 .play-icon-center {
   position: absolute;
   top: 50%;
@@ -74,7 +71,7 @@ h2.fw-bold.text-dark {
   color: #fff;
 }
 
-/* Locked Overlay */
+
 .locked-overlay {
   position: absolute;
   top: 0;
@@ -91,7 +88,7 @@ h2.fw-bold.text-dark {
   transition: background 0.3s;
 }
 
-/* Card Body */
+
 .video-card-body {
   flex: 1;
   display: flex;
@@ -110,7 +107,7 @@ h2.fw-bold.text-dark {
   margin-bottom: auto;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 991px) {
   .video-card-img-wrapper {
     height: 180px;

@@ -4,7 +4,7 @@
   scroll-behavior: smooth;
   gap: 20px;
   padding: 10px 0;
-  margin: 0 40px; /* leave space for arrows */
+  margin: 0 40px;
 }
 
 .project-card {

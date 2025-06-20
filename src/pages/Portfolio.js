@@ -47,7 +47,7 @@ function Portfolio() {
     backgroundColor: "rgba(0, 0, 0, 0.2)",
     transition: "opacity 0.3s ease",
     zIndex: 1,
-    pointerEvents: "none" // ✅ allow clicks to pass through
+    pointerEvents: "none" 
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ServiceDetails.css"; // Custom scoped CSS
+import "./ServiceDetails.css"; 
 
 function ServiceDetails() {
   const location = useLocation();

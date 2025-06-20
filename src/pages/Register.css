@@ -1,5 +1,3 @@
-/* Register.css */
-
 .register-body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #74ebd5, #acb6e5);
@@ -91,7 +89,7 @@
   color: #2c5aa0;
 }
 
-/* Fade animation */
+
 @keyframes register-fadeIn {
   from {
     opacity: 0;

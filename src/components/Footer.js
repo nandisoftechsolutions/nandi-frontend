@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Footer.css';
@@ -6,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="footer bg-dark text-light pt-5 pb-4 mt-auto">
       <div className="container">
-        {/* Admin Login */}
+      
         <div className="text-center mb-4">
           <NavLink to="/AdminLogin">
             <button className="btn btn-outline-light px-4 py-2">
@@ -18,7 +19,7 @@ const Footer = () => {
         <hr className="bg-light" />
 
         <div className="row text-center text-md-start">
-          {/* Company Info */}
+        
           <div className="col-12 col-md-3 mb-4">
             <h5 className="footer-title">Nandi Softech Solutions</h5>
             <p className="small">
@@ -40,7 +41,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+         
           <div className="col-12 col-md-3 mb-4">
             <h6 className="footer-title">Quick Links</h6>
             <ul className="list-unstyled">
@@ -52,7 +53,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+         
           <div className="col-12 col-md-3 mb-4">
             <h6 className="footer-title">Our Services</h6>
             <ul className="list-unstyled">
@@ -64,7 +65,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+         
           <div className="col-12 col-md-3 mb-4">
             <h6 className="footer-title">Newsletter</h6>
             <p className="small">Stay updated with our latest innovations.</p>

@@ -22,14 +22,17 @@
     "react-scripts": "5.0.1",
     "react-to-pdf": "^2.0.1",
     "slugify": "^1.6.6",
+    "source-map-explorer": "^2.5.3",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "build": "craco build",
+    "build-no-minify": "cross-env GENERATE_SOURCEMAP=false TERSER_DISABLE=true craco build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -48,5 +51,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "cross-env": "^7.0.3",
+    "stylelint": "^16.21.0"
   }
 }

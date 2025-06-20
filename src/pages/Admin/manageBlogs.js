@@ -117,7 +117,7 @@ export default function ManageBlogs() {
         </div>
       )}
 
-      {/* Blog Form */}
+    
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="border p-4 rounded shadow-sm bg-white mb-5">
         <div className="row g-4">
           <div className="col-md-6">
@@ -179,7 +179,7 @@ export default function ManageBlogs() {
         </div>
       </form>
 
-      {/* Blog Cards */}
+    
       <div className="position-relative">
         <button className="scroll-btn left" onClick={() => scrollBlogs('left')}>&#8592;</button>
         <div className="blog-scroll-container" ref={scrollRef}>

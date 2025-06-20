@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './HeroSection.css';
 import videoBg from '../assets/video/bghero.mp4';
 
-const bgImages = [
-  require('../assets/sections/gear.png'),
-  require('../assets/heart.png'),
-  require('../assets/servicehero.png'),
-  require('../assets/bgimage/bg.png'),
-  require('../assets/bgimage/bg10.png'),
-  require('../assets/bgimage/bg11.png'),
-  require('../assets/bgimage/bg12.png'),
-];
+import gearImg from '../assets/sections/gear.png';
+import heartImg from '../assets/heart.png';
+import heroImg from '../assets/servicehero.png';
+import bgImg1 from '../assets/bgimage/bg.png';
+import bgImg2 from '../assets/bgimage/bg10.png';
+import bgImg3 from '../assets/bgimage/bg11.png';
+import bgImg4 from '../assets/bgimage/bg12.png'; 
+
+const bgImages = [gearImg, heartImg, heroImg, bgImg1, bgImg2, bgImg3, bgImg4];
 
 const contentSlides = [
   {
@@ -47,8 +47,7 @@ const HeroSection = () => {
   useEffect(() => {
     const videoTimer = setTimeout(() => {
       setShowImage(true);
-    }, 6000); // after 6s, start images
-
+    }, 6000);
     return () => clearTimeout(videoTimer);
   }, []);
 
@@ -87,7 +86,6 @@ const HeroSection = () => {
               backgroundImage: `url(${bgImages[currentIndex]})`,
             }}
           />
-
           <div className="hero-content">
             <h1 className="hero-title">{currentContent?.title}</h1>
             <p className="hero-subtitle">{currentContent?.subtitle}</p>

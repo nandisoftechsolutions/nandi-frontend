@@ -7,7 +7,7 @@ function BlogDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Sample blog data - in real app, fetch from backend by ID
+
   const blogs = [
     {
       id: '1',

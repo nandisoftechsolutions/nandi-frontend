@@ -1,7 +1,7 @@
 import React from 'react';
 
 const StatsSection = ({ title = 'Our Achievements', stats = [] }) => {
-  // Default stats if none are passed as props
+ 
   const defaultStats = [
     { count: '120+', label: 'Projects Delivered' },
     { count: '50+', label: 'Happy Clients' },

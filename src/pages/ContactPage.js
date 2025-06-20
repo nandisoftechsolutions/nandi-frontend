@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import contactBg from "../assets/bgimage/contct.png"; // ✅ Make sure file is named exactly "contct.png"
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +14,7 @@ const ContactPage = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.name && user.email) {
+    if (user?.name && user?.email) {
       setFormData((prev) => ({
         ...prev,
         name: user.name,
@@ -31,10 +32,9 @@ const ContactPage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log('👉 Sending:', formData);
-  try {
-    const res = await axios.post("http://localhost:5000/api/contact", formData);
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/contact", formData);
       if (res.data.success) {
         alert("✅ Your query submitted successfully!");
         setFormData((prev) => ({
@@ -53,7 +53,7 @@ const ContactPage = () => {
 
   const contactInfo = {
     address: "Nandi Softech Solutions, Vijayapura, Karnataka",
-    email: "nandisoftechsolution.com",
+    email: "nandisoftechsolution@gmail.com", // ✅ Fixing fake domain
     phone: "+91 8152853260",
     socials: {
       facebook: "https://www.facebook.com",
@@ -64,25 +64,27 @@ const ContactPage = () => {
 
   return (
     <div>
-      {/* Hero Section with Background Image */}
+      {/* Hero Section */}
       <div
         className="text-white d-flex align-items-center justify-content-center text-center"
         style={{
           height: "60vh",
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${require("../assets/bgimage/contct.png")})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${contactBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
         }}
       >
-        
+        <div>
+          <h1 className="display-4 fw-bold">Contact Us</h1>
+          <p className="lead">We’d love to hear from you!</p>
+        </div>
       </div>
 
-      {/* Contact Form and Info */}
+      {/* Contact Section */}
       <div className="container my-5">
-        <p className="lead">
-            We'd love to hear from you! Reach out for any questions, support, or collaboration.
-          </p>
+        <p className="lead text-center mb-4">
+          Reach out for any questions, support, or collaboration.
+        </p>
         <div className="row g-4">
           {/* Contact Form */}
           <div className="col-lg-6">
@@ -135,7 +137,9 @@ const ContactPage = () => {
                       required
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary w-100">Send Message</button>
+                  <button type="submit" className="btn btn-primary w-100">
+                    Send Message
+                  </button>
                 </form>
               )}
             </div>
@@ -145,29 +149,22 @@ const ContactPage = () => {
           <div className="col-lg-6">
             <div className="contact-card p-4 rounded shadow-sm bg-white">
               <h3 className="mb-4">Contact Information</h3>
-              <p>
-                <i className="bi bi-geo-alt info-icon"></i>
-                <strong>Address:</strong> {contactInfo.address}
-              </p>
-              <p>
-                <i className="bi bi-envelope info-icon"></i>
-                <strong>Email:</strong> {contactInfo.email}
-              </p>
-              <p>
-                <i className="bi bi-telephone info-icon"></i>
-                <strong>Phone:</strong> {contactInfo.phone}
-              </p>
+              <p><strong>📍 Address:</strong> {contactInfo.address}</p>
+              <p><strong>📧 Email:</strong> {contactInfo.email}</p>
+              <p><strong>📞 Phone:</strong> {contactInfo.phone}</p>
               <hr />
               <h5>Follow Us</h5>
-              <a href={contactInfo.socials.facebook} className="btn btn-outline-primary btn-sm me-2">
-                <i className="bi bi-facebook me-1"></i>Facebook
-              </a>
-              <a href={contactInfo.socials.youtube} className="btn btn-outline-danger btn-sm me-2">
-                <i className="bi bi-youtube me-1"></i>YouTube
-              </a>
-              <a href={contactInfo.socials.instagram} className="btn btn-outline-info btn-sm">
-                <i className="bi bi-instagram me-1"></i>Instagram
-              </a>
+              <div className="d-flex gap-2 flex-wrap">
+                <a href={contactInfo.socials.facebook} className="btn btn-outline-primary btn-sm">
+                  <i className="bi bi-facebook me-1"></i> Facebook
+                </a>
+                <a href={contactInfo.socials.youtube} className="btn btn-outline-danger btn-sm">
+                  <i className="bi bi-youtube me-1"></i> YouTube
+                </a>
+                <a href={contactInfo.socials.instagram} className="btn btn-outline-info btn-sm">
+                  <i className="bi bi-instagram me-1"></i> Instagram
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -176,15 +173,15 @@ const ContactPage = () => {
       {/* Google Map */}
       <div className="container-fluid px-0">
         <iframe
-  className="w-100 border-0"
-  height="450"
-  loading="lazy"
-  allowFullScreen
-  referrerPolicy="no-referrer-when-downgrade"
-  src="https://maps.google.com/maps?q=Vijayapura,%20Karnataka&t=&z=13&ie=UTF8&iwloc=&output=embed"
-  title="Vijayapura Map"
-/>
-
+          title="Vijayapura Map"
+          src="https://maps.google.com/maps?q=Vijayapura,%20Karnataka&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="450"
+          style={{ border: 0 }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-/* White and bold style ONLY on homepage */
+
 .white-navbar .nav-link,
 .white-navbar .btn-outline-dark,
 .white-navbar .navbar-brand,
@@ -17,10 +17,10 @@
   background-color: white;
 }
 
-/* Main Navbar */
+
 .main-navbar {
   background: rgba(236, 241, 242, 0);
-  padding: 6px 0; /* Reduced padding */
+  padding: 6px 0; 
   position: absolute;
   box-shadow: 0 8px 25px rgba(71, 11, 11, 0);
   z-index: 999;
@@ -29,7 +29,7 @@
   right: 0;
 }
 
-/* Fixed Navbar with dark background */
+
 .main-navbar.fixed {
   background: #f0f0f0;
   position: fixed;
@@ -58,13 +58,13 @@
   background-color: #222;
 }
 
-/* Logo */
+
 .navbar-logo {
   height: 40px;
   width: 70px;
 }
 
-/* Branding Text */
+
 .brand-text {
   display: flex;
   flex-direction: column;
@@ -89,7 +89,7 @@
   margin: 0;
 }
 
-/* Nav Links */
+
 .navbar-links {
   display: flex;
   align-items: center;
@@ -119,7 +119,7 @@
   color: #fff;
 }
 
-/* User Info Badge */
+
 .user-info .badge {
   font-size: 1rem;
   padding: 8px 8px;
@@ -130,7 +130,7 @@
   margin-left: 5px;
 }
 
-/* Hamburger Menu (Mobile) */
+
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -146,7 +146,7 @@
   border-radius: 1px;
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 991.98px) {
   .menu-toggle {
     display: flex;

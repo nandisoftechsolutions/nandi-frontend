@@ -1,9 +1,8 @@
-/* Container Padding */
 .container-fluid {
   padding: 2rem;
 }
 
-/* Top Bar */
+
 .video-top-bar {
   display: flex;
   justify-content: space-between;
@@ -43,7 +42,7 @@
   font-size: 1.2rem;
 }
 
-/* Video Player */
+
 .video-player iframe,
 .video-player video {
   border-radius: 8px;
@@ -51,7 +50,7 @@
   width: 100%;
 }
 
-/* Description Box */
+
 .description-box {
   background: #f6f6f6;
   padding: 1rem;
@@ -75,7 +74,7 @@
   margin-top: 6px;
 }
 
-/* Teacher Info */
+
 .teacher-info {
   display: flex;
   align-items: center;
@@ -104,7 +103,7 @@
   color: #888;
 }
 
-/* Action Buttons */
+
 .video-actions {
   display: flex;
   gap: 10px;
@@ -125,7 +124,7 @@
   font-size: 1rem;
 }
 
-/* Three-dot menu */
+
 .menu-dropdown {
   position: relative;
   display: inline-block;
@@ -169,7 +168,7 @@
   display: block;
 }
 
-/* Comment Box */
+
 .comment-input-box {
   display: flex;
   align-items: center;
@@ -196,7 +195,7 @@
   color: #333;
 }
 
-/* Comment Action Buttons */
+
 .comment-actions {
   display: flex;
   justify-content: flex-end;
@@ -209,7 +208,7 @@
   padding: 4px 10px;
 }
 
-/* Comments List */
+
 .comments-section {
   margin-top: 2rem;
 }
@@ -240,7 +239,7 @@
   color: #333;
 }
 
-/* Related Videos */
+
 .related-videos {
   margin-top: 1rem;
 }
@@ -295,7 +294,7 @@
   color: #fff;
 }
 
-/* Responsive */
+
 @media (max-width: 576px) {
   .video-top-bar {
     flex-direction: column;
