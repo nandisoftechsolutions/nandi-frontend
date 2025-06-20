@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css';
+import BASE_URL from '../api';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email: email.trim(),
-        password: password.trim(),
-      });
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
+  email: email.trim(),
+  password: password.trim(),
+});
 
       if (response.status === 200) {
         const { token, user } = response.data;

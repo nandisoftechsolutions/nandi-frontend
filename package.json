@@ -2,6 +2,14 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "build-no-minify": "cross-env GENERATE_SOURCEMAP=false TERSER_DISABLE=true craco build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -26,19 +34,13 @@
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
-  "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "build-no-minify": "cross-env GENERATE_SOURCEMAP=false TERSER_DISABLE=true craco build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "cross-env": "^7.0.3",
+    "stylelint": "^16.21.0"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": ["react-app", "react-app/jest"]
   },
   "browserslist": {
     "production": [
@@ -51,10 +53,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@craco/craco": "^7.1.0",
-    "cross-env": "^7.0.3",
-    "stylelint": "^16.21.0"
   }
 }
