@@ -1,0 +1,3 @@
+[build]
+  command = "craco build"
+  publish = "build"
