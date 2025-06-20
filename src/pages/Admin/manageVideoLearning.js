@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './ManageVideoLearning.css';
 import AdminNavbar from './Components/AdminNavbar';
+import BASE_URL from '../../api';
 
 export default function ManageVideoLearning() {
   const [videos, setVideos] = useState([]);
@@ -43,7 +44,7 @@ export default function ManageVideoLearning() {
 
   const fetchVideos = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/managevideo');
+      const res = await axios.get(`${BASE_URL}/api/managevideo`);
       const initialized = res.data.map(video => ({ ...video, showVideo: false }));
       setVideos(initialized);
       setTimeout(() => {
@@ -56,7 +57,7 @@ export default function ManageVideoLearning() {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/courses');
+      const res = await axios.get(`${BASE_URL}/api/courses`);
       setCourses(res.data);
     } catch (err) {
       console.error('❌ Fetch courses error:', err);
@@ -65,7 +66,7 @@ export default function ManageVideoLearning() {
 
   const fetchTeachers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/teachers');
+      const res = await axios.get(`${BASE_URL}/api/teachers`);
       setTeachers(res.data);
     } catch (err) {
       console.error('❌ Fetch teachers error:', err);
@@ -88,9 +89,9 @@ export default function ManageVideoLearning() {
 
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/managevideo/${editId}`, data);
+        await axios.put(`${BASE_URL}/api/managevideo/${editId}`, data);
       } else {
-        await axios.post('http://localhost:5000/api/managevideo', data);
+        await axios.post(`${BASE_URL}/api/managevideo`, data);
       }
       resetForm();
       fetchVideos();
@@ -118,7 +119,7 @@ export default function ManageVideoLearning() {
   const handleDelete = async id => {
     if (window.confirm('Delete this video?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/managevideo/${id}`);
+        await axios.delete(`${BASE_URL}/api/managevideo/${id}`);
         fetchVideos();
       } catch (err) {
         console.error('❌ Delete error:', err);
@@ -185,7 +186,7 @@ export default function ManageVideoLearning() {
   const handleCourseDelete = async id => {
     if (window.confirm('Delete this course?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/courses/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/courses/delete/${id}`);
         fetchCourses();
       } catch (err) {
         console.error('❌ Delete course error:', err);
@@ -200,9 +201,9 @@ export default function ManageVideoLearning() {
 
     try {
       if (editCourseId) {
-        await axios.put(`http://localhost:5000/api/courses/update/${editCourseId}`, data);
+        await axios.put(`${BASE_URL}/api/courses/update/${editCourseId}`, data);
       } else {
-        await axios.post('http://localhost:5000/api/courses/add', data);
+        await axios.post(`${BASE_URL}/api/courses/add`, data);
       }
       resetCourseForm();
       fetchCourses();
@@ -214,6 +215,9 @@ export default function ManageVideoLearning() {
   return (
     <div className="container-fluid px-3 px-md-5 py-4">
       <AdminNavbar />
+      <br/>
+      <br/>
+      <br/>
       <h2 className="text-center mb-4">Manage Course Videos</h2>
 
       <form ref={formRef} onSubmit={handleSubmit} className="form-wrapper styled-form mb-5" encType="multipart/form-data">
@@ -246,11 +250,11 @@ export default function ManageVideoLearning() {
             <div className="video-card" key={v.id}>
               <div className="thumbnail-wrapper">
                 {!v.showVideo && v.thumbnail && (
-                  <img src={`http://localhost:5000/uploads/${v.thumbnail}`} alt={v.title} className="video-thumbnail" />
+                  <img src={`${BASE_URL}/uploads/${v.thumbnail}`} alt={v.title} className="video-thumbnail" />
                 )}
                 {v.showVideo && v.videos && (
                   <video width="100%" height="180" autoPlay muted controls className="video-actual">
-                    <source src={`http://localhost:5000/uploads/${v.videos}`} type="video/mp4" />
+                    <source src={`${BASE_URL}/uploads/${v.videos}`} type="video/mp4" />
                   </video>
                 )}
               </div>
@@ -295,7 +299,7 @@ export default function ManageVideoLearning() {
           {courses.map(c => (
             <div className="video-card" key={c.id}>
               {c.thumbnail && (
-                <img src={`http://localhost:5000/uploads/${c.thumbnail}`} alt={c.title} className="video-thumbnail" />
+                <img src={`${BASE_URL}/uploads/${c.thumbnail}`} alt={c.title} className="video-thumbnail" />
               )}
               <div className="video-card-body">
                 <h5>{c.title}</h5>

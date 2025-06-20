@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import './OrderManagement.css';
 import AdminNavbar from './Components/AdminNavbar';
+import BASE_URL from '../../api';
 
 const platformsList = ['Web', 'Android', 'iOS', 'Windows'];
 const featuresList = ['Login', 'Payment', 'Notifications', 'Analytics'];
@@ -29,7 +30,7 @@ const OrderManagement = () => {
   const [newOrder, setNewOrder] = useState(initialOrder);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/orders')
+    axios.get(`${BASE_URL}/api/orders`)
       .then(res => setOrders(res.data))
       .catch(console.error);
 
@@ -64,8 +65,8 @@ const OrderManagement = () => {
     e.preventDefault();
     const data = isEditing ? editOrder : newOrder;
     const request = isEditing
-      ? axios.put(`http://localhost:5000/api/orders/${editOrder.id}`, data)
-      : axios.post('http://localhost:5000/api/orders', data);
+      ? axios.put(`${BASE_URL}/api/orders/${editOrder.id}`, data)
+      : axios.post(`${BASE_URL}/api/orders`, data)
 
     request.then(resp => {
       if (isEditing) {
@@ -80,7 +81,7 @@ const OrderManagement = () => {
   };
 
   const handleDelete = id => {
-    axios.delete(`http://localhost:5000/api/orders/${id}`)
+    axios.delete(`${BASE_URL}/api/orders/${id}`)
       .then(() => setOrders(prev => prev.filter(o => o.id !== id)))
       .catch(console.error);
   };
@@ -109,7 +110,6 @@ const OrderManagement = () => {
       <br/>
       <br/>
       <br/>
-      <br/>
       <div className="mb-4 d-flex flex-wrap justify-content-between align-items-center">
         <h2 className="fw-bold">Order Management</h2>
         <div className="btn-group">
@@ -120,7 +120,7 @@ const OrderManagement = () => {
 
       {/* Order List Table */}
       <div className="table-responsive mb-5 shadow rounded bg-white p-3">
-        <table className="table table-striped">
+        <table className="table table-striped table-hover text-sm">
           <thead className="table-dark">
             <tr>
               <th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Service</th>
@@ -147,20 +147,20 @@ const OrderManagement = () => {
 
       {/* Form Section */}
       <div className="bg-light shadow-sm p-4 rounded">
-        <h4 className="mb-4 text-primary">{isEditing ? 'Edit Order' : 'Add New Order'}</h4>
+        <h4 className="mb-4 text-primary text-center">{isEditing ? 'Edit Order' : 'Add New Order'}</h4>
         <form onSubmit={handleSubmit}>
           <div className="row g-3">
-            <div className="col-md-4"><input className="form-control" placeholder="Name" name="name" value={formData.name} onChange={handleChange} required /></div>
-            <div className="col-md-4"><input className="form-control" placeholder="Email" name="email" value={formData.email} onChange={handleChange} required /></div>
-            <div className="col-md-4"><input className="form-control" placeholder="Phone" name="phone" value={formData.phone} onChange={handleChange} /></div>
-            <div className="col-md-4"><select className="form-select" name="service_type" value={formData.service_type} onChange={handleChange}><option value="">Service Type</option>{serviceTypes.map(s => <option key={s}>{s}</option>)}</select></div>
-            <div className="col-md-4"><select className="form-select" name="design_style" value={formData.design_style} onChange={handleChange}><option value="">Design Style</option>{designStyles.map(s => <option key={s}>{s}</option>)}</select></div>
-            <div className="col-md-4"><select className="form-select" name="deadline" value={formData.deadline} onChange={handleChange}><option value="">Deadline</option>{deadlines.map(d => <option key={d}>{d}</option>)}</select></div>
-            <div className="col-md-4"><select className="form-select" name="budget" value={formData.budget} onChange={handleChange}><option value="">Budget</option>{budgets.map(b => <option key={b}>{b}</option>)}</select></div>
-            <div className="col-md-4"><select className="form-select" name="assigned_team" value={formData.assigned_team} onChange={handleChange}><option value="">Team</option>{teamList.map(t => <option key={t}>{t}</option>)}</select></div>
-            <div className="col-md-4"><select className="form-select" name="assign_to" value={formData.assign_to} onChange={handleChange}><option value="">Assign To</option>{assignToList.map(p => <option key={p}>{p}</option>)}</select></div>
-            <div className="col-md-4"><input type="date" className="form-control" name="start_date" value={formData.start_date} onChange={handleChange} /></div>
-            <div className="col-md-4"><input type="date" className="form-control" name="end_date" value={formData.end_date} onChange={handleChange} /></div>
+            <div className="col-md-4 col-12"><input className="form-control" placeholder="Name" name="name" value={formData.name} onChange={handleChange} required /></div>
+            <div className="col-md-4 col-12"><input className="form-control" placeholder="Email" name="email" value={formData.email} onChange={handleChange} required /></div>
+            <div className="col-md-4 col-12"><input className="form-control" placeholder="Phone" name="phone" value={formData.phone} onChange={handleChange} /></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="service_type" value={formData.service_type} onChange={handleChange}><option value="">Service Type</option>{serviceTypes.map(s => <option key={s}>{s}</option>)}</select></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="design_style" value={formData.design_style} onChange={handleChange}><option value="">Design Style</option>{designStyles.map(s => <option key={s}>{s}</option>)}</select></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="deadline" value={formData.deadline} onChange={handleChange}><option value="">Deadline</option>{deadlines.map(d => <option key={d}>{d}</option>)}</select></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="budget" value={formData.budget} onChange={handleChange}><option value="">Budget</option>{budgets.map(b => <option key={b}>{b}</option>)}</select></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="assigned_team" value={formData.assigned_team} onChange={handleChange}><option value="">Team</option>{teamList.map(t => <option key={t}>{t}</option>)}</select></div>
+            <div className="col-md-4 col-12"><select className="form-select" name="assign_to" value={formData.assign_to} onChange={handleChange}><option value="">Assign To</option>{assignToList.map(p => <option key={p}>{p}</option>)}</select></div>
+            <div className="col-md-6 col-12"><input type="date" className="form-control" name="start_date" value={formData.start_date} onChange={handleChange} /></div>
+            <div className="col-md-6 col-12"><input type="date" className="form-control" name="end_date" value={formData.end_date} onChange={handleChange} /></div>
             <div className="col-12">
               <label className="form-label">Platform</label><br />
               {platformsList.map(pl => (

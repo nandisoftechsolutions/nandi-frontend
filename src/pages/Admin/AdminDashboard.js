@@ -5,6 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './AdminDashboard.css';
 import { Link, useNavigate } from 'react-router-dom';
 import AdminNavbar from './Components/AdminNavbar';
+import BASE_URL from '../../api';
 
 const AdminDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -45,7 +46,7 @@ const AdminDashboard = () => {
 
         const results = await Promise.all(
           endpoints.map((endpoint) =>
-            fetch(`http://localhost:5000/api/dashboard/${endpoint}`).then((res) => res.json())
+            fetch(`${BASE_URL}/dashboard/${endpoint}`).then((res) => res.json())
           )
         );
 
@@ -85,98 +86,106 @@ const AdminDashboard = () => {
   return (
     <>
       <AdminNavbar />
-     <br/>
-     <br/>
+      <br />
+      <br />
       <div className="dash-wrapper container-fluid py-5 bg-light min-vh-100">
         <div className="dash-header text-center mb-5">
-          <h2 className="card fw-bold text-dark">Welcome to Admin Panel, <span className="text-primary">{adminData.name}</span></h2>
+          <h2 className="card fw-bold text-dark">
+            Welcome to Admin Panel, <span className="text-primary">{adminData.name}</span>
+          </h2>
         </div>
-        <div className="dash-container d-flex rounded shadow bg-white overflow-hidden">
-          {!collapsed && (
-            <aside className="dash-sidebar bg-gradient p-3 text-white border-end">
-              <div className="dash-profile text-center mb-4">
-                <img
-                  src={adminData?.photo ? `http://localhost:5000${adminData.photo}` : '/assets/Admin.jpg'}
-                  alt="Admin"
-                  className="dash-profile-img rounded-circle border border-white shadow"
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                />
-                <h5 className="mt-3 fw-bold">{adminData.name}</h5>
+        <div className="row">
+          <div className="col-lg-3 mb-4">
+            {!collapsed && (
+              <aside className="dash-sidebar bg-gradient p-3 text-white border-end rounded">
+                <div className="dash-profile text-center mb-4">
+                  <img
+                    src={adminData?.photo ? `${BASE_URL}${adminData.photo}` : '/assets/Admin.jpg'}
+                    alt="Admin"
+                    className="dash-profile-img rounded-circle border border-white shadow"
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                  <h5 className="mt-3 fw-bold">{adminData.name}</h5>
+                </div>
+                <ul className="nav flex-column">
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/dashboard">
+                      <i className="bi bi-speedometer2"></i> Dashboard Overview
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/orders">
+                      <i className="bi bi-cart-check"></i> Order Management
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/manageJobs">
+                      <i className="bi bi-briefcase"></i> Job Postings
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/ProjectManager">
+                      <i className="bi bi-kanban"></i> Projects
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/ManageVideoLearning">
+                      <i className="bi bi-collection-play"></i> Course Videos
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/manageBlogs">
+                      <i className="bi bi-pencil-square"></i> Blogs
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/messages">
+                      <i className="bi bi-envelope-open"></i> Messages
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/TeamManage">
+                      <i className="bi bi-people-fill"></i> Team
+                    </Link>
+                  </li>
+                  <li className="nav-item mb-2">
+                    <Link className="nav-link text-white dash-link hover-light" to="/users">
+                      <i className="bi bi-person-gear"></i> Admin Users
+                    </Link>
+                  </li>
+                </ul>
+              </aside>
+            )}
+          </div>
+          <div className="col-lg-9">
+            <main className="dash-main p-4 bg-white rounded shadow-sm">
+              <div className="d-flex justify-content-end mb-4">
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => setCollapsed(!collapsed)}
+                >
+                  <i className={`bi ${collapsed ? 'bi-list' : 'bi-x-lg'}`}></i>
+                </button>
               </div>
-              <ul className="nav flex-column">
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/dashboard">
-                    <i className="bi bi-speedometer2"></i> Dashboard Overview
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/orders">
-                    <i className="bi bi-cart-check"></i> Order Management
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/manageJobs">
-                    <i className="bi bi-briefcase"></i> Job Postings
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/ProjectManager">
-                    <i className="bi bi-kanban"></i> Projects
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/ManageVideoLearning">
-                    <i className="bi bi-collection-play"></i> Course Videos
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/manageBlogs">
-                    <i className="bi bi-pencil-square"></i> Blogs
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/messages">
-                    <i className="bi bi-envelope-open"></i> Messages
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/TeamManage">
-                    <i className="bi bi-people-fill"></i> Team
-                  </Link>
-                </li>
-                <li className="nav-item mb-2">
-                  <Link className="nav-link text-white dash-link hover-light" to="/users">
-                    <i className="bi bi-person-gear"></i> Admin Users
-                  </Link>
-                </li>
-              </ul>
-            </aside>
-          )}
-
-          <main className="dash-main p-4 flex-grow-1 bg-white">
-            <div className="d-flex justify-content-end mb-4">
-              <button className="btn btn-sm btn-outline-secondary" onClick={() => setCollapsed(!collapsed)}>
-                <i className={`bi ${collapsed ? 'bi-list' : 'bi-x-lg'}`}></i>
-              </button>
-            </div>
-            <div className="row g-4">
-              {cards.map((card, index) => (
-                <div className="col-sm-6 col-md-4 col-lg-3" key={index}>
-                  <div
-                    className="dash-stat-card card border-0 shadow-sm h-100 hover-card"
-                    onClick={() => navigate(card.link)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="card-body text-center">
-                      <i className={`bi ${card.icon} fs-1 text-gradient`}></i>
-                      <h6 className="mt-3 fw-semibold">{card.title}</h6>
-                      <p className="fs-5 fw-bold text-dark mb-0">{card.count}</p>
+              <div className="row g-4">
+                {cards.map((card, index) => (
+                  <div className="col-6 col-md-4 col-lg-3" key={index}>
+                    <div
+                      className="dash-stat-card card border-0 shadow-sm h-100 hover-card"
+                      onClick={() => navigate(card.link)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="card-body text-center">
+                        <i className={`bi ${card.icon} fs-1 text-gradient`}></i>
+                        <h6 className="mt-3 fw-semibold">{card.title}</h6>
+                        <p className="fs-5 fw-bold text-dark mb-0">{card.count}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </main>
+                ))}
+              </div>
+            </main>
+          </div>
         </div>
       </div>
     </>

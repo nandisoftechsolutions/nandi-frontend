@@ -1,47 +1,78 @@
+/* Scroll container with horizontal scroll and spacing */
 .project-scroll-container {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  gap: 20px;
-  padding: 10px 0;
-  margin: 0 40px;
+  padding-bottom: 1rem;
 }
 
+.project-card img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;       /* Ensure image has no curves */
+  display: block;
+  aspect-ratio: auto !important;     /* Reset any inherited aspect ratio */
+}
+
+
+/* Individual project cards */
 .project-card {
-  min-width: 300px;
-  max-width: 300px;
-  background: #fff;
+  width: 320px;
+  flex: 0 0 auto;
+  border-radius: 0; /* No border-radius */
   border: 1px solid #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: box-shadow 0.2s;
 }
 
+.project-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Make images normal (no curves) and responsive */
 .project-card img {
   width: 100%;
   height: 180px;
   object-fit: cover;
+  border-radius: 0; /* Ensure no curved corners */
 }
 
+/* Scroll buttons */
 .scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
-  background: white;
+  z-index: 5;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
   border: none;
-  font-size: 2rem;
-  padding: 6px 12px;
+  padding: 8px 12px;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  font-size: 20px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .scroll-btn.left {
-  left: 10px;
+  left: 0;
 }
 
 .scroll-btn.right {
-  right: 10px;
+  right: 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .project-card {
+    width: 100%;
+  }
+
+  .scroll-btn {
+    display: none; /* Hide scroll buttons on small devices */
+  }
 }

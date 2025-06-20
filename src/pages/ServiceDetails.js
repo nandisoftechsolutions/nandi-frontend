@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ServiceDetails.css"; 
+import "./ServiceDetails.css";
 
 function ServiceDetails() {
   const location = useLocation();
@@ -41,26 +41,37 @@ function ServiceDetails() {
   };
 
   return (
-    <div className="service-details-container container py-5">
-      <h2 className="service-details-heading text-gradient">
-        {serviceTitle}
-      </h2>
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-10">
+          <div className="text-center mb-4">
+            <h2 className="fw-bold text-primary">{serviceTitle}</h2>
+            <p className="lead text-muted">{service.content}</p>
+          </div>
 
-      <p className="service-details-description lead">
-        {service.content}
-      </p>
+          <div className="card border-0 shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title fw-semibold mb-3">Technologies We Use</h5>
+              <ul className="list-group list-group-flush">
+                {service.tech.map((tech, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <span>{tech}</span>
+                    <span className="badge bg-primary rounded-pill">✓</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-      <div className="service-details-card card mt-4">
-        <h5 className="service-details-tech-title">
-          Technologies We Use:
-        </h5>
-        <ul className="list-group list-group-flush">
-          {service.tech.map((tech, i) => (
-            <li key={i} className="list-group-item service-details-list-item">
-              {tech}
-            </li>
-          ))}
-        </ul>
+          {service.tech.length === 0 && (
+            <div className="alert alert-warning mt-4">
+              No technologies listed for this service yet.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -85,3 +85,15 @@
     padding: 1rem;
   }
 }
+
+@media (max-width: 576px) {
+  .card-title {
+    font-size: 1.1rem;
+  }
+  .form-label {
+    font-size: 0.9rem;
+  }
+  .btn {
+    font-size: 0.9rem;
+  }
+}

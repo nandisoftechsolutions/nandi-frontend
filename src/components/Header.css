@@ -1,56 +1,70 @@
-
 .tops-info-bar {
   background-color: rgb(55, 68, 69);
   transition: all 0.6s ease;
   color: rgba(246, 242, 242, 0.84);
+  font-size: 0.9rem;
+  padding: 0.3rem 0;
 }
 
 .admi {
   display: flex;
   align-items: center;
-  gap: 10%;
+  flex-wrap: wrap;
+  gap: 0.2rem;
 }
 
-
-.navbar {
-  background-color: transparent;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  box-shadow: none;
-  margin-top: 30px;
+.admi i,
+.admi span,
+.admi a {
+  color: #f1f1f1;
+  font-weight: 500;
 }
 
-.navbar-shadow {
-  box-shadow: 0 4px 10px rgb(231, 222, 222);
+.admi a.admi {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.card-scrolled {
-  background-color: white !important;
-}
-
-.navbar .nav-link {
-  font-weight: bold;
-  color: rgb(223, 236, 236);
-}
-
-.navbar .nav-link.active {
-  color: #f39c12;
-}
-
-/* Hide the header on scroll */
-.tops-hide {
-  display: none;
-}
-
-/* Fixed navbar after scroll */
-.navbar.fixed-top {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1050;
-}
-
-.top-info-bar .container-fluid {
+.tops-info-bar .container-fluid {
   padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Social icons and quote button */
+.tops-info-bar a {
+  color: #f1f1f1;
+  transition: color 0.3s;
+}
+
+.tops-info-bar a:hover {
+  color:rgb(17, 17, 15);
+}
+
+.tops-info-bar .btn-outline-warning {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+
+/* Responsive layout */
+@media (max-width: 576px) {
+  .tops-info-bar {
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .admi {
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .tops-info-bar .container-fluid {
+    flex-direction: column !important;
+    gap: 0.4rem;
+  }
+
+  .tops-info-bar .btn-outline-warning {
+    width: 100%;
+    text-align: center;
+  }
 }

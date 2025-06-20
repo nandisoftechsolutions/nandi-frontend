@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AdminNavbar from './Components/AdminNavbar';
+import BASE_URL from '../../api';
 
 function ManageJobs() {
   const [jobs, setJobs] = useState([]);
@@ -24,14 +25,14 @@ function ManageJobs() {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/jobs');
+      const res = await axios.get(`${BASE_URL}/api/jobs`);
       const jobsData = res.data;
       setJobs(jobsData);
 
       const countResults = await Promise.all(
         jobsData.map(async (job) => {
           try {
-            const countRes = await axios.get(`http://localhost:5000/api/jobs/${job.id}/applications/count`);
+            const countRes = await axios.get(`${BASE_URL}/api/jobs/${job.id}/applications/count`);
             return { jobId: job.id, count: countRes.data.count };
           } catch {
             return { jobId: job.id, count: 0 };
@@ -47,17 +48,15 @@ function ManageJobs() {
 
       const allApps = await Promise.all(
         jobsData.map((job) =>
-          axios
-            .get(`http://localhost:5000/api/jobs/${job.id}/applications`)
-            .then((res) =>
-              res.data.map((app) => ({
-                ...app,
-                job_title: job.title,
-                job_location: job.location,
-                salary_range: job.salary_range,
-                job_type: job.job_type,
-              }))
-            )
+          axios.get(`${BASE_URL}/api/jobs/${job.id}/applications`).then((res) =>
+            res.data.map((app) => ({
+              ...app,
+              job_title: job.title,
+              job_location: job.location,
+              salary_range: job.salary_range,
+              job_type: job.job_type,
+            }))
+          )
         )
       );
 
@@ -76,9 +75,9 @@ function ManageJobs() {
     e.preventDefault();
     try {
       if (editingJobId) {
-        await axios.put(`http://localhost:5000/api/jobs/${editingJobId}`, jobForm);
+        await axios.put(`${BASE_URL}/api/jobs/${editingJobId}`, jobForm);
       } else {
-        await axios.post('http://localhost:5000/api/jobs', jobForm);
+        await axios.post(`${BASE_URL}/api/jobs`, jobForm);
       }
       fetchJobs();
       resetForm();
@@ -103,7 +102,7 @@ function ManageJobs() {
 
   const handleDelete = async (jobId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+      await axios.delete(`${BASE_URL}/api/jobs/${jobId}`);
       fetchJobs();
     } catch (err) {
       console.error('Error deleting job:', err);
@@ -118,7 +117,7 @@ function ManageJobs() {
 
   const handleStatusChange = async (applicantId, status) => {
     try {
-      await axios.patch(`http://localhost:5000/api/applicants/${applicantId}/status`, { status });
+      await axios.patch(`${BASE_URL}/api/applicants/${applicantId}/status`, { status });
       fetchJobs();
     } catch (error) {
       console.error('Error updating status:', error);
@@ -128,11 +127,7 @@ function ManageJobs() {
   return (
     <>
       <AdminNavbar />
-      <br/>
-      <br/>
       <div className="container py-5">
-
-        {/* Applicant Table */}
         <div className="mb-5">
           <h2 className="text-center mb-4">All Job Applicants</h2>
           <div className="table-responsive">
@@ -177,9 +172,7 @@ function ManageJobs() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9" className="text-center">
-                      No applicants found.
-                    </td>
+                    <td colSpan="9" className="text-center">No applicants found.</td>
                   </tr>
                 )}
               </tbody>
@@ -187,7 +180,6 @@ function ManageJobs() {
           </div>
         </div>
 
-        {/* Job Cards */}
         <h1 className="text-center text-primary fw-bold mb-4">Manage Job Openings</h1>
         <div className="row g-4 mb-5">
           {jobs.map((job) => (
@@ -197,18 +189,13 @@ function ManageJobs() {
                 <p>{job.description}</p>
                 <p className="text-muted">{job.location}</p>
                 <p className="text-muted">Applications: {applicationsCount[job.id] || 0}</p>
-                <button className="btn btn-outline-secondary me-2" onClick={() => handleEdit(job)}>
-                  Edit
-                </button>
-                <button className="btn btn-outline-danger" onClick={() => handleDelete(job.id)}>
-                  Delete
-                </button>
+                <button className="btn btn-outline-secondary me-2" onClick={() => handleEdit(job)}>Edit</button>
+                <button className="btn btn-outline-danger" onClick={() => handleDelete(job.id)}>Delete</button>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Add/Edit Form */}
         <button className="btn btn-primary mb-4" onClick={() => setFormVisible(!formVisible)}>
           {formVisible ? 'Cancel' : 'Add New Job'}
         </button>
@@ -217,81 +204,19 @@ function ManageJobs() {
           <section className="mb-5">
             <h2 className="text-center mb-4">{editingJobId ? 'Edit Job' : 'Add New Job'}</h2>
             <form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '600px' }}>
-
-              {/* Title */}
-              <div className="mb-3">
-                <label className="form-label">Title</label>
-                <select className="form-select" name="title" required value={jobForm.title} onChange={handleInputChange}>
-                  <option value="">Select Title</option>
-                  <option value="Frontend Developer">Frontend Developer</option>
-                  <option value="Backend Developer">Backend Developer</option>
-                  <option value="UI/UX Designer">UI/UX Designer</option>
-                  <option value="Project Manager">Project Manager</option>
-                  <option value="QA Tester">QA Tester</option>
-                </select>
-              </div>
-
-              {/* Location */}
-              <div className="mb-3">
-                <label className="form-label">Location</label>
-                <select className="form-select" name="location" required value={jobForm.location} onChange={handleInputChange}>
-                  <option value="">Select Location</option>
-                  <option value="Bangalore">Bangalore</option>
-                  <option value="Hyderabad">Hyderabad</option>
-                  <option value="Pune">Pune</option>
-                  <option value="Remote">Remote</option>
-                  <option value="Chennai">Chennai</option>
-                </select>
-              </div>
-
-              {/* Salary Range */}
-              <div className="mb-3">
-                <label className="form-label">Salary Range</label>
-                <select className="form-select" name="salary_range" required value={jobForm.salary_range} onChange={handleInputChange}>
-                  <option value="">Select Salary Range</option>
-                  <option value="₹3 - ₹5 LPA">₹3 - ₹5 LPA</option>
-                  <option value="₹5 - ₹8 LPA">₹5 - ₹8 LPA</option>
-                  <option value="₹8 - ₹12 LPA">₹8 - ₹12 LPA</option>
-                  <option value="₹12 - ₹20 LPA">₹12 - ₹20 LPA</option>
-                </select>
-              </div>
-
-              {/* Job Type */}
-              <div className="mb-3">
-                <label className="form-label">Job Type</label>
-                <select className="form-select" name="job_type" required value={jobForm.job_type} onChange={handleInputChange}>
-                  <option value="">Select Job Type</option>
-                  <option value="Full Time">Full Time</option>
-                  <option value="Part Time">Part Time</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Contract">Contract</option>
-                </select>
-              </div>
-
-              {/* Interview Type */}
-              <div className="mb-3">
-                <label className="form-label">Interview Type</label>
-                <select className="form-select" name="interview_type" required value={jobForm.interview_type} onChange={handleInputChange}>
-                  <option value="">Select Interview Type</option>
-                  <option value="Online">Online</option>
-                  <option value="Offline">Offline</option>
-                  <option value="Telephonic">Telephonic</option>
-                </select>
-              </div>
-
-              {/* Experience Level */}
-              <div className="mb-3">
-                <label className="form-label">Experience Level</label>
-                <select className="form-select" name="exp_level" required value={jobForm.exp_level} onChange={handleInputChange}>
-                  <option value="">Select Experience Level</option>
-                  <option value="Fresher">Fresher</option>
-                  <option value="1-3 Years">1-3 Years</option>
-                  <option value="3-5 Years">3-5 Years</option>
-                  <option value="5+ Years">5+ Years</option>
-                </select>
-              </div>
-
-              {/* Description */}
+              {['title', 'location', 'salary_range', 'job_type', 'interview_type', 'exp_level'].map((field) => (
+                <div className="mb-3" key={field}>
+                  <label className="form-label text-capitalize">{field.replace('_', ' ')}</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name={field}
+                    value={jobForm[field]}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+              ))}
               <div className="mb-3">
                 <label className="form-label">Description</label>
                 <textarea
@@ -303,7 +228,6 @@ function ManageJobs() {
                   rows={4}
                 />
               </div>
-
               <button type="submit" className="btn btn-success w-100">
                 {editingJobId ? 'Update Job' : 'Submit Job'}
               </button>

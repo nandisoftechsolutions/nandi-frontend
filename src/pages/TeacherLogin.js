@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../api';
 
 export default function TeacherLogin() {
   const [email, setEmail] = useState('');
@@ -11,16 +12,20 @@ export default function TeacherLogin() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (!email || !password) return alert('Please fill all fields');
+    if (!email.trim() || !password.trim()) {
+      alert('Please fill all fields');
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/teacher/login', {
+      const res = await axios.post(`${BASE_URL}/api/teacher/login`, {
         email: email.trim(),
         password: password.trim(),
       });
 
       const { token, teacher } = res.data;
+
       localStorage.setItem('teacherToken', token);
       localStorage.setItem('teacher', JSON.stringify(teacher));
       localStorage.setItem('teacherName', teacher.name);
@@ -36,33 +41,39 @@ export default function TeacherLogin() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-start min-vh-100 pt-5">
-      <div className="card p-4 shadow" style={{ maxWidth: '400px', width: '100%' }}>
-        <h2 className="text-primary text-center mb-4">Teacher Login</h2>
+    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="card shadow p-4 w-100" style={{ maxWidth: '420px' }}>
+        <h3 className="text-center text-primary mb-4 fw-semibold">Teacher Login</h3>
 
-        <div className="mb-3 position-relative">
-          <FaEnvelope className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" />
+        <div className="form-group mb-3 position-relative">
+          <FaEnvelope className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" />
           <input
             type="email"
-            className="form-control ps-5"
-            placeholder="Email"
+            className="form-control ps-5 py-2"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
 
-        <div className="mb-3 position-relative">
-          <FaLock className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" />
+        <div className="form-group mb-4 position-relative">
+          <FaLock className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" />
           <input
             type="password"
-            className="form-control ps-5"
-            placeholder="Password"
+            className="form-control ps-5 py-2"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 
-        <button className="btn btn-primary w-100" onClick={handleLogin} disabled={loading}>
+        <button
+          className="btn btn-primary w-100 fw-semibold"
+          onClick={handleLogin}
+          disabled={loading}
+        >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </div>

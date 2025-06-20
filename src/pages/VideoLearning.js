@@ -1,8 +1,8 @@
-// File: src/pages/VideoLearning.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './VideoLearning.css';
+import BASE_URL from '../api';
 
 function VideoLearning() {
   const navigate = useNavigate();
@@ -14,22 +14,19 @@ function VideoLearning() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/managevideo');
+        const res = await axios.get(`${BASE_URL}/api/managevideo`);
         setVideos(res.data);
 
         if (user?.email) {
-          const uniqueCourseIds = [
-            ...new Set(res.data.map((v) => v.course_id).filter(Boolean)),
-          ];
-
+          const uniqueCourseIds = [...new Set(res.data.map(v => v.course_id).filter(Boolean))];
           const enrollmentStatus = {};
+
           await Promise.all(
             uniqueCourseIds.map(async (courseId) => {
               try {
-                const { data } = await axios.get(
-                  `http://localhost:5000/api/courses/${courseId}/is-enrolled`,
-                  { params: { userEmail: user.email } }
-                );
+                const { data } = await axios.get(`${BASE_URL}/api/courses/${courseId}/is-enrolled`, {
+                  params: { userEmail: user.email },
+                });
                 enrollmentStatus[courseId] = data.enrolled;
               } catch (err) {
                 console.error(`Enrollment check failed for course ${courseId}:`, err);
@@ -55,7 +52,6 @@ function VideoLearning() {
 
   return (
     <div className="container py-5">
-      <br/>
       <h2 className="text-center mb-5 fw-bold">📚 Full Course Video Library</h2>
 
       {Object.entries(groupedVideos).map(([courseName, courseVideos], idx) => {
@@ -79,7 +75,7 @@ function VideoLearning() {
                     <div className="video-card h-100 shadow-sm rounded overflow-hidden">
                       <div className="video-card-img-wrapper position-relative">
                         <img
-                          src={`http://localhost:5000/uploads/${video.thumbnail}`}
+                          src={`${BASE_URL}/uploads/${video.thumbnail}`}
                           alt={video.title}
                           className="video-card-img w-100"
                           style={{ objectFit: 'cover', height: '200px' }}
@@ -89,7 +85,7 @@ function VideoLearning() {
                           <div
                             className="play-icon-center"
                             onClick={() => navigate(`/video/${video.id}`)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: 'pointer', position: 'absolute', top: '40%', left: '45%' }}
                           >
                             <i className="bi bi-play-circle-fill play-icon fs-2 text-white"></i>
                           </div>

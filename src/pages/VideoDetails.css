@@ -311,3 +311,22 @@
     width: 100%;
   }
 }
+/* src/pages/VideoDetails.css */
+
+.card-img-top {
+  height: 140px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

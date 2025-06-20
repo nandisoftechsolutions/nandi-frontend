@@ -49,3 +49,10 @@
 .admin-login-btn:hover {
   background-color: #e0a800;
 }
+
+.footer .developer {
+  color: #ffc107; 
+  font-weight: 600;
+  margin-top: 5px;
+  display: block;
+}

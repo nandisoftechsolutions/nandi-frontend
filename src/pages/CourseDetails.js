@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import BASE_URL from '../api';
 
 const CourseDetails = () => {
   const { courseSlug } = useParams();
@@ -13,7 +14,6 @@ const CourseDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // ✅ Razorpay script loader
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -30,13 +30,13 @@ const CourseDetails = () => {
       try {
         if (location.state?.courseData) {
           const courseId = location.state.courseData;
-          const res = await axios.get(`http://localhost:5000/api/courses/byid/${courseId}`);
+          const res = await axios.get(`${BASE_URL}/api/courses/byid/${courseId}`);
           setSelectedCourse(res.data);
         } else if (courseSlug) {
-          const res = await axios.get(`http://localhost:5000/api/courses/${courseSlug}`);
+          const res = await axios.get(`${BASE_URL}/api/courses/${courseSlug}`);
           setSelectedCourse(res.data);
         } else {
-          const res = await axios.get('http://localhost:5000/api/courses');
+          const res = await axios.get(`${BASE_URL}/api/courses`);
           setCourses(res.data);
         }
       } catch (err) {
@@ -66,31 +66,31 @@ const CourseDetails = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/courses/init-payment', {
+      const res = await axios.post(`${BASE_URL}/api/courses/init-payment`, {
         courseId: course.id,
         username: user.name,
         email: user.email,
       });
 
       const options = {
-        key: 'rzp_test_SO0yWkGNPJARIG', // Replace with env in production
+        key: 'rzp_test_SO0yWkGNPJARIG',
         amount: res.data.amount,
         currency: 'INR',
         name: 'Nandi Softech Solutions',
         description: `Purchase ${course.title}`,
         order_id: res.data.orderId,
         handler: async function (response) {
-  await axios.post('http://localhost:5000/api/courses/verify-payment', {
-    razorpay_order_id: response.razorpay_order_id,
-    razorpay_payment_id: response.razorpay_payment_id,
-    razorpay_signature: response.razorpay_signature,
-    courseId: course.id,
-    email: user.email,
-  });
+          await axios.post(`${BASE_URL}/api/courses/verify-payment`, {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            courseId: course.id,
+            email: user.email,
+          });
 
-  alert('✅ Payment successful and subscription activated!');
-  navigate('/thank-you', { state: { courseTitle: course.title } }); // ✅ redirection
-},
+          alert('✅ Payment successful and subscription activated!');
+          navigate('/thank-you', { state: { courseTitle: course.title } });
+        },
         prefill: {
           email: user.email,
           name: user.name,
@@ -145,8 +145,7 @@ const CourseDetails = () => {
               <p className="card-text text-muted">{selectedCourse.description}</p>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-4 gap-3">
                 <div className="text-success fw-bold fs-4">
-                  ₹{selectedCourse.price}{' '}
-                  <span className="text-muted fs-6">(One-time)</span>
+                  ₹{selectedCourse.price} <span className="text-muted fs-6">(One-time)</span>
                 </div>
                 <button className="btn btn-success px-4" onClick={() => handleBuyNow(selectedCourse)}>
                   Buy Now
@@ -168,7 +167,7 @@ const CourseDetails = () => {
       <div className="row">
         {courses.map((course) => (
           <motion.div
-            className="col-sm-12 col-md-6 col-lg-4 mb-4"
+            className="col-12 col-md-6 col-lg-4 mb-4"
             key={course.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

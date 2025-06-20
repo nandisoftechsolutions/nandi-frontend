@@ -1,16 +1,10 @@
-// File: src/pages/VideoDetails.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import slugify from 'slugify';
 import './VideoDetails.css';
-import {
-  BsHeart,
-  BsHeartFill,
-  BsShare,
-  BsLock,
-} from 'react-icons/bs';
+import { BsHeart, BsHeartFill, BsShare, BsLock } from 'react-icons/bs';
+import BASE_URL from '../api';
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -32,21 +26,21 @@ const VideoDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/managevideo/${id}`);
+        const res = await axios.get(`${BASE_URL}/api/managevideo/${id}`);
         setVideo(res.data);
         setCourseName(res.data.course || '');
 
         if (user?.email) {
-          const enrollRes = await axios.get(`http://localhost:5000/api/courses/${res.data.course_id}/is-enrolled`, {
+          const enrollRes = await axios.get(`${BASE_URL}/api/courses/${res.data.course_id}/is-enrolled`, {
             params: { userEmail: user.email },
           });
           setIsEnrolled(enrollRes.data.enrolled);
         }
 
-        const relatedRes = await axios.get(`http://localhost:5000/api/coursevideos/bycourse/${res.data.course_id}`);
+        const relatedRes = await axios.get(`${BASE_URL}/api/coursevideos/bycourse/${res.data.course_id}`);
         setRelatedVideos(relatedRes.data.filter((v) => v.id !== +id));
 
-        const likeRes = await axios.get(`http://localhost:5000/api/likes/${id}?user=${username}`);
+        const likeRes = await axios.get(`${BASE_URL}/api/likes/${id}?user=${username}`);
         setLikesData({ likes: likeRes.data.likes, dislikes: likeRes.data.dislikes });
         setUserLiked(likeRes.data.userLiked);
       } catch (err) {
@@ -64,11 +58,11 @@ const VideoDetails = () => {
     if (userLiked === action) return;
 
     try {
-      await axios.post(`http://localhost:5000/api/likes/${id}`, {
+      await axios.post(`${BASE_URL}/api/likes/${id}`, {
         user_name: username,
         is_dislike: isDislike,
       });
-      const res = await axios.get(`http://localhost:5000/api/likes/${id}?user=${username}`);
+      const res = await axios.get(`${BASE_URL}/api/likes/${id}?user=${username}`);
       setLikesData({ likes: res.data.likes, dislikes: res.data.dislikes });
       setUserLiked(res.data.userLiked);
     } catch (err) {
@@ -95,25 +89,26 @@ const VideoDetails = () => {
     <div className="container-fluid py-4">
       <br/>
       <br/>
+
       <div className="row mb-4 align-items-center">
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <h2 className="fw-bold mb-2">{courseName}</h2>
         </div>
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="input-group">
             <input type="text" className="form-control" placeholder="Search" />
             <span className="input-group-text"><i className="bi bi-search"></i></span>
           </div>
         </div>
       </div>
+      <hr/>
 
       <div className="row">
-        {/* Video and description */}
         <div className="col-lg-8 mb-4">
           <div className="mb-3">
             {video.videos ? (
               <video width="100%" controls autoPlay>
-                <source src={`http://localhost:5000/uploads/${video.videos}`} type="video/mp4" />
+                <source src={`${BASE_URL}/uploads/${video.videos}`} type="video/mp4" />
               </video>
             ) : (
               <iframe
@@ -132,11 +127,7 @@ const VideoDetails = () => {
           <div className="d-flex flex-wrap gap-3 align-items-center mb-3">
             <div className="d-flex align-items-center gap-2">
               <img
-                src={
-                  video.teacher_profile_picture
-                    ? `http://localhost:5000/uploads/${video.teacher_profile_picture}`
-                    : '/default-user.png'
-                }
+                src={video.teacher_profile_picture ? `${BASE_URL}/uploads/${video.teacher_profile_picture}` : '/default-user.png'}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = '/default-user.png';
@@ -149,18 +140,10 @@ const VideoDetails = () => {
               <strong>{video.teacher_name || 'Unknown Teacher'}</strong>
             </div>
             <div className="d-flex flex-wrap gap-2">
-              <button
-                className="btn btn-outline-danger"
-                onClick={() => handleLike(false)}
-                disabled={userLiked === 'like'}
-              >
+              <button className="btn btn-outline-danger" onClick={() => handleLike(false)} disabled={userLiked === 'like'}>
                 <BsHeart /> {likesData.likes}
               </button>
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => handleLike(true)}
-                disabled={userLiked === 'dislike'}
-              >
+              <button className="btn btn-outline-dark" onClick={() => handleLike(true)} disabled={userLiked === 'dislike'}>
                 <BsHeartFill /> {likesData.dislikes}
               </button>
               <button className="btn btn-outline-secondary" onClick={handleCopy}>
@@ -188,7 +171,6 @@ const VideoDetails = () => {
           </div>
         </div>
 
-        {/* Related videos */}
         <div className="col-lg-4">
           <h5 className="fw-bold mb-3">📂 Related Videos</h5>
           {relatedVideos.map((v, idx) => (
@@ -198,6 +180,8 @@ const VideoDetails = () => {
               style={{
                 cursor: !isEnrolled && idx > 1 ? 'not-allowed' : 'pointer',
                 opacity: !isEnrolled && idx > 1 ? 0.6 : 1,
+                borderRadius: '10px',
+                overflow: 'hidden',
               }}
               onClick={() => {
                 if (!isEnrolled && idx > 1) return alert('Subscribe to unlock more videos');
@@ -205,10 +189,15 @@ const VideoDetails = () => {
               }}
             >
               <img
-                src={`http://localhost:5000/uploads/${v.thumbnail}`}
-                className="card-img-top"
-                alt={v.title}
-              />
+  src={`${BASE_URL}/uploads/${v.thumbnail}`}
+  alt={v.title}
+  style={{
+    width: '100%',
+    height: '140px',
+    objectFit: 'cover',
+    borderRadius: '0px' 
+  }}
+/>
               <div className="card-body d-flex justify-content-between align-items-center">
                 <h6 className="card-title text-truncate mb-0">{v.title}</h6>
                 {!isEnrolled && idx > 1 && <BsLock />}

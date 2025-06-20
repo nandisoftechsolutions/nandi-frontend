@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './BlogsSection.css';
+import BASE_URL from '../api';
 
 function BlogsSection() {
   const [blogs, setBlogs] = useState([]);
@@ -15,7 +16,7 @@ function BlogsSection() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/manageblogs');
+      const res = await axios.get(`${BASE_URL}/api/manageblogs`);
       setBlogs(res.data);
     } catch (error) {
       console.error('Error fetching blogs:', error);
@@ -44,11 +45,11 @@ function BlogsSection() {
         </p>
         <hr />
 
-        <div className="text-center mb-4">
+        <div className="text-center mb-4 flex-wrap d-flex justify-content-center">
           {categories.map(cat => (
             <button
               key={cat}
-              className={`btn btn-outline-secondary mx-1 ${filter === cat ? 'active' : ''}`}
+              className={`btn btn-outline-secondary mx-1 mb-2 ${filter === cat ? 'active' : ''}`}
               onClick={() => setFilter(cat)}
             >
               {cat}
@@ -59,24 +60,33 @@ function BlogsSection() {
         <div className="scroll-wrapper position-relative">
           <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>&#10094;</button>
 
-          <div className="scroll-container" ref={scrollRef}>
+          <div className="scroll-container d-flex overflow-auto" ref={scrollRef}>
             {filteredBlogs.map(blog => (
               <a
                 key={blog.id}
                 href={blog.video_link || '#'}
                 target="_blank"
                 rel="noreferrer"
-                className="blog-card text-decoration-none"
+                className="blog-card text-decoration-none mx-2"
+                style={{
+                  flex: '0 0 auto',
+                  width: '300px',
+                  border: '1px solid #ccc',
+                  borderRadius: '8px',
+                  backgroundColor: '#fff',
+                  overflow: 'hidden',
+                }}
               >
                 {blog.thumbnail && (
-                  <div className="image-wrapper">
+                  <div className="image-wrapper position-relative">
                     <img
-                      src={`http://localhost:5000/uploads/${blog.thumbnail}`}
+                      src={`${BASE_URL}/uploads/${blog.thumbnail}`}
                       alt={blog.title}
-                      className="card-img-top"
+                      className="w-100"
+                      style={{ height: '180px', objectFit: 'cover', borderRadius: '0' }}
                     />
-                    <div className="play-button-overlay">
-                      <i className="bi bi-play-circle-fill play-icon"></i>
+                    <div className="play-button-overlay position-absolute top-50 start-50 translate-middle">
+                      <i className="bi bi-play-circle-fill text-white fs-1"></i>
                     </div>
                   </div>
                 )}

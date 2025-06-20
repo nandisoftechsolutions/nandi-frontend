@@ -3,6 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./About.css";
 import steveJobsImage from "../assets/sections/stevjobs.png";
+import BASE_URL from "../api";
 
 function About() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -14,18 +15,18 @@ function About() {
     { year: "2022", event: "Crossed 100+ projects" },
   ];
 
-  useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/teammembers");
-        setTeamMembers(res.data);
-      } catch (error) {
-        console.error("Failed to fetch team members", error);
-      }
-    };
+ useEffect(() => {
+  const fetchTeamMembers = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/teammembers`);
+      setTeamMembers(res.data);
+    } catch (error) {
+      console.error("Failed to fetch team members", error);
+    }
+  };
 
-    fetchTeamMembers();
-  }, []);
+  fetchTeamMembers();
+}, []);
 
   return (
     <div className="container py-5">

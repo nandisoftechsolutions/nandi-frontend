@@ -214,16 +214,16 @@
 
 
 @media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   .video-card {
-    flex: 0 0 85%;
+    min-width: 90% !important;
   }
 
   .scroll-button {
     display: none;
   }
-
-  .card-actions .btn {
-    font-size: 0.8rem;
-    padding: 5px 8px;
-  }
 }
+

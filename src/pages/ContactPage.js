@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import contactBg from "../assets/bgimage/contct.png"; // ✅ Make sure file is named exactly "contct.png"
+import contactBg from "../assets/bgimage/contct.png"; // ✅ Ensure this exists
+import BASE_URL from "../api";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/contact", formData);
+      const res = await axios.post(`${BASE_URL}/api/contact`, formData);
       if (res.data.success) {
         alert("✅ Your query submitted successfully!");
         setFormData((prev) => ({
@@ -53,7 +54,7 @@ const ContactPage = () => {
 
   const contactInfo = {
     address: "Nandi Softech Solutions, Vijayapura, Karnataka",
-    email: "nandisoftechsolution@gmail.com", // ✅ Fixing fake domain
+    email: "nandisoftechsolution@gmail.com",
     phone: "+91 8152853260",
     socials: {
       facebook: "https://www.facebook.com",
@@ -74,8 +75,8 @@ const ContactPage = () => {
           backgroundPosition: "center",
         }}
       >
-        <div>
-          <h1 className="display-4 fw-bold">Contact Us</h1>
+        <div className="px-3">
+          <h1 className="display-5 fw-bold">Contact Us</h1>
           <p className="lead">We’d love to hear from you!</p>
         </div>
       </div>
@@ -87,8 +88,8 @@ const ContactPage = () => {
         </p>
         <div className="row g-4">
           {/* Contact Form */}
-          <div className="col-lg-6">
-            <div className="contact-card p-4 rounded shadow-sm bg-white">
+          <div className="col-12 col-lg-6">
+            <div className="contact-card p-4 rounded shadow-sm bg-white h-100">
               <h3 className="mb-4">Get In Touch</h3>
 
               {!isLoggedIn ? (
@@ -146,22 +147,22 @@ const ContactPage = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="col-lg-6">
-            <div className="contact-card p-4 rounded shadow-sm bg-white">
+          <div className="col-12 col-lg-6">
+            <div className="contact-card p-4 rounded shadow-sm bg-white h-100">
               <h3 className="mb-4">Contact Information</h3>
               <p><strong>📍 Address:</strong> {contactInfo.address}</p>
-              <p><strong>📧 Email:</strong> {contactInfo.email}</p>
-              <p><strong>📞 Phone:</strong> {contactInfo.phone}</p>
+              <p><strong>📧 Email:</strong> <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a></p>
+              <p><strong>📞 Phone:</strong> <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a></p>
               <hr />
               <h5>Follow Us</h5>
               <div className="d-flex gap-2 flex-wrap">
-                <a href={contactInfo.socials.facebook} className="btn btn-outline-primary btn-sm">
+                <a href={contactInfo.socials.facebook} className="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
                   <i className="bi bi-facebook me-1"></i> Facebook
                 </a>
-                <a href={contactInfo.socials.youtube} className="btn btn-outline-danger btn-sm">
+                <a href={contactInfo.socials.youtube} className="btn btn-outline-danger btn-sm" target="_blank" rel="noopener noreferrer">
                   <i className="bi bi-youtube me-1"></i> YouTube
                 </a>
-                <a href={contactInfo.socials.instagram} className="btn btn-outline-info btn-sm">
+                <a href={contactInfo.socials.instagram} className="btn btn-outline-info btn-sm" target="_blank" rel="noopener noreferrer">
                   <i className="bi bi-instagram me-1"></i> Instagram
                 </a>
               </div>
@@ -170,7 +171,7 @@ const ContactPage = () => {
         </div>
       </div>
 
-      {/* Google Map */}
+      {/* Google Map Section */}
       <div className="container-fluid px-0">
         <iframe
           title="Vijayapura Map"

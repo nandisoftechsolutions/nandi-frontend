@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import BASE_URL from '../api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
     password: '',
   });
   const [profilePicture, setProfilePicture] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ const Register = () => {
     }
 
     try {
+      setLoading(true);
       const data = new FormData();
       data.append('name', name);
       data.append('email', email);
@@ -39,18 +42,12 @@ const Register = () => {
       data.append('password', password);
       data.append('profilePicture', profilePicture);
 
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/register',
-        data,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/api/auth/register`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
       if (response.status === 201 || response.status === 200) {
-        alert('User registered successfully');
+        alert('🎉 Registered successfully');
         setFormData({ name: '', email: '', mobile: '', password: '' });
         setProfilePicture(null);
         navigate('/login');
@@ -60,65 +57,89 @@ const Register = () => {
     } catch (error) {
       console.error('Registration Error:', error.response?.data || error.message);
       alert(error.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="register-container">
-      <br />
-      <div className="register-form-box">
-        <h2 className="register-form-title">Create Account</h2>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          className="register-input"
-          value={formData.name}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="register-input"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <input
-          type="tel"
-          name="mobile"
-          placeholder="Mobile Number"
-          className="register-input"
-          value={formData.mobile}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="register-input"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <input
-          type="file"
-          name="profilePicture"
-          className="register-input"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <button className="register-button" onClick={handleRegister}>
-          Register
+    <div className="container py-5 d-flex justify-content-center align-items-center min-vh-100">
+      <br/>
+      <br/>
+      <div className="card shadow p-4 w-100" style={{ maxWidth: '500px' }}>
+        <h2 className="text-center mb-4 text-primary">Create Account</h2>
+
+        <div className="mb-3">
+          <input
+            type="text"
+            name="name"
+            className="form-control"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="email"
+            name="email"
+            className="form-control"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="tel"
+            name="mobile"
+            className="form-control"
+            placeholder="Mobile Number"
+            value={formData.mobile}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="file"
+            name="profilePicture"
+            className="form-control"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        <button
+          className="btn btn-primary w-100 fw-bold"
+          onClick={handleRegister}
+          disabled={loading}
+        >
+          {loading ? 'Registering...' : 'Register'}
         </button>
-        <p className="register-footer-text">
-          Already have an account?
+
+        <div className="text-center mt-3">
+          <small className="text-muted">Already have an account?</small>
           <button
+            className="btn btn-link p-0 ms-2"
             onClick={() => navigate('/login')}
-            className="register-login-link"
           >
             Login here
           </button>
-        </p>
+        </div>
       </div>
     </div>
   );

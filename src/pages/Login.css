@@ -45,3 +45,51 @@ input:focus {
     transform: translateY(0);
   }
 }
+
+/* Login.css */
+
+.login-container {
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-icon {
+  position: absolute;
+  top: 50%;
+  left: 1.25rem;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 1.25rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1.5rem;
+  }
+
+  .form-icon {
+    left: 1rem;
+  }
+
+  .password-toggle {
+    right: 1rem;
+  }
+
+  .form-control {
+    font-size: 0.95rem;
+    padding: 0.6rem 2.5rem 0.6rem 2.5rem;
+  }
+}

@@ -15,28 +15,38 @@ const bgImages = [gearImg, heartImg, heroImg, bgImg1, bgImg2, bgImg3, bgImg4];
 const contentSlides = [
   {
     title: "Welcome to Nandi Softech",
-    subtitle: "Innovative Software and Testing Solutions",
+    subtitle: "Innovative Software Development & Professional Testing Services",
     button: "Get Started",
   },
   {
     title: "We Build Business Software",
-    subtitle: "Custom ERP, Billing, Inventory & Automation Tools",
+    subtitle: "ERP Systems, Billing Apps, School & Shop Management, Custom CRM",
     button: "Explore Services",
   },
   {
-    title: "We Teach Modern Tech",
-    subtitle: "Join Our Courses in Web Development, Testing, and AI",
+    title: "Practical IT Courses for Everyone",
+    subtitle: "Learn Full Stack Development, Software Testing, and Cloud Tools with Real Projects",
     button: "Join Courses",
   },
   {
-    title: "Affordable IT for Every Business",
-    subtitle: "From Schools to Shops, We Build Digital Solutions",
+    title: "Learn From Industry Experts",
+    subtitle: "Trainers with 5+ Years of Experience in IT, Live Mentorship, Interview Preparation & Internships",
+    button: "Start Learning",
+  },
+  {
+    title: "Affordable Tech for Small Businesses",
+    subtitle: "Digitize Your Business With Our Custom Software — No Big Budgets Required",
     button: "Talk to Us",
   },
   {
-    title: "Learn Coding With Us",
-    subtitle: "We Start With Scratch, We Provide Certifications",
-    button: "Let's Create",
+    title: "Career-Focused Learning Paths",
+    subtitle: "From Basics to Advanced, Get Certified and Job-Ready — Even Without Prior Experience",
+    button: "View Roadmap",
+  },
+  {
+    title: "Support After Training",
+    subtitle: "We Help You With Resume Building, Mock Interviews, Freelance Projects, and Placement",
+    button: "Let’s Begin",
   },
 ];
 

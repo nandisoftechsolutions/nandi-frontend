@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './TeamManage.css';
 import AdminNavbar from './Components/AdminNavbar';
+import BASE_URL from '../../api';
 
 const departments = ['Management', 'Engineering', 'Marketing', 'Sales', 'Design', 'HR', 'Support', 'Leadership'];
 const roles = ['Developer', 'Designer', 'Manager', 'Engineer', 'Lead', 'CEO', 'CTO', 'CMO'];
@@ -18,7 +19,7 @@ const TeamManage = () => {
   const formRef = useRef(null);
 
   const fetchMembers = () => {
-    axios.get('http://localhost:5000/api/team')
+    axios.get(`${BASE_URL}/api/team`)
       .then(res => setMembers(res.data))
       .catch(err => console.error('Error fetching team data:', err));
   };
@@ -33,7 +34,7 @@ const TeamManage = () => {
     formData.append('photo', file);
     setUploading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/team/upload', formData);
+      const res = await axios.post(`${BASE_URL}/api/team/upload`, formData);
       setNewMember(prev => ({ ...prev, photo_url: res.data.photo_url }));
     } catch (err) {
       console.error('Upload error:', err);
@@ -45,12 +46,15 @@ const TeamManage = () => {
 
   const handleSubmit = () => {
     const method = editId ? 'put' : 'post';
-    const url = editId ? `http://localhost:5000/api/team/${editId}` : 'http://localhost:5000/api/team';
+    const url = editId ? `${BASE_URL}/api/team/${editId}` : `${BASE_URL}/api/team`;
 
     axios[method](url, newMember)
       .then(() => {
         fetchMembers();
-        setNewMember({ name: '', role: '', bio: '', department: '', email: '', linkedin: '', is_founder: false, is_cofounder: false, photo_url: '' });
+        setNewMember({
+          name: '', role: '', bio: '', department: '', email: '', linkedin: '',
+          is_founder: false, is_cofounder: false, photo_url: ''
+        });
         setEditId(null);
       })
       .catch(err => alert('Error saving team member'));
@@ -58,7 +62,7 @@ const TeamManage = () => {
 
   const handleDelete = id => {
     if (window.confirm('Are you sure?')) {
-      axios.delete(`http://localhost:5000/api/team/${id}`)
+      axios.delete(`${BASE_URL}/api/team/${id}`)
         .then(() => fetchMembers())
         .catch(err => alert('Delete failed'));
     }
@@ -114,16 +118,16 @@ const TeamManage = () => {
             {uploading && <small className="text-muted">Uploading...</small>}
           </div>
           <div className="col-md-6">
-            <label className="form-check-label">
-              <input type="checkbox" className="form-check-input me-2" checked={newMember.is_founder} onChange={e => setNewMember({ ...newMember, is_founder: e.target.checked })} />
-              Founder
-            </label>
+            <div className="form-check">
+              <input type="checkbox" className="form-check-input" id="founder" checked={newMember.is_founder} onChange={e => setNewMember({ ...newMember, is_founder: e.target.checked })} />
+              <label className="form-check-label" htmlFor="founder">Founder</label>
+            </div>
           </div>
           <div className="col-md-6">
-            <label className="form-check-label">
-              <input type="checkbox" className="form-check-input me-2" checked={newMember.is_cofounder} onChange={e => setNewMember({ ...newMember, is_cofounder: e.target.checked })} />
-              Co-Founder
-            </label>
+            <div className="form-check">
+              <input type="checkbox" className="form-check-input" id="cofounder" checked={newMember.is_cofounder} onChange={e => setNewMember({ ...newMember, is_cofounder: e.target.checked })} />
+              <label className="form-check-label" htmlFor="cofounder">Co-Founder</label>
+            </div>
           </div>
           <div className="col-12">
             <button className="btn btn-success w-100" onClick={() => {
@@ -161,7 +165,7 @@ const TeamManage = () => {
                 <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={member.id}>
                   <div className="card team-card text-center p-3 h-100 shadow-sm">
                     <img
-                      src={`http://localhost:5000/uploads/${member.photo_url || 'default-user.jpg'}`}
+                      src={`${BASE_URL}/uploads/${member.photo_url || 'default-user.jpg'}`}
                       alt={member.name}
                       className="rounded-circle mx-auto mb-3"
                       style={{ width: '100px', height: '100px', objectFit: 'cover', border: '3px solid #0d6efd' }}

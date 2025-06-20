@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminLogin.css';
+import BASE_URL from '../../api';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -13,9 +14,8 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/admins/login', { email, password });
+      const res = await axios.post(`${BASE_URL}/api/admins/login`, { email, password });
 
-      // Save admin data including photo
       localStorage.setItem('isAdmin', 'true');
       localStorage.setItem('adminData', JSON.stringify(res.data));
 
@@ -26,26 +26,34 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="admin-login-wrapper">
-      <form className="admin-login-form" onSubmit={handleLogin}>
-        <h2>Admin Login</h2>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-        {errorMsg && <p className="admin-error-msg">{errorMsg}</p>}
-      </form>
+    <div className="admin-login-wrapper d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="admin-login-form card p-4 shadow-sm w-100" style={{ maxWidth: '400px' }}>
+        <h2 className="text-center mb-4">Admin Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Enter Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100">Login</button>
+          {errorMsg && <p className="text-danger mt-3 text-center">{errorMsg}</p>}
+        </form>
+      </div>
     </div>
   );
 };

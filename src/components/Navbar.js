@@ -10,7 +10,6 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-
   const isHomePage = location.pathname === '/';
 
   useEffect(() => {
@@ -61,14 +60,12 @@ const Navbar = () => {
     { to: '/contact', label: 'Contact' },
     { to: '/learn', label: 'Learn' },
     { to: '/careers', label: 'Careers', isButton: true },
-    
     ...(!user ? [{ to: '/login', label: 'Login' }] : []),
-      
   ];
 
   return (
     <nav className={`main-navbar ${isScrolled ? 'fixed' : ''} ${isHomePage ? 'white-navbar' : ''}`}>
-      <div className="container d-flex justify-content-between align-items-center flex-wrap">
+      <div className="container-fluid d-flex flex-column flex-sm-row justify-content-between align-items-center py-1">
         <div className="d-flex align-items-center">
           <NavLink to="/" className="navbar-brand d-flex align-items-center text-decoration-none">
             <div className="logo-mask me-2">
@@ -101,10 +98,7 @@ const Navbar = () => {
 
           {user && (
             <>
-              <button
-                className="nav-link btn btn-link text-danger"
-                onClick={handleLogout}
-              >
+              <button className="nav-link btn btn-link text-danger" onClick={handleLogout}>
                 Logout
               </button>
               <div className="user-info ms-3 mt-2 mt-lg-0">

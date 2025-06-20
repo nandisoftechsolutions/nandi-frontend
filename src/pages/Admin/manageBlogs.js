@@ -3,6 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminNavbar from './Components/AdminNavbar';
 import './ManageBlogs.css';
+import BASE_URL from '../../api';
 
 export default function ManageBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -22,7 +23,7 @@ export default function ManageBlogs() {
 
   const loadBlogs = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/manageblogs');
+      const res = await axios.get(`${BASE_URL}/api/manageblogs`);
       setBlogs(res.data);
     } catch (error) {
       console.error('Error fetching blogs:', error);
@@ -55,10 +56,10 @@ export default function ManageBlogs() {
       if (form.thumbnail) data.append('thumbnail', form.thumbnail);
 
       if (form.id) {
-        await axios.put(`http://localhost:5000/api/manageblogs/${form.id}`, data);
+        await axios.put(`${BASE_URL}/api/manageblogs/${form.id}`, data);
         showAlert('Blog updated successfully!');
       } else {
-        await axios.post('http://localhost:5000/api/manageblogs', data);
+        await axios.post(`${BASE_URL}/api/manageblogs`, data);
         showAlert('Blog added successfully!');
       }
 
@@ -85,7 +86,7 @@ export default function ManageBlogs() {
   const handleDelete = async id => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/manageblogs/${id}`);
+        await axios.delete(`${BASE_URL}/api/manageblogs/${id}`);
         showAlert('Blog deleted successfully!', 'warning');
         loadBlogs();
       } catch (error) {
@@ -117,7 +118,7 @@ export default function ManageBlogs() {
         </div>
       )}
 
-    
+      {/* Blog Form */}
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="border p-4 rounded shadow-sm bg-white mb-5">
         <div className="row g-4">
           <div className="col-md-6">
@@ -179,15 +180,15 @@ export default function ManageBlogs() {
         </div>
       </form>
 
-    
+      {/* Blog List with Horizontal Scroll */}
       <div className="position-relative">
         <button className="scroll-btn left" onClick={() => scrollBlogs('left')}>&#8592;</button>
-        <div className="blog-scroll-container" ref={scrollRef}>
+        <div className="blog-scroll-container d-flex overflow-auto px-2" ref={scrollRef}>
           {blogs.map(blog => (
-            <div key={blog.id} className="blog-card shadow-sm bg-white rounded">
+            <div key={blog.id} className="blog-card shadow-sm bg-white rounded m-2 flex-shrink-0" style={{ minWidth: '280px', maxWidth: '320px' }}>
               {blog.thumbnail && (
                 <img
-                  src={`http://localhost:5000/uploads/${blog.thumbnail}`}
+                  src={`${BASE_URL}/uploads/${blog.thumbnail}`}
                   alt={`${blog.title} thumbnail`}
                   className="card-img-top"
                   style={{ height: '180px', objectFit: 'cover' }}

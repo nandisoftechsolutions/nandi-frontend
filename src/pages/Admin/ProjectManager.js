@@ -3,6 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AdminNavbar from './Components/AdminNavbar';
 import './ProjectManager.css';
+import BASE_URL from '../../api';
 
 const ProjectManager = () => {
   const [projects, setProjects] = useState([]);
@@ -24,7 +25,7 @@ const ProjectManager = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/manageprojects');
+      const res = await axios.get(`${BASE_URL}/api/manageprojects`);
       setProjects(res.data);
     } catch (err) {
       console.error('Failed to fetch projects:', err);
@@ -49,8 +50,8 @@ const ProjectManager = () => {
 
     try {
       const url = editId
-        ? `http://localhost:5000/api/manageprojects/${editId}`
-        : 'http://localhost:5000/api/manageprojects';
+        ? `${BASE_URL}/api/manageprojects/${editId}`
+        : `${BASE_URL}/api/manageprojects`;
       const method = editId ? axios.put : axios.post;
       await method(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       resetForm();
@@ -78,7 +79,7 @@ const ProjectManager = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this project?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/manageprojects/${id}`);
+        await axios.delete(`${BASE_URL}/api/manageprojects/${id}`);
         fetchProjects();
       } catch (err) {
         console.error('Delete failed:', err);
@@ -112,8 +113,8 @@ const ProjectManager = () => {
   return (
     <>
       <AdminNavbar />
-      <div className="container-fluid p-4 mt-5">
-        <div className="container bg-white p-4 shadow-lg rounded">
+      <div className="container-fluid p-3 mt-5">
+        <div className="container bg-white p-4 shadow-sm rounded">
           <h2 className="text-center mb-4 text-primary fw-bold">
             {editId ? 'Edit Project' : 'Add New Project'}
           </h2>
@@ -149,7 +150,7 @@ const ProjectManager = () => {
               <input type="file" name="image_file" onChange={handleChange} className="form-control" accept="image/*" />
             </div>
             <div className="col-12 text-center">
-              <button type="submit" className="btn btn-success px-5 shadow-sm">
+              <button type="submit" className="btn btn-success px-5 shadow">
                 {editId ? 'Update' : 'Add'} Project
               </button>
             </div>
@@ -159,13 +160,15 @@ const ProjectManager = () => {
         <h3 className="my-4 text-primary fw-bold text-center">Projects List</h3>
         <div className="position-relative">
           <button className="scroll-btn left" onClick={() => scrollProjects('left')}>&#8592;</button>
-          <div className="project-scroll-container" ref={scrollRef}>
+          <div className="project-scroll-container d-flex overflow-auto gap-3 px-2" ref={scrollRef}>
             {projects.map((p) => (
-              <div className="project-card" key={p.id}>
+              <div className="project-card card shadow-sm flex-shrink-0" key={p.id} style={{ width: '320px' }}>
                 {p.image_url && (
                   <img
-                    src={`http://localhost:5000${p.image_url}`}
+                    src={`${BASE_URL}${p.image_url}`}
                     alt={p.title}
+                    className="card-img-top"
+                    style={{ height: '180px', objectFit: 'cover' }}
                   />
                 )}
                 <div className="card-body d-flex flex-column">
