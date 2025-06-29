@@ -1,3 +1,6 @@
 [build]
-  command = "npx craco build"
+  command = "npm install --legacy-peer-deps && npx craco build"
   publish = "build"
+
+[context.production.environment]
+  NODE_VERSION = "18"
