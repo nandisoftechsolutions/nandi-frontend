@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 import Header from './components/Header';
 import Navbar from './components/Navbar';
@@ -54,10 +55,9 @@ const AppWrapper = () => {
     '/manageblogs',
     '/teammanage',
     '/managemassage',
-    
     '/manageuser',
     '/manageadmins',
-    '/manageateachers',
+    '/manageteachers'
   ];
 
   const isAdminRoute = adminPaths.some(path =>
@@ -75,7 +75,6 @@ const AppWrapper = () => {
 
       <div className="page-content">
         <Routes>
-         
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -92,17 +91,12 @@ const AppWrapper = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/teampage" element={<TeamPage />} />
-         <Route path="/course/:courseSlug/coursedetails" element={<CourseDetails />} />
-
+          <Route path="/course/:courseSlug/coursedetails" element={<CourseDetails />} />
           <Route path="/thank-you" element={<ThankYou />} />
 
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-
-         
-         <Route path="/forgot-password" element={<ForgotPassword />} />
-         <Route path="/reset-password" element={<ResetPassword />} />
-
-         
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/orders" element={<OrderManagement />} />
@@ -112,14 +106,19 @@ const AppWrapper = () => {
           <Route path="/manageblogs" element={<ManageBlogs />} />
           <Route path="/teammanage" element={<TeamManage />} />
           <Route path="/managemassage" element={<ManageMassage />} />
-        
           <Route path="/manageuser" element={<ManageUser />} />
-          <Route path="/manageadmins" element={<ManageAdmin/>}/>
-          <Route path="/teacherslogin" element={<TeacherLogin/>}/>
-          <Route path="/manageteachers" element={<TeacherManage/>}/>
+          <Route path="/manageadmins" element={<ManageAdmin />} />
+          <Route path="/teacherslogin" element={<TeacherLogin />} />
+          <Route path="/manageteachers" element={<TeacherManage />} />
 
-          
-          <Route path="*" element={<h2 className="text-center mt-5">404 - Page Not Found</h2>} />
+          <Route
+            path="*"
+            element={
+              <div className="text-center mt-5">
+                <h2>404 - Page Not Found</h2>
+              </div>
+            }
+          />
         </Routes>
       </div>
 
@@ -130,9 +129,11 @@ const AppWrapper = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppWrapper />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AppWrapper />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

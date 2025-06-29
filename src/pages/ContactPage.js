@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import contactBg from "../assets/bgimage/contct.png"; // ✅ Ensure this exists
 import BASE_URL from "../api";
 
@@ -65,6 +66,14 @@ const ContactPage = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Contact Us | Nandi Softech Solutions</title>
+        <meta
+          name="description"
+          content="Get in touch with Nandi Softech Solutions. Contact us for software development, testing services, or training courses. We'd love to hear from you!"
+        />
+      </Helmet>
+
       {/* Hero Section */}
       <div
         className="text-white d-flex align-items-center justify-content-center text-center"
@@ -93,11 +102,15 @@ const ContactPage = () => {
               <h3 className="mb-4">Get In Touch</h3>
 
               {!isLoggedIn ? (
-                <p className="text-danger">🔒 Please login to send a message.</p>
+                <p className="text-danger">
+                  🔒 Please login to send a message.
+                </p>
               ) : (
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Your Name</label>
+                    <label htmlFor="name" className="form-label">
+                      Your Name
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -107,7 +120,9 @@ const ContactPage = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email Address</label>
+                    <label htmlFor="email" className="form-label">
+                      Email Address
+                    </label>
                     <input
                       type="email"
                       className="form-control"
@@ -117,7 +132,9 @@ const ContactPage = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="subject" className="form-label">Subject</label>
+                    <label htmlFor="subject" className="form-label">
+                      Subject
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -128,7 +145,9 @@ const ContactPage = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="message" className="form-label">Message</label>
+                    <label htmlFor="message" className="form-label">
+                      Message
+                    </label>
                     <textarea
                       className="form-control"
                       id="message"
@@ -150,19 +169,44 @@ const ContactPage = () => {
           <div className="col-12 col-lg-6">
             <div className="contact-card p-4 rounded shadow-sm bg-white h-100">
               <h3 className="mb-4">Contact Information</h3>
-              <p><strong>📍 Address:</strong> {contactInfo.address}</p>
-              <p><strong>📧 Email:</strong> <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a></p>
-              <p><strong>📞 Phone:</strong> <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a></p>
+              <p>
+                <strong>📍 Address:</strong> {contactInfo.address}
+              </p>
+              <p>
+                <strong>📧 Email:</strong>{" "}
+                <a href={`mailto:${contactInfo.email}`}>
+                  {contactInfo.email}
+                </a>
+              </p>
+              <p>
+                <strong>📞 Phone:</strong>{" "}
+                <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
+              </p>
               <hr />
               <h5>Follow Us</h5>
               <div className="d-flex gap-2 flex-wrap">
-                <a href={contactInfo.socials.facebook} className="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                <a
+                  href={contactInfo.socials.facebook}
+                  className="btn btn-outline-primary btn-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <i className="bi bi-facebook me-1"></i> Facebook
                 </a>
-                <a href={contactInfo.socials.youtube} className="btn btn-outline-danger btn-sm" target="_blank" rel="noopener noreferrer">
+                <a
+                  href={contactInfo.socials.youtube}
+                  className="btn btn-outline-danger btn-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <i className="bi bi-youtube me-1"></i> YouTube
                 </a>
-                <a href={contactInfo.socials.instagram} className="btn btn-outline-info btn-sm" target="_blank" rel="noopener noreferrer">
+                <a
+                  href={contactInfo.socials.instagram}
+                  className="btn btn-outline-info btn-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <i className="bi bi-instagram me-1"></i> Instagram
                 </a>
               </div>

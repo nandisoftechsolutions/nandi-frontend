@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./Services.css";
 
-import servicesBg from "../assets/bgimage/servicesbg.png"; // ✅ FIXED
+import servicesBg from "../assets/bgimage/servicesbg.png";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -43,12 +44,20 @@ const Services = () => {
 
   return (
     <div>
-      {/* Hero Section with background image */}
+      <Helmet>
+        <title>Our Services | Nandi Softech</title>
+        <meta
+          name="description"
+          content="Discover the range of digital services we offer, from websites to mobile apps, software solutions, UI/UX design, and SEO marketing."
+        />
+      </Helmet>
+
+      {/* Hero Section */}
       <div
         className="text-white d-flex align-items-center justify-content-center text-center"
         style={{
           height: "60vh",
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${servicesBg})`, // ✅ FIXED
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${servicesBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -63,31 +72,32 @@ const Services = () => {
       </div>
 
       {/* Services Section */}
-      <div className="services-container container my-5">
-        <div className="row justify-content-center mb-2">
+      <div className="container my-5">
+        <div className="row justify-content-center mb-4">
           <div className="col-12 text-center">
-            <h2 className="services-heading">What We Offer</h2>
-            <p className="services-subtext">
-              We provide high-quality, modern, and tailored digital solutions for your business growth.
+            <h2 className="services-heading fw-bold">What We Offer</h2>
+            <p className="services-subtext text-muted">
+              We provide high-quality, modern, and tailored digital solutions
+              for your business growth.
             </p>
           </div>
         </div>
 
-        <div className="row justify-content-center gap-3">
+        <div className="row gy-4 justify-content-center">
           {servicesList.map(({ icon, title, description }, idx) => (
             <div
               key={idx}
-              className="service-card text-center p-3 rounded-3 shadow-sm"
-              style={{
-                width: "180px",
-                flex: "0 0 auto",
-                cursor: "pointer",
-              }}
+              className="col-6 col-sm-4 col-md-3 col-lg-2"
+              role="button"
+              aria-label={`Learn more about ${title}`}
               onClick={() => handleCardClick(title)}
+              style={{ cursor: "pointer" }}
             >
-              <div className="service-icon fs-3 mb-2">{icon}</div>
-              <h6 className="fw-semibold">{title}</h6>
-              <p className="text-muted small">{description}</p>
+              <div className="service-card text-center p-3 rounded-3 shadow-sm h-100">
+                <div className="service-icon fs-2 mb-2">{icon}</div>
+                <h6 className="fw-semibold">{title}</h6>
+                <p className="text-muted small">{description}</p>
+              </div>
             </div>
           ))}
         </div>

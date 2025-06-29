@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import BASE_URL from "../api";
@@ -53,15 +54,29 @@ function Portfolio() {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    color: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: "1rem",
+    opacity: 0,
     transition: "opacity 0.3s ease",
-    zIndex: 1,
-    pointerEvents: "none",
+    zIndex: 2,
   };
 
   return (
     <div className="container py-5">
-      <h1 className="mb-5 text-center text-primary">Our Portfolio</h1>
+      <Helmet>
+        <title>Portfolio | Nandi Softech</title>
+        <meta
+          name="description"
+          content="Explore our portfolio showcasing websites, mobile apps, and software solutions developed by Nandi Softech Solutions."
+        />
+      </Helmet>
+
+      <h1 className="mb-5 text-center text-primary fw-bold">Our Portfolio</h1>
 
       {/* Filter Buttons */}
       <div className="mb-4 text-center">
@@ -82,11 +97,22 @@ function Portfolio() {
       {/* Projects Grid */}
       <div className="row g-4">
         {filtered.map(
-          ({ id, title, description, full_image_url, youtube_link, demo_link }) => (
+          ({
+            id,
+            title,
+            description,
+            full_image_url,
+            youtube_link,
+            demo_link,
+          }) => (
             <div key={id} className="col-12 col-sm-6 col-lg-3">
               <div
-                className="card h-100"
-                style={id === hoveredId ? { ...cardStyle, ...cardHover } : cardStyle}
+                className="card h-100 position-relative"
+                style={
+                  hoveredId === id
+                    ? { ...cardStyle, ...cardHover }
+                    : cardStyle
+                }
                 onMouseEnter={() => setHoveredId(id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
@@ -106,6 +132,7 @@ function Portfolio() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      color: "#888",
                     }}
                   >
                     No Image Available
@@ -118,21 +145,26 @@ function Portfolio() {
                     ...overlayStyle,
                     opacity: hoveredId === id ? 1 : 0,
                   }}
-                ></div>
+                >
+                  <div>
+                    <h5 className="mb-2">{title}</h5>
+                    <p className="small">{description?.slice(0, 80)}...</p>
+                  </div>
+                </div>
 
-                {/* Project Content */}
+                {/* Card Body */}
                 <div className="card-body">
                   <h5 className="card-title text-primary">{title}</h5>
-                  <p className="text-muted small">{description}</p>
-                  <div className="d-flex justify-content-between">
+                  <p className="text-muted small">{description?.slice(0, 80)}...</p>
+                  <div className="d-flex gap-2 mt-2">
                     {youtube_link && (
                       <a
                         href={youtube_link}
                         target="_blank"
                         rel="noreferrer"
-                        className="btn btn-sm btn-danger"
+                        className="badge bg-danger text-decoration-none"
                       >
-                        YouTube
+                        🎥 YouTube
                       </a>
                     )}
                     {demo_link && (
@@ -140,9 +172,9 @@ function Portfolio() {
                         href={demo_link}
                         target="_blank"
                         rel="noreferrer"
-                        className="btn btn-sm btn-success"
+                        className="badge bg-success text-decoration-none"
                       >
-                        Live Demo
+                        🚀 Live Demo
                       </a>
                     )}
                   </div>

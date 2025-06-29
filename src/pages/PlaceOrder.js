@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 import BASE_URL from '../api';
 
 function PlaceOrder() {
@@ -13,6 +14,7 @@ function PlaceOrder() {
   });
 
   const fileInputRef = useRef(null);
+  const messageRef = useRef(null);
   const [message, setMessage] = useState('');
 
   const platforms = ['Android', 'iOS', 'Web App'];
@@ -52,33 +54,55 @@ function PlaceOrder() {
     try {
       const res = await axios.post(`${BASE_URL}/api/orders`, formData);
       if (res.data.success) {
-        setMessage('✅ Order submitted successfully!');
-        setForm({
-          name: '', email: '', phone: '', serviceType: '',
-          platform: [], features: [], designStyle: '',
-          deadline: '', budget: '', attachment: null,
-          additionalNotes: '',
-        });
-        if (fileInputRef.current) fileInputRef.current.value = '';
+        setMessage('✅ Your order has been submitted successfully!');
+        resetForm();
       } else {
         setMessage('⚠️ Submission failed. Please try again.');
       }
     } catch (err) {
       console.error('❌ Submit Error:', err.response?.data || err.message);
       setMessage(err.response?.data?.message || '❌ Server error. Try again.');
+    } finally {
+      if (messageRef.current) {
+        messageRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
     }
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '', email: '', phone: '', serviceType: '',
+      platform: [], features: [], designStyle: '',
+      deadline: '', budget: '', attachment: null,
+      additionalNotes: '',
+    });
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const isChecked = (name, value) => form[name].includes(value);
 
   return (
     <div className="container py-5">
+      <Helmet>
+        <title>Place an Order | Nandi Softech</title>
+        <meta
+          name="description"
+          content="Place your project order with Nandi Softech Solutions. Select service type, platform, features, and upload files easily."
+        />
+      </Helmet>
+
       <div className="card shadow p-4 bg-light rounded-4">
-        <h2 className="text-center mb-4">Place an Order</h2>
-        {message && <div className="alert alert-info text-center">{message}</div>}
+        <h2 className="text-center mb-4 fw-bold">Place an Order</h2>
+
+        {message && (
+          <div ref={messageRef} className="alert alert-info text-center fw-semibold">
+            {message}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row g-3">
+            {/* Basic Inputs */}
             <div className="col-md-6">
               <label className="form-label">Name</label>
               <input type="text" className="form-control" name="name" value={form.name} onChange={handleChange} required />
@@ -91,6 +115,8 @@ function PlaceOrder() {
               <label className="form-label">Phone</label>
               <input type="text" className="form-control" name="phone" value={form.phone} onChange={handleChange} />
             </div>
+
+            {/* Dropdowns */}
             <div className="col-md-6">
               <label className="form-label">Service Type</label>
               <select className="form-select" name="serviceType" value={form.serviceType} onChange={handleChange} required>
@@ -119,16 +145,38 @@ function PlaceOrder() {
                 {budgets.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             </div>
+
+            {/* File Upload */}
             <div className="col-md-6">
               <label className="form-label">Attachment</label>
-              <input type="file" className="form-control" name="attachment" ref={fileInputRef} onChange={handleChange} accept=".pdf,.doc,.docx,.txt,.jpg,.png" />
+              <input
+                type="file"
+                className="form-control"
+                name="attachment"
+                ref={fileInputRef}
+                onChange={handleChange}
+                accept=".pdf,.doc,.docx,.txt,.jpg,.png"
+              />
+              {form.attachment && (
+                <small className="text-muted d-block mt-1">📎 {form.attachment.name}</small>
+              )}
             </div>
+
+            {/* Checkboxes */}
             <div className="col-12">
               <label className="form-label">Platform</label>
               <div className="d-flex flex-wrap gap-3">
                 {platforms.map(item => (
                   <div key={item} className="form-check">
-                    <input type="checkbox" className="form-check-input" id={`platform-${item}`} name="platform" value={item} checked={isChecked('platform', item)} onChange={handleChange} />
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id={`platform-${item}`}
+                      name="platform"
+                      value={item}
+                      checked={isChecked('platform', item)}
+                      onChange={handleChange}
+                    />
                     <label className="form-check-label" htmlFor={`platform-${item}`}>{item}</label>
                   </div>
                 ))}
@@ -139,18 +187,37 @@ function PlaceOrder() {
               <div className="d-flex flex-wrap gap-3">
                 {featuresList.map(item => (
                   <div key={item} className="form-check">
-                    <input type="checkbox" className="form-check-input" id={`features-${item}`} name="features" value={item} checked={isChecked('features', item)} onChange={handleChange} />
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id={`features-${item}`}
+                      name="features"
+                      value={item}
+                      checked={isChecked('features', item)}
+                      onChange={handleChange}
+                    />
                     <label className="form-check-label" htmlFor={`features-${item}`}>{item}</label>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Notes */}
             <div className="col-12">
               <label className="form-label">Additional Notes</label>
-              <textarea className="form-control" name="additionalNotes" rows="4" value={form.additionalNotes} onChange={handleChange}></textarea>
+              <textarea
+                className="form-control"
+                name="additionalNotes"
+                rows="4"
+                value={form.additionalNotes}
+                onChange={handleChange}
+              ></textarea>
             </div>
+
             <div className="col-12">
-              <button type="submit" className="btn btn-primary w-100">Submit Order</button>
+              <button type="submit" className="btn btn-primary w-100">
+                Submit Order
+              </button>
             </div>
           </div>
         </form>

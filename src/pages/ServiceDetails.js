@@ -1,11 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ServiceDetails.css";
 
 function ServiceDetails() {
   const location = useLocation();
-  const { serviceTitle } = location.state || { serviceTitle: "Service" };
+  const { serviceTitle } = location.state || { serviceTitle: "Our Service" };
 
   const details = {
     "Website Development": {
@@ -42,31 +43,43 @@ function ServiceDetails() {
 
   return (
     <div className="container py-5">
+      <Helmet>
+        <title>{serviceTitle} | Nandi Softech</title>
+        <meta
+          name="description"
+          content={`${serviceTitle} - ${service.content}`}
+        />
+      </Helmet>
+
       <div className="row justify-content-center">
         <div className="col-lg-10">
           <div className="text-center mb-4">
-            <h2 className="fw-bold text-primary">{serviceTitle}</h2>
+            <h1 className="fw-bold text-primary">{serviceTitle}</h1>
             <p className="lead text-muted">{service.content}</p>
           </div>
 
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title fw-semibold mb-3">Technologies We Use</h5>
-              <ul className="list-group list-group-flush">
-                {service.tech.map((tech, index) => (
-                  <li
-                    key={index}
-                    className="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    <span>{tech}</span>
-                    <span className="badge bg-primary rounded-pill">✓</span>
-                  </li>
-                ))}
-              </ul>
+          {service.tech.length > 0 ? (
+            <div className="card border-0 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title fw-semibold mb-3">
+                  Technologies We Use
+                </h5>
+                <ul className="list-group list-group-flush">
+                  {service.tech.map((tech, index) => (
+                    <li
+                      key={index}
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      <span>{tech}</span>
+                      <span className="badge bg-primary rounded-pill" aria-label="Supported">
+                        ✓
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-
-          {service.tech.length === 0 && (
+          ) : (
             <div className="alert alert-warning mt-4">
               No technologies listed for this service yet.
             </div>

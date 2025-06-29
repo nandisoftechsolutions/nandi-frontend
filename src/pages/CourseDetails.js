@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import BASE_URL from '../api';
 
@@ -120,6 +121,9 @@ const CourseDetails = () => {
   if (error) {
     return (
       <div className="container text-center py-5">
+        <Helmet>
+          <title>Course Not Found | Nandi Softech</title>
+        </Helmet>
         <h4 className="text-danger">{error}</h4>
       </div>
     );
@@ -127,79 +131,97 @@ const CourseDetails = () => {
 
   if (selectedCourse) {
     return (
-      <div className="container py-5">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
-            <img
-              src={selectedCourse.thumbnail}
-              alt={selectedCourse.title}
-              className="card-img-top img-fluid"
-              style={{ height: '350px', objectFit: 'cover' }}
-            />
-            <div className="card-body p-4">
-              <h2 className="card-title fw-bold mb-3">{selectedCourse.title}</h2>
-              <p className="card-text text-muted">{selectedCourse.description}</p>
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-4 gap-3">
-                <div className="text-success fw-bold fs-4">
-                  ₹{selectedCourse.price} <span className="text-muted fs-6">(One-time)</span>
+      <>
+        <Helmet>
+          <title>{selectedCourse.title} | Nandi Softech Courses</title>
+          <meta
+            name="description"
+            content={`Learn more about the course ${selectedCourse.title} at Nandi Softech Solutions. Get lifetime access today.`}
+          />
+        </Helmet>
+        <div className="container py-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
+              <img
+                src={selectedCourse.thumbnail || 'https://via.placeholder.com/600x350?text=No+Image'}
+                alt={selectedCourse.title}
+                className="card-img-top img-fluid"
+                style={{ height: '350px', objectFit: 'cover' }}
+              />
+              <div className="card-body p-4">
+                <h2 className="card-title fw-bold mb-3">{selectedCourse.title}</h2>
+                <p className="card-text text-muted">{selectedCourse.description}</p>
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-4 gap-3">
+                  <div className="text-success fw-bold fs-4">
+                    ₹{selectedCourse.price} <span className="text-muted fs-6">(One-time)</span>
+                  </div>
+                  <button className="btn btn-success px-4" onClick={() => handleBuyNow(selectedCourse)}>
+                    Buy Now
+                  </button>
                 </div>
-                <button className="btn btn-success px-4" onClick={() => handleBuyNow(selectedCourse)}>
-                  Buy Now
-                </button>
+                <p className="text-muted fst-italic mt-3 mb-0">
+                  ✅ Lifetime access to all modules and future updates.
+                </p>
               </div>
-              <p className="text-muted fst-italic mt-3 mb-0">
-                ✅ Lifetime access to all modules and future updates.
-              </p>
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="container py-5">
-      <h2 className="text-center fw-bold mb-4">📚 All Courses</h2>
-      <div className="row">
-        {courses.map((course) => (
-          <motion.div
-            className="col-12 col-md-6 col-lg-4 mb-4"
-            key={course.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="card h-100 shadow rounded-4">
-              <img
-                src={course.thumbnail}
-                className="card-img-top img-fluid"
-                alt={course.title}
-                style={{ height: '250px', objectFit: 'cover' }}
-              />
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title fw-bold text-uppercase">{course.title}</h5>
-                <p className="card-text text-muted">{course.description?.slice(0, 100)}...</p>
-                <div className="mt-auto d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-                  <span className="text-success fw-bold">₹{course.price}</span>
-                  <button
-                    className="btn btn-success"
-                    onClick={() =>
-                      navigate(`/course/${course.title.toLowerCase().replace(/\s+/g, '-')}/coursedetails`)
-                    }
-                  >
-                    Buy Now
-                  </button>
+    <>
+      <Helmet>
+        <title>Our Courses | Nandi Softech</title>
+        <meta
+          name="description"
+          content="Browse a wide range of software development, design, and marketing courses at Nandi Softech Solutions."
+        />
+      </Helmet>
+      <div className="container py-5">
+        <h2 className="text-center fw-bold mb-4">📚 All Courses</h2>
+        <div className="row">
+          {courses.map((course) => (
+            <motion.div
+              className="col-12 col-md-6 col-lg-4 mb-4"
+              key={course.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="card h-100 shadow rounded-4">
+                <img
+                  src={course.thumbnail || 'https://via.placeholder.com/400x250?text=No+Image'}
+                  className="card-img-top img-fluid"
+                  alt={course.title}
+                  style={{ height: '250px', objectFit: 'cover' }}
+                />
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title fw-bold text-uppercase">{course.title}</h5>
+                  <p className="card-text text-muted">{course.description?.slice(0, 100)}...</p>
+                  <div className="mt-auto d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                    <span className="text-success fw-bold">₹{course.price}</span>
+                    <button
+                      className="btn btn-success"
+                      onClick={() =>
+                        navigate(`/course/${course.title.toLowerCase().replace(/\s+/g, '-')}/coursedetails`)
+                      }
+                    >
+                      Buy Now
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

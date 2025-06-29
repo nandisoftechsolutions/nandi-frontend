@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 import './Careers.css'; 
 import BASE_URL from '../api';
 
@@ -56,17 +57,35 @@ function Careers() {
     }
   };
 
-  if (loading) return <div className="text-center py-5 fs-4 text-muted">Loading opportunities...</div>;
-  if (error) return <div className="alert alert-danger text-center py-5">{error}</div>;
-
   return (
     <div className="container py-5 careers-page">
+      <Helmet>
+        <title>Careers at Nandi Softech Solutions</title>
+        <meta
+          name="description"
+          content="Explore exciting job opportunities at Nandi Softech Solutions. Join us to build your future in tech."
+        />
+      </Helmet>
+
       <br/>
-      
       <h1 className="text-center text-primary fw-bold mb-4">Join Our Team</h1>
       <p className="text-center text-muted mb-5">
         Explore exciting opportunities to work with Nandi Softech Solutions.
       </p>
+
+      {loading && (
+        <div className="text-center py-5 fs-4 text-muted">Loading opportunities...</div>
+      )}
+
+      {error && (
+        <div className="alert alert-danger text-center py-5">{error}</div>
+      )}
+
+      {!loading && !error && jobs.length === 0 && (
+        <div className="text-center py-5 fs-5 text-muted">
+          🚀 No job openings at the moment. Please check back soon!
+        </div>
+      )}
 
       {/* Job Cards */}
       <div className="row g-4 mb-5">
@@ -151,6 +170,11 @@ function Careers() {
                   onChange={handleFileChange}
                   required
                 />
+                {formData.resume && (
+                  <small className="text-muted d-block mt-1">
+                    📎 {formData.resume.name}
+                  </small>
+                )}
               </div>
             </div>
             <button type="submit" className="btn btn-primary mt-4 w-100">
