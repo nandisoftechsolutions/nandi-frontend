@@ -1,7 +1,11 @@
-# robots.txt for https://nandisofetchsolution.netlify.app
+# robots.txt for Nandi Softech Solutions
 # Learn more: https://www.robotstxt.org/robotstxt.html
 
 User-agent: *
+Disallow:
+
+# Allow all crawlers full access
 Allow: /
 
-Sitemap: https://nandisofetchsolution.netlify.app/sitemap.xml
+# Sitemap (optional, if you have a sitemap.xml)
+# Sitemap: https://nandisofetchsolution.netlify.app/sitemap.xml
