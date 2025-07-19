@@ -7,5 +7,5 @@ Disallow:
 # Allow all crawlers full access
 Allow: /
 
-# Sitemap (optional, if you have a sitemap.xml)
-# Sitemap: https://nandisofetchsolution.netlify.app/sitemap.xml
+# Correct sitemap URL for your live domain
+Sitemap: https://nandisoftechsolutions.in/sitemap.xml
