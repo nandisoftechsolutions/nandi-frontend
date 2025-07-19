@@ -2,10 +2,8 @@
 # Learn more: https://www.robotstxt.org/robotstxt.html
 
 User-agent: *
-Disallow:
+Disallow: 
 
-# Allow all crawlers full access
 Allow: /
 
-# Correct sitemap URL for your live domain
 Sitemap: https://nandisoftechsolutions.in/sitemap.xml
