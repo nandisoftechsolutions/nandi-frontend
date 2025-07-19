@@ -2,8 +2,6 @@
 # Learn more: https://www.robotstxt.org/robotstxt.html
 
 User-agent: *
-Disallow: 
-
-Allow: /
+Disallow:
 
 Sitemap: https://nandisoftechsolutions.in/sitemap.xml
