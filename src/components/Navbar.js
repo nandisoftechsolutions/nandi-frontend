@@ -101,9 +101,13 @@ const Navbar = () => {
               <button className="nav-link btn btn-link text-danger" onClick={handleLogout}>
                 Logout
               </button>
-              <div className="user-info ms-3 mt-2 mt-lg-0">
-                <span className="badge bg-primary">Hi, {user}</span>
-              </div>
+               <div className="user-info ms-3 mt-2 mt-lg-0">
+               <NavLink to="/user-details" className="text-decoration-none">
+                <span className="badge bg-primary" style={{ cursor: 'pointer' }}>
+                Hi, {user}
+                </span>
+              </NavLink>
+            </div>
             </>
           )}
         </div>

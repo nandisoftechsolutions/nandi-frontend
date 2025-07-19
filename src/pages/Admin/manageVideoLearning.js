@@ -8,48 +8,32 @@ export default function ManageVideoLearning() {
   const [videos, setVideos] = useState([]);
   const [courses, setCourses] = useState([]);
   const [teachers, setTeachers] = useState([]);
-
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    youtubeLink: '',
-    uicode: '',
-    backendcode: '',
-    thumbnail: null,
-    videos: null,
-    course_id: '',
-    teacher_id: ''
-  });
-
+  const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [editCourseId, setEditCourseId] = useState(null);
+
   const scrollRef = useRef(null);
   const courseScrollRef = useRef(null);
   const formRef = useRef(null);
 
-  const [courseForm, setCourseForm] = useState({
-    title: '',
-    description: '',
-    price: '',
-    offer: '',
-    duration: '',
-    thumbnail: null
+  const [form, setForm] = useState({
+    title: '', description: '', youtubeLink: '',
+    uicode: '', backendcode: '', thumbnail: null,
+    videos: null, course_id: '', teacher_id: ''
   });
-  const [editCourseId, setEditCourseId] = useState(null);
+
+  const [courseForm, setCourseForm] = useState({
+    title: '', description: '', price: '', offer: '', duration: '', thumbnail: null
+  });
 
   useEffect(() => {
-    fetchVideos();
-    fetchCourses();
-    fetchTeachers();
+    fetchVideos(); fetchCourses(); fetchTeachers();
   }, []);
 
   const fetchVideos = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/managevideo`);
-      const initialized = res.data.map(video => ({ ...video, showVideo: false }));
-      setVideos(initialized);
-      setTimeout(() => {
-        setVideos(prev => prev.map(video => ({ ...video, showVideo: !!video.videos })));
-      }, 2000);
+      setVideos(res.data.map(v => ({ ...v, showVideo: !!v.videos })));
     } catch (err) {
       console.error('❌ Fetch videos error:', err);
     }
@@ -75,155 +59,118 @@ export default function ManageVideoLearning() {
 
   const handleChange = e => {
     const { name, value, files } = e.target;
-    if (name === 'thumbnail' || name === 'videos') {
-      setForm(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      setForm(prev => ({ ...prev, [name]: value }));
-    }
+    setForm(prev => ({ ...prev, [name]: files ? files[0] : value.trimStart() }));
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     const data = new FormData();
-    Object.entries(form).forEach(([key, val]) => data.append(key, val || ''));
+    Object.entries(form).forEach(([k, v]) => data.append(k, v || ''));
 
     try {
-      if (editId) {
-        await axios.put(`${BASE_URL}/api/managevideo/${editId}`, data);
-      } else {
-        await axios.post(`${BASE_URL}/api/managevideo`, data);
-      }
-      resetForm();
-      fetchVideos();
+      setLoading(true);
+      const url = `${BASE_URL}/api/managevideo${editId ? `/${editId}` : ''}`;
+      const method = editId ? 'put' : 'post';
+      await axios[method](url, data);
+      resetForm(); fetchVideos();
     } catch (err) {
       console.error('❌ Submit error:', err);
+      alert('Upload failed: ' + (err.response?.data?.message || 'Network error'));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEdit = video => {
-    setEditId(video.id);
+  const handleEdit = v => {
+    setEditId(v.id);
     setForm({
-      title: video.title || '',
-      description: video.description || '',
-      youtubeLink: video.youtubelink || '',
-      uicode: video.uicode || '',
-      backendcode: video.backendcode || '',
-      thumbnail: null,
-      videos: null,
-      course_id: video.course_id || '',
-      teacher_id: video.teacher_id || ''
+      title: v.title, description: v.description, youtubeLink: v.youtubelink || '',
+      uicode: v.uicode, backendcode: v.backendcode, thumbnail: null,
+      videos: null, course_id: v.course_id, teacher_id: v.teacher_id
     });
-    setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDelete = async id => {
-    if (window.confirm('Delete this video?')) {
-      try {
-        await axios.delete(`${BASE_URL}/api/managevideo/${id}`);
-        fetchVideos();
-      } catch (err) {
-        console.error('❌ Delete error:', err);
-      }
+    if (!window.confirm('Are you sure?')) return;
+    try {
+      await axios.delete(`${BASE_URL}/api/managevideo/${id}`);
+      fetchVideos();
+    } catch (err) {
+      console.error('❌ Delete error:', err);
     }
   };
 
   const resetForm = () => {
     setForm({
-      title: '',
-      description: '',
-      youtubeLink: '',
-      uicode: '',
-      backendcode: '',
-      thumbnail: null,
-      videos: null,
-      course_id: '',
-      teacher_id: ''
+      title: '', description: '', youtubeLink: '',
+      uicode: '', backendcode: '', thumbnail: null,
+      videos: null, course_id: '', teacher_id: ''
     });
     setEditId(null);
   };
 
-  const scroll = (direction, ref) => {
-    const el = ref.current;
-    if (el) {
-      const shift = direction === 'left' ? -el.clientWidth : el.clientWidth;
-      el.scrollTo({ left: el.scrollLeft + shift, behavior: 'smooth' });
-    }
+  const scroll = (dir, ref) => {
+    ref.current?.scrollTo({
+      left: ref.current.scrollLeft + (dir === 'left' ? -ref.current.offsetWidth : ref.current.offsetWidth),
+      behavior: 'smooth'
+    });
   };
 
   const handleCourseChange = e => {
     const { name, value, files } = e.target;
-    if (name === 'thumbnail') {
-      setCourseForm(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      setCourseForm(prev => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const resetCourseForm = () => {
-    setCourseForm({
-      title: '',
-      description: '',
-      price: '',
-      offer: '',
-      duration: '',
-      thumbnail: null
-    });
-    setEditCourseId(null);
-  };
-
-  const handleCourseEdit = course => {
-    setEditCourseId(course.id);
-    setCourseForm({
-      title: course.title || '',
-      description: course.description || '',
-      price: course.price || '',
-      offer: course.offer || '',
-      duration: course.duration || '',
-      thumbnail: null
-    });
-  };
-
-  const handleCourseDelete = async id => {
-    if (window.confirm('Delete this course?')) {
-      try {
-        await axios.delete(`${BASE_URL}/api/courses/delete/${id}`);
-        fetchCourses();
-      } catch (err) {
-        console.error('❌ Delete course error:', err);
-      }
-    }
+    setCourseForm(prev => ({ ...prev, [name]: files ? files[0] : value.trimStart() }));
   };
 
   const handleCourseSubmit = async e => {
     e.preventDefault();
     const data = new FormData();
-    Object.entries(courseForm).forEach(([key, val]) => data.append(key, val || ''));
+    Object.entries(courseForm).forEach(([k, v]) => data.append(k, v || ''));
 
     try {
-      if (editCourseId) {
-        await axios.put(`${BASE_URL}/api/courses/update/${editCourseId}`, data);
-      } else {
-        await axios.post(`${BASE_URL}/api/courses/add`, data);
-      }
-      resetCourseForm();
-      fetchCourses();
+      const url = `${BASE_URL}/api/courses/${editCourseId ? `update/${editCourseId}` : 'add'}`;
+      const method = editCourseId ? 'put' : 'post';
+      await axios[method](url, data);
+      resetCourseForm(); fetchCourses();
     } catch (err) {
       console.error('❌ Submit course error:', err);
+      alert('Course submit failed');
+    }
+  };
+
+  const handleCourseEdit = course => {
+    setEditCourseId(course.id);
+    setCourseForm({
+      title: course.title, description: course.description,
+      price: course.price, offer: course.offer,
+      duration: course.duration, thumbnail: null
+    });
+  };
+
+  const resetCourseForm = () => {
+    setCourseForm({ title: '', description: '', price: '', offer: '', duration: '', thumbnail: null });
+    setEditCourseId(null);
+  };
+
+  const handleCourseDelete = async id => {
+    if (!window.confirm('Delete this course?')) return;
+    try {
+      await axios.delete(`${BASE_URL}/api/courses/delete/${id}`);
+      fetchCourses();
+    } catch (err) {
+      console.error('❌ Delete course error:', err);
     }
   };
 
   return (
     <div className="container-fluid px-3 px-md-5 py-4">
       <AdminNavbar />
-      <br/>
-      <br/>
-      <br/>
+      <br/><br/><br/>
       <h2 className="text-center mb-4">Manage Course Videos</h2>
-
       <form ref={formRef} onSubmit={handleSubmit} className="form-wrapper styled-form mb-5" encType="multipart/form-data">
         <div className="form-grid">
           <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
-          <input name="youtubeLink" placeholder="YouTube Link (optional)" value={form.youtubeLink} onChange={handleChange} />
+          <input name="youtubeLink" placeholder="YouTube Link" value={form.youtubeLink} onChange={handleChange} />
           <select name="course_id" value={form.course_id} onChange={handleChange} required>
             <option value="">Choose Course</option>
             {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -239,7 +186,9 @@ export default function ManageVideoLearning() {
         <textarea name="uicode" placeholder="UI Code" value={form.uicode} onChange={handleChange} required />
         <textarea name="backendcode" placeholder="Backend Code" value={form.backendcode} onChange={handleChange} required />
         <div className="text-center mt-3">
-          <button type="submit" className="btn btn-primary">{editId ? 'Update' : 'Add'} Video</button>
+          <button type="submit" className="btn btn-primary">
+            {loading ? 'Uploading...' : (editId ? 'Update' : 'Add')} Video
+          </button>
         </div>
       </form>
 
@@ -248,28 +197,25 @@ export default function ManageVideoLearning() {
         <div className="video-scroll-container" ref={scrollRef}>
           {videos.map(v => (
             <div className="video-card" key={v.id}>
-              <div className="thumbnail-wrapper">
-                {!v.showVideo && v.thumbnail && (
-                  <img src={`${BASE_URL}/uploads/${v.thumbnail}`} alt={v.title} className="video-thumbnail" />
-                )}
-                {v.showVideo && v.videos && (
-                  <video width="100%" height="180" autoPlay muted controls className="video-actual">
-                    <source src={`${BASE_URL}/uploads/${v.videos}`} type="video/mp4" />
-                  </video>
-                )}
-              </div>
+              {v.videos ? (
+                <video width="100%" height="180" controls className="video-actual">
+                  <source src={`${BASE_URL}/uploads/${v.videos}`} type="video/mp4" />
+                </video>
+              ) : (
+                <img src={`${BASE_URL}/uploads/${v.thumbnail}`} alt={v.title} className="video-thumbnail" />
+              )}
               <div className="video-card-body">
                 <h5>{v.title}</h5>
                 <p>{v.description.slice(0, 80)}...</p>
+                {v.youtubelink && (
+                  <a href={v.youtubelink} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm my-1">
+                    ▶ YouTube
+                  </a>
+                )}
                 <div className="card-actions">
                   <button className="btn btn-edit" onClick={() => handleEdit(v)}>Edit</button>
                   <button className="btn btn-delete" onClick={() => handleDelete(v.id)}>Delete</button>
                 </div>
-                {!v.videos && v.youtubelink && (
-                  <div className="mt-2">
-                    <a href={v.youtubelink} target="_blank" rel="noopener noreferrer" className="btn btn-learn">▶ Play YouTube</a>
-                  </div>
-                )}
               </div>
             </div>
           ))}
@@ -289,7 +235,7 @@ export default function ManageVideoLearning() {
         <textarea name="description" placeholder="Description" value={courseForm.description} onChange={handleCourseChange} required />
         <div className="text-center mt-3">
           <button type="submit" className="btn btn-success">{editCourseId ? 'Update' : 'Add'} Course</button>
-          {editCourseId && <button className="btn btn-secondary ml-2" onClick={resetCourseForm}>Cancel Edit</button>}
+          {editCourseId && <button type="button" className="btn btn-secondary ml-2" onClick={resetCourseForm}>Cancel Edit</button>}
         </div>
       </form>
 
@@ -298,9 +244,7 @@ export default function ManageVideoLearning() {
         <div className="video-scroll-container" ref={courseScrollRef}>
           {courses.map(c => (
             <div className="video-card" key={c.id}>
-              {c.thumbnail && (
-                <img src={`${BASE_URL}/uploads/${c.thumbnail}`} alt={c.title} className="video-thumbnail" />
-              )}
+              {c.thumbnail && <img src={`${BASE_URL}/uploads/${c.thumbnail}`} alt={c.title} className="video-thumbnail" />}
               <div className="video-card-body">
                 <h5>{c.title}</h5>
                 <p>{c.description.slice(0, 80)}...</p>

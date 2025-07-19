@@ -1,3 +1,4 @@
+// src/pages/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -21,20 +22,20 @@ export default function Login() {
     setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL}/api/auth/login`, {
-  email: email.trim(),
-  password: password.trim(),
-});
+        email: email.trim(),
+        password: password.trim(),
+      });
 
       if (response.status === 200) {
         const { token, user } = response.data;
 
         localStorage.setItem('userToken', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user)); // full user object
         localStorage.setItem('username', user.name);
         localStorage.setItem('userAvatar', user.profile_picture || 'default-user.png');
 
         alert(`Welcome, ${user.name}`);
-        window.location.href = '/';
+        window.location.href = '/userdetails'; // redirect to details
       } else {
         alert(response.data.error || 'Unexpected error');
       }
@@ -101,19 +102,13 @@ export default function Login() {
         </div>
 
         <div className="text-center mt-2">
-          <button
-            onClick={() => navigate('/forgot-password')}
-            className="btn btn-link p-0 text-decoration-none"
-          >
+          <button onClick={() => navigate('/forgot-password')} className="btn btn-link p-0 text-decoration-none">
             Forgot Password?
           </button>
         </div>
 
         <div className="text-center mt-2">
-          <button
-            onClick={() => navigate('/teacherslogin')}
-            className="btn btn-link p-0 text-decoration-none"
-          >
+          <button onClick={() => navigate('/teacherslogin')} className="btn btn-link p-0 text-decoration-none">
             Teacher Login
           </button>
         </div>

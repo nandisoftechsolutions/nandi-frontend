@@ -18,15 +18,18 @@
 
 
 .main-navbar {
-  background: rgba(236, 241, 242, 0);
-  padding: 2px 0; 
-  position: absolute;
-  box-shadow: 0 8px 8px rgba(71, 11, 11, 0);
-  z-index: 999;
-  transition: all 0.3s ease-in-out;
+  background: transparent;
+  padding: 8px 0;
+  position: fixed; /* fixed to top */
+  top: 0;
   left: 0;
   right: 0;
+  z-index: 9999;
+  box-shadow: none;
+  transition: all 0.3s ease-in-out;
+  top: 45px;
 }
+
 
 
 .main-navbar.fixed {

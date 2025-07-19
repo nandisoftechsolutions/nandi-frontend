@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from "react"; // ✅ added useRef
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
@@ -102,7 +102,6 @@ function PlaceOrder() {
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row g-3">
-            {/* Basic Inputs */}
             <div className="col-md-6">
               <label className="form-label">Name</label>
               <input type="text" className="form-control" name="name" value={form.name} onChange={handleChange} required />
@@ -115,8 +114,6 @@ function PlaceOrder() {
               <label className="form-label">Phone</label>
               <input type="text" className="form-control" name="phone" value={form.phone} onChange={handleChange} />
             </div>
-
-            {/* Dropdowns */}
             <div className="col-md-6">
               <label className="form-label">Service Type</label>
               <select className="form-select" name="serviceType" value={form.serviceType} onChange={handleChange} required>
@@ -145,8 +142,6 @@ function PlaceOrder() {
                 {budgets.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             </div>
-
-            {/* File Upload */}
             <div className="col-md-6">
               <label className="form-label">Attachment</label>
               <input
@@ -161,8 +156,6 @@ function PlaceOrder() {
                 <small className="text-muted d-block mt-1">📎 {form.attachment.name}</small>
               )}
             </div>
-
-            {/* Checkboxes */}
             <div className="col-12">
               <label className="form-label">Platform</label>
               <div className="d-flex flex-wrap gap-3">
@@ -201,8 +194,6 @@ function PlaceOrder() {
                 ))}
               </div>
             </div>
-
-            {/* Notes */}
             <div className="col-12">
               <label className="form-label">Additional Notes</label>
               <textarea
@@ -213,7 +204,6 @@ function PlaceOrder() {
                 onChange={handleChange}
               ></textarea>
             </div>
-
             <div className="col-12">
               <button type="submit" className="btn btn-primary w-100">
                 Submit Order

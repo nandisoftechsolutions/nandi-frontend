@@ -31,6 +31,7 @@ import ManageBlogs from './pages/Admin/manageBlogs';
 import TeamPage from './pages/TeamPage';
 import TeamManage from './pages/Admin/TeamManage';
 import ManageMassage from './pages/Admin/ManageMassage';
+import UserDetails from './pages/UserDetails';
 
 import ManageUser from './pages/Admin/ManageUser';
 import ForgotPassword from './pages/ForgotPassword';
@@ -110,6 +111,7 @@ const AppWrapper = () => {
           <Route path="/manageadmins" element={<ManageAdmin />} />
           <Route path="/teacherslogin" element={<TeacherLogin />} />
           <Route path="/manageteachers" element={<TeacherManage />} />
+          <Route path="/user-details" element={<UserDetails />} />
 
           <Route
             path="*"
