@@ -1,3 +1,5 @@
+// === frontend/src/admin/Pages/ProjectManager.js ===
+
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -105,7 +107,7 @@ const ProjectManager = () => {
     if (container) {
       container.scrollBy({
         left: direction === 'left' ? -320 : 320,
-        behavior: 'smooth',
+        behavior: 'smooth'
       });
     }
   };

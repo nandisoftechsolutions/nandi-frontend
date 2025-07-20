@@ -1,4 +1,5 @@
-// src/pages/AdminDashboard.jsx
+// File: src/pages/AdminDashboard.jsx
+
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -10,6 +11,7 @@ import BASE_URL from '../../api';
 const AdminDashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [adminData, setAdminData] = useState({ name: 'Admin', photo: '' });
+
   const [stats, setStats] = useState({
     totalOrders: 0,
     openJobs: 0,
@@ -29,45 +31,31 @@ const AdminDashboard = () => {
     const savedAdmin = JSON.parse(localStorage.getItem('adminData'));
     if (savedAdmin) setAdminData(savedAdmin);
 
-    const fetchDashboardData = async () => {
+    const fetchStats = async () => {
       try {
-        const endpoints = [
-          'total-orders',
-          'open-jobs',
-          'total-applications',
-          'total-projects',
-          'total-messages',
-          'total-admins',
-          'total-users',
-          'total-teammembers',
-          'total-blogs',
-          'total-coursevideos',
-        ];
+        const res = await fetch(`${BASE_URL}/api/stats`);
+        if (!res.ok) throw new Error('Failed to fetch stats');
+        const data = await res.json();
 
-        const results = await Promise.all(
-          endpoints.map((endpoint) =>
-            fetch(`${BASE_URL}/dashboard/${endpoint}`).then((res) => res.json())
-          )
-        );
-
+        // Safe defaulting
         setStats({
-          totalOrders: results[0].total || 0,
-          openJobs: results[1].openJobs || 0,
-          applications: results[2].total || 0,
-          projects: results[3].total || 0,
-          messages: results[4].total || 0,
-          admins: results[5].total || 0,
-          users: results[6].total || 0,
-          teammembers: results[7].total || 0,
-          blogs: results[8].total || 0,
-          coursevideos: results[9].total || 0,
+          totalOrders: data?.totalOrders || 0,
+          openJobs: data?.openJobs || 0,
+          applications: data?.applications || 0,
+          projects: data?.projects || 0,
+          messages: data?.messages || 0,
+          admins: data?.admins || 0,
+          users: data?.users || 0,
+          teammembers: data?.teammembers || 0,
+          blogs: data?.blogs || 0,
+          coursevideos: data?.coursevideos || 0,
         });
-      } catch (error) {
-        console.error('Error fetching dashboard data', error);
+      } catch (err) {
+        console.error('Error fetching stats:', err.message);
       }
     };
 
-    fetchDashboardData();
+    fetchStats();
   }, []);
 
   const cards = [
@@ -86,27 +74,32 @@ const AdminDashboard = () => {
   return (
     <>
       <AdminNavbar />
-      <br />
-      <br />
       <div className="dash-wrapper container-fluid py-5 bg-light min-vh-100">
         <div className="dash-header text-center mb-5">
           <h2 className="card fw-bold text-dark">
-            Welcome to Admin Panel, <span className="text-primary">{adminData.name}</span>
+            Welcome to Admin Panel, <span className="text-primary">{adminData?.name}</span>
           </h2>
         </div>
+
         <div className="row">
+          {/* Sidebar */}
           <div className="col-lg-3 mb-4">
             {!collapsed && (
               <aside className="dash-sidebar bg-gradient p-3 text-white border-end rounded">
                 <div className="dash-profile text-center mb-4">
                   <img
-                    src={adminData?.photo ? `${BASE_URL}${adminData.photo}` : '/assets/Admin.jpg'}
+                    src={
+                      adminData?.photo
+                        ? `${BASE_URL}${adminData.photo}`
+                        : '/assets/Admin.jpg'
+                    }
                     alt="Admin"
                     className="dash-profile-img rounded-circle border border-white shadow"
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                   />
-                  <h5 className="mt-3 fw-bold">{adminData.name}</h5>
+                  <h5 className="mt-3 fw-bold">{adminData?.name}</h5>
                 </div>
+
                 <ul className="nav flex-column">
                   <li className="nav-item mb-2">
                     <Link className="nav-link text-white dash-link hover-light" to="/dashboard">
@@ -157,6 +150,8 @@ const AdminDashboard = () => {
               </aside>
             )}
           </div>
+
+          {/* Main Dashboard */}
           <div className="col-lg-9">
             <main className="dash-main p-4 bg-white rounded shadow-sm">
               <div className="d-flex justify-content-end mb-4">
@@ -167,6 +162,7 @@ const AdminDashboard = () => {
                   <i className={`bi ${collapsed ? 'bi-list' : 'bi-x-lg'}`}></i>
                 </button>
               </div>
+
               <div className="row g-4">
                 {cards.map((card, index) => (
                   <div className="col-6 col-md-4 col-lg-3" key={index}>

@@ -27,7 +27,9 @@ export default function ManageVideoLearning() {
   });
 
   useEffect(() => {
-    fetchVideos(); fetchCourses(); fetchTeachers();
+    fetchVideos(); 
+    fetchCourses(); 
+    fetchTeachers();
   }, []);
 
   const fetchVideos = async () => {
@@ -35,7 +37,8 @@ export default function ManageVideoLearning() {
       const res = await axios.get(`${BASE_URL}/api/managevideo`);
       setVideos(res.data.map(v => ({ ...v, showVideo: !!v.videos })));
     } catch (err) {
-      console.error('❌ Fetch videos error:', err);
+      console.error('❌ Fetch videos error:', err?.message);
+      alert('Failed to load videos. Check network or CORS settings.');
     }
   };
 
@@ -44,7 +47,8 @@ export default function ManageVideoLearning() {
       const res = await axios.get(`${BASE_URL}/api/courses`);
       setCourses(res.data);
     } catch (err) {
-      console.error('❌ Fetch courses error:', err);
+      console.error('❌ Fetch courses error:', err?.message);
+      alert('Failed to load courses. Check backend.');
     }
   };
 
@@ -53,7 +57,8 @@ export default function ManageVideoLearning() {
       const res = await axios.get(`${BASE_URL}/api/teachers`);
       setTeachers(res.data);
     } catch (err) {
-      console.error('❌ Fetch teachers error:', err);
+      console.error('❌ Fetch teachers error:', err?.message);
+      alert('Failed to load teachers.');
     }
   };
 
@@ -72,10 +77,11 @@ export default function ManageVideoLearning() {
       const url = `${BASE_URL}/api/managevideo${editId ? `/${editId}` : ''}`;
       const method = editId ? 'put' : 'post';
       await axios[method](url, data);
-      resetForm(); fetchVideos();
+      resetForm(); 
+      fetchVideos();
     } catch (err) {
-      console.error('❌ Submit error:', err);
-      alert('Upload failed: ' + (err.response?.data?.message || 'Network error'));
+      console.error('❌ Submit error:', err?.message);
+      alert('Upload failed. Check console for more.');
     } finally {
       setLoading(false);
     }
@@ -97,7 +103,7 @@ export default function ManageVideoLearning() {
       await axios.delete(`${BASE_URL}/api/managevideo/${id}`);
       fetchVideos();
     } catch (err) {
-      console.error('❌ Delete error:', err);
+      console.error('❌ Delete error:', err?.message);
     }
   };
 
@@ -131,9 +137,10 @@ export default function ManageVideoLearning() {
       const url = `${BASE_URL}/api/courses/${editCourseId ? `update/${editCourseId}` : 'add'}`;
       const method = editCourseId ? 'put' : 'post';
       await axios[method](url, data);
-      resetCourseForm(); fetchCourses();
+      resetCourseForm(); 
+      fetchCourses();
     } catch (err) {
-      console.error('❌ Submit course error:', err);
+      console.error('❌ Submit course error:', err?.message);
       alert('Course submit failed');
     }
   };
@@ -158,7 +165,7 @@ export default function ManageVideoLearning() {
       await axios.delete(`${BASE_URL}/api/courses/delete/${id}`);
       fetchCourses();
     } catch (err) {
-      console.error('❌ Delete course error:', err);
+      console.error('❌ Delete course error:', err?.message);
     }
   };
 
@@ -167,6 +174,7 @@ export default function ManageVideoLearning() {
       <AdminNavbar />
       <br/><br/><br/>
       <h2 className="text-center mb-4">Manage Course Videos</h2>
+      {/* --- Video Form --- */}
       <form ref={formRef} onSubmit={handleSubmit} className="form-wrapper styled-form mb-5" encType="multipart/form-data">
         <div className="form-grid">
           <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
@@ -192,6 +200,7 @@ export default function ManageVideoLearning() {
         </div>
       </form>
 
+      {/* --- Video Scroll Section --- */}
       <div className="video-scroll-wrapper">
         <button className="scroll-button" onClick={() => scroll('left', scrollRef)}>&#10094;</button>
         <div className="video-scroll-container" ref={scrollRef}>
@@ -223,6 +232,7 @@ export default function ManageVideoLearning() {
         <button className="scroll-button" onClick={() => scroll('right', scrollRef)}>&#10095;</button>
       </div>
 
+      {/* --- Course Form --- */}
       <h2 className="text-center my-5">Manage Courses</h2>
       <form onSubmit={handleCourseSubmit} className="form-wrapper styled-form mb-4" encType="multipart/form-data">
         <div className="form-grid">
@@ -239,6 +249,7 @@ export default function ManageVideoLearning() {
         </div>
       </form>
 
+      {/* --- Course Scroll --- */}
       <div className="video-scroll-wrapper">
         <button className="scroll-button" onClick={() => scroll('left', courseScrollRef)}>&#10094;</button>
         <div className="video-scroll-container" ref={courseScrollRef}>

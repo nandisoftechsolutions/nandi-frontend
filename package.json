@@ -1,51 +1,32 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Nandi Softech Solution Frontend",
+  "main": "src/index.js",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "build-no-minify": "cross-env GENERATE_SOURCEMAP=false TERSER_DISABLE=true craco build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "test": "craco test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.9.0",
-    "bootstrap": "^5.3.6",
+    "@craco/craco": "^7.1.0",
+    "axios": "^1.6.0",
+    "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "file-saver": "^2.0.5",
-    "framer-motion": "^12.18.1",
+    "framer-motion": "^12.23.6",
+    "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
-    "multer": "^2.0.1",
-    "react": "^18.3.1",
+    "react": "^18.2.0",
     "react-bootstrap": "^2.10.10",
-    "react-dom": "^18.3.1",
+    "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^7.6.2",
+    "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
-    "react-to-pdf": "^2.0.1",
-    "slugify": "^1.6.6",
-    "source-map-explorer": "^2.5.3",
-    "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
-  },
-  "devDependencies": {
-    "@craco/craco": "^7.1.0",
-    "cross-env": "^7.0.3",
-    "sitemap": "^8.0.0",
-    "stylelint": "^16.21.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "slugify": "^1.6.6"
   },
   "browserslist": {
     "production": [
@@ -58,5 +39,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nandisoftechsolutions/react-frontend.git"
+  },
+  "keywords": [],
+  "author": "Nandi Softech Solutions",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nandisoftechsolutions/react-frontend/issues"
+  },
+  "homepage": "https://nandisoftechsolutions.in"
 }

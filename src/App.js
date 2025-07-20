@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from './components/Header';
 import Navbar from './components/Navbar';
@@ -20,6 +19,12 @@ import VideoLearning from './pages/VideoLearning';
 import VideoDetails from './pages/VideoDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import TeamPage from './pages/TeamPage';
+import CourseDetails from './pages/CourseDetails';
+import ThankYou from './pages/ThankYou';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import UserDetails from './pages/UserDetails';
 
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminDashboard from './pages/Admin/AdminDashboard';
@@ -28,23 +33,16 @@ import ManageJobs from './pages/Admin/manageJobs';
 import ProjectManager from './pages/Admin/ProjectManager';
 import ManageVideoLearning from './pages/Admin/manageVideoLearning';
 import ManageBlogs from './pages/Admin/manageBlogs';
-import TeamPage from './pages/TeamPage';
 import TeamManage from './pages/Admin/TeamManage';
 import ManageMassage from './pages/Admin/ManageMassage';
-import UserDetails from './pages/UserDetails';
-
 import ManageUser from './pages/Admin/ManageUser';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 import ManageAdmin from './pages/Admin/ManageAdmin';
 import TeacherLogin from './pages/TeacherLogin';
 import TeacherManage from './pages/Admin/TeacherManage';
-import CourseDetails from './pages/CourseDetails';
-import ThankYou from './pages/ThankYou';
 
 import './App.css';
 
-const AppWrapper = () => {
+const App = () => {
   const location = useLocation();
 
   const adminPaths = [
@@ -58,10 +56,10 @@ const AppWrapper = () => {
     '/managemassage',
     '/manageuser',
     '/manageadmins',
-    '/manageteachers'
+    '/manageteachers',
   ];
 
-  const isAdminRoute = adminPaths.some(path =>
+  const isAdminRoute = adminPaths.some((path) =>
     location.pathname.toLowerCase().startsWith(path)
   );
 
@@ -76,6 +74,7 @@ const AppWrapper = () => {
 
       <div className="page-content">
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -94,10 +93,11 @@ const AppWrapper = () => {
           <Route path="/teampage" element={<TeamPage />} />
           <Route path="/course/:courseSlug/coursedetails" element={<CourseDetails />} />
           <Route path="/thank-you" element={<ThankYou />} />
-
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/user-details" element={<UserDetails />} />
 
+          {/* Admin Routes */}
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/orders" element={<OrderManagement />} />
@@ -111,8 +111,8 @@ const AppWrapper = () => {
           <Route path="/manageadmins" element={<ManageAdmin />} />
           <Route path="/teacherslogin" element={<TeacherLogin />} />
           <Route path="/manageteachers" element={<TeacherManage />} />
-          <Route path="/user-details" element={<UserDetails />} />
 
+          {/* 404 */}
           <Route
             path="*"
             element={
@@ -128,15 +128,5 @@ const AppWrapper = () => {
     </>
   );
 };
-
-function App() {
-  return (
-    <HelmetProvider>
-      <BrowserRouter>
-        <AppWrapper />
-      </BrowserRouter>
-    </HelmetProvider>
-  );
-}
 
 export default App;
