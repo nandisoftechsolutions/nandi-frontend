@@ -8,7 +8,7 @@ import heroImg from '../assets/servicehero.png';
 import bgImg1 from '../assets/bgimage/bg.png';
 import bgImg2 from '../assets/bgimage/bg10.png';
 import bgImg3 from '../assets/bgimage/bg11.png';
-import bgImg4 from '../assets/bgimage/bg12.png'; 
+import bgImg4 from '../assets/bgimage/bg12.png';
 
 const bgImages = [gearImg, heartImg, heroImg, bgImg1, bgImg2, bgImg3, bgImg4];
 
@@ -88,21 +88,25 @@ const HeroSection = () => {
 
       <div className="overlay-dark" />
 
-      {showImage && (
-        <>
-          <div
-            className="overlay-bg-image"
-            style={{
-              backgroundImage: `url(${bgImages[currentIndex]})`,
-            }}
-          />
-          <div className="hero-content">
-            <h1 className="hero-title">{currentContent?.title}</h1>
+      <div
+        className={`overlay-bg-image ${showImage ? '' : 'hidden'}`}
+        style={{
+          backgroundImage: `url(${bgImages[currentIndex]})`,
+        }}
+      />
+
+      <div className="hero-content">
+        {/* Always render H1 for SEO, hide it visually if video is playing */}
+        <h1 className="hero-title" style={{ visibility: showImage ? 'visible' : 'hidden' }}>
+          {currentContent?.title}
+        </h1>
+        {showImage && (
+          <>
             <p className="hero-subtitle">{currentContent?.subtitle}</p>
             <button className="atc-btn">{currentContent?.button}</button>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

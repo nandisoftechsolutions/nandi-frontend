@@ -22,6 +22,11 @@ const Home = () => {
         />
       </Helmet>
 
+      {/* H1 tag for SEO improvement */}
+      <h1 style={{ position: 'absolute', left: '-9999px' }}>
+        Welcome to Nandi Softech Solutions – Software Development, Testing & Training Services
+      </h1>
+
       <HeroSection />
       <Services />
       <TechStack />
