@@ -10,13 +10,12 @@ function VideoLearning() {
   const [videos, setVideos] = useState([]);
   const [enrolledMap, setEnrolledMap] = useState({});
   const [courseTitles, setCourseTitles] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/managevideo`);
-        console.log('Fetched videos:', res.data);
-
         const videoList = Array.isArray(res.data)
           ? res.data
           : Array.isArray(res.data.videos)
@@ -25,16 +24,17 @@ function VideoLearning() {
 
         setVideos(videoList);
 
-        const courseIds = [...new Set(videoList.map(v => v.course_id).filter(Boolean))];
+        const courseIds = [
+          ...new Set(videoList.map((v) => v.course_id).filter(Boolean)),
+        ];
 
         const titleMap = {};
         await Promise.all(
-          courseIds.map(async id => {
+          courseIds.map(async (id) => {
             try {
               const { data } = await axios.get(`${BASE_URL}/api/courses/${id}`);
               titleMap[id.toString()] = data?.title || 'Untitled Course';
-            } catch (err) {
-              console.error(`Error fetching course ${id}:`, err);
+            } catch {
               titleMap[id.toString()] = 'Untitled Course';
             }
           })
@@ -44,40 +44,40 @@ function VideoLearning() {
         if (user?.email) {
           const enrollmentStatus = {};
           await Promise.all(
-            courseIds.map(async courseId => {
+            courseIds.map(async (courseId) => {
               try {
-                const { data } = await axios.get(`${BASE_URL}/api/courses/${courseId}/is-enrolled`, {
-                  params: { userEmail: user.email },
-                });
+                const { data } = await axios.get(
+                  `${BASE_URL}/api/courses/${courseId}/is-enrolled`,
+                  { params: { userEmail: user.email } }
+                );
                 enrollmentStatus[courseId.toString()] = data?.enrolled;
-              } catch (err) {
-                console.error(`Enrollment check failed for course ${courseId}:`, err);
+              } catch {
+                enrollmentStatus[courseId.toString()] = false;
               }
             })
           );
           setEnrolledMap(enrollmentStatus);
         }
-      } catch (error) {
-        console.error('Error fetching videos:', error);
-        setVideos([]); // Fallback to empty array
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchVideos();
   }, [user?.email]);
 
-  const groupedVideos = Array.isArray(videos)
-    ? videos.reduce((acc, video) => {
-        const courseId = video.course_id ? video.course_id.toString() : 'uncategorized';
-        if (!acc[courseId]) acc[courseId] = [];
-        acc[courseId].push(video);
-        return acc;
-      }, {})
-    : {};
+  const groupedVideos = videos.reduce((acc, video) => {
+    const courseId = video.course_id?.toString() || 'uncategorized';
+    if (!acc[courseId]) acc[courseId] = [];
+    acc[courseId].push(video);
+    return acc;
+  }, {});
 
-  if (!Array.isArray(videos) || videos.length === 0) {
-    return <div className="text-center py-5">Loading videos...</div>;
-  }
+  if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
+
+  if (!videos.length) return <div className="text-center py-5">🚫 No videos available</div>;
 
   return (
     <div className="container py-5">
@@ -96,18 +96,22 @@ function VideoLearning() {
                   const isUnlocked = isEnrolled || index < 2;
 
                   return (
-                    <div key={video.id || index} className="col">
+                    <div key={video._id || index} className="col">
                       <div className="video-card h-100 shadow-sm rounded overflow-hidden">
                         <div className="position-relative">
                           <img
-                            src={video.thumbnail ? `${BASE_URL}/uploads/${video.thumbnail}` : '/default-thumbnail.jpg'}
+                            src={
+                              video.thumbnail
+                                ? `${BASE_URL}/uploads/${video.thumbnail}`
+                                : '/default-thumbnail.jpg'
+                            }
                             alt={video.title}
                             className="w-100"
                             style={{ objectFit: 'cover', height: '200px' }}
                           />
                           {isUnlocked ? (
                             <div
-                              onClick={() => navigate(`/video/${video.id}`)}
+                              onClick={() => navigate(`/video/${video._id}`)}
                               className="position-absolute top-50 start-50 translate-middle"
                               style={{ cursor: 'pointer' }}
                             >
@@ -130,12 +134,14 @@ function VideoLearning() {
                         </div>
                         <div className="p-3 d-flex flex-column">
                           <h5 className="fw-semibold text-dark mb-2">{video.title}</h5>
-                          <p className="text-muted mb-3 flex-grow-1">{video.description?.slice(0, 80)}...</p>
+                          <p className="text-muted mb-3 flex-grow-1">
+                            {video.description?.slice(0, 80)}...
+                          </p>
                           {user?.email ? (
                             isUnlocked ? (
                               <button
                                 className="btn btn-info fw-semibold"
-                                onClick={() => navigate(`/video/${video.id}`)}
+                                onClick={() => navigate(`/video/${video._id}`)}
                               >
                                 🎓 Learn More
                               </button>
@@ -148,7 +154,9 @@ function VideoLearning() {
                               </button>
                             )
                           ) : (
-                            <p className="text-muted text-center mt-2">🔒 Login to explore content</p>
+                            <p className="text-muted text-center mt-2">
+                              🔒 Login to explore content
+                            </p>
                           )}
                         </div>
                       </div>
