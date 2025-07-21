@@ -17,7 +17,12 @@ function VideoLearning() {
         const res = await axios.get(`${BASE_URL}/api/managevideo`);
         console.log('Fetched videos:', res.data);
 
-        const videoList = Array.isArray(res.data) ? res.data : (res.data.videos || []);
+        const videoList = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.videos)
+          ? res.data.videos
+          : [];
+
         setVideos(videoList);
 
         const courseIds = [...new Set(videoList.map(v => v.course_id).filter(Boolean))];
@@ -54,7 +59,7 @@ function VideoLearning() {
         }
       } catch (error) {
         console.error('Error fetching videos:', error);
-        setVideos([]); // fallback to empty array to avoid crash
+        setVideos([]); // Fallback to empty array
       }
     };
 
@@ -70,7 +75,7 @@ function VideoLearning() {
       }, {})
     : {};
 
-  if (!Array.isArray(videos) || !videos.length) {
+  if (!Array.isArray(videos) || videos.length === 0) {
     return <div className="text-center py-5">Loading videos...</div>;
   }
 
@@ -86,69 +91,70 @@ function VideoLearning() {
           <div key={courseId || idx} className="mb-5">
             <h2 className="fw-bold text-dark border-bottom pb-2">{title}</h2>
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-              {courseVideos.map((video, index) => {
-                const isUnlocked = isEnrolled || index < 2;
+              {Array.isArray(courseVideos) &&
+                courseVideos.map((video, index) => {
+                  const isUnlocked = isEnrolled || index < 2;
 
-                return (
-                  <div key={video.id} className="col">
-                    <div className="video-card h-100 shadow-sm rounded overflow-hidden">
-                      <div className="position-relative">
-                        <img
-                          src={video.thumbnail ? `${BASE_URL}/uploads/${video.thumbnail}` : '/default-thumbnail.jpg'}
-                          alt={video.title}
-                          className="w-100"
-                          style={{ objectFit: 'cover', height: '200px' }}
-                        />
-                        {isUnlocked ? (
-                          <div
-                            onClick={() => navigate(`/video/${video.id}`)}
-                            className="position-absolute top-50 start-50 translate-middle"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <i className="bi bi-play-circle-fill text-white fs-2"></i>
-                          </div>
-                        ) : (
-                          <div
-                            className="locked-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                            style={{
-                              backgroundColor: 'rgba(0,0,0,0.5)',
-                              color: '#fff',
-                              fontSize: '2rem',
-                              cursor: 'pointer',
-                            }}
-                            onClick={() => navigate('/purchase')}
-                          >
-                            <i className="bi bi-lock-fill"></i>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-3 d-flex flex-column">
-                        <h5 className="fw-semibold text-dark mb-2">{video.title}</h5>
-                        <p className="text-muted mb-3 flex-grow-1">{video.description?.slice(0, 80)}...</p>
-                        {user?.email ? (
-                          isUnlocked ? (
-                            <button
-                              className="btn btn-info fw-semibold"
+                  return (
+                    <div key={video.id || index} className="col">
+                      <div className="video-card h-100 shadow-sm rounded overflow-hidden">
+                        <div className="position-relative">
+                          <img
+                            src={video.thumbnail ? `${BASE_URL}/uploads/${video.thumbnail}` : '/default-thumbnail.jpg'}
+                            alt={video.title}
+                            className="w-100"
+                            style={{ objectFit: 'cover', height: '200px' }}
+                          />
+                          {isUnlocked ? (
+                            <div
                               onClick={() => navigate(`/video/${video.id}`)}
+                              className="position-absolute top-50 start-50 translate-middle"
+                              style={{ cursor: 'pointer' }}
                             >
-                              🎓 Learn More
-                            </button>
+                              <i className="bi bi-play-circle-fill text-white fs-2"></i>
+                            </div>
                           ) : (
-                            <button
-                              className="btn btn-outline-secondary fw-semibold"
+                            <div
+                              className="locked-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                              style={{
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                color: '#fff',
+                                fontSize: '2rem',
+                                cursor: 'pointer',
+                              }}
                               onClick={() => navigate('/purchase')}
                             >
-                              🔒 Subscribe to unlock
-                            </button>
-                          )
-                        ) : (
-                          <p className="text-muted text-center mt-2">🔒 Login to explore content</p>
-                        )}
+                              <i className="bi bi-lock-fill"></i>
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-3 d-flex flex-column">
+                          <h5 className="fw-semibold text-dark mb-2">{video.title}</h5>
+                          <p className="text-muted mb-3 flex-grow-1">{video.description?.slice(0, 80)}...</p>
+                          {user?.email ? (
+                            isUnlocked ? (
+                              <button
+                                className="btn btn-info fw-semibold"
+                                onClick={() => navigate(`/video/${video.id}`)}
+                              >
+                                🎓 Learn More
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-outline-secondary fw-semibold"
+                                onClick={() => navigate('/purchase')}
+                              >
+                                🔒 Subscribe to unlock
+                              </button>
+                            )
+                          ) : (
+                            <p className="text-muted text-center mt-2">🔒 Login to explore content</p>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
             <hr className="mt-5 border-dark" />
           </div>
