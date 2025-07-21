@@ -16,18 +16,23 @@ function VideoLearning() {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/managevideo`);
-        const videoList = Array.isArray(res.data)
-          ? res.data
-          : Array.isArray(res.data.videos)
-          ? res.data.videos
-          : [];
+        
+        // Safe fallback parsing
+        let videoList = [];
+        if (Array.isArray(res.data)) {
+          videoList = res.data;
+        } else if (res.data && Array.isArray(res.data.videos)) {
+          videoList = res.data.videos;
+        }
 
         setVideos(videoList);
 
+        // Extract unique course IDs
         const courseIds = [
-          ...new Set(videoList.map((v) => v.course_id).filter(Boolean)),
+          ...new Set(videoList.map((v) => v.course_id).filter(Boolean))
         ];
 
+        // Fetch course titles
         const titleMap = {};
         await Promise.all(
           courseIds.map(async (id) => {
@@ -41,6 +46,7 @@ function VideoLearning() {
         );
         setCourseTitles(titleMap);
 
+        // Check enrollment status for each course
         if (user?.email) {
           const enrollmentStatus = {};
           await Promise.all(
@@ -58,8 +64,10 @@ function VideoLearning() {
           );
           setEnrolledMap(enrollmentStatus);
         }
+
       } catch (err) {
         console.error('Error fetching videos:', err);
+        setVideos([]);
       } finally {
         setLoading(false);
       }
@@ -68,6 +76,7 @@ function VideoLearning() {
     fetchVideos();
   }, [user?.email]);
 
+  // Group videos by course_id
   const groupedVideos = videos.reduce((acc, video) => {
     const courseId = video.course_id?.toString() || 'uncategorized';
     if (!acc[courseId]) acc[courseId] = [];
@@ -75,6 +84,7 @@ function VideoLearning() {
     return acc;
   }, {});
 
+  // Render states
   if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
 
   if (!videos.length) return <div className="text-center py-5">🚫 No videos available</div>;
