@@ -1,4 +1,6 @@
-/* Updated TeamPage.css */
+/* TeamPage.css */
+
+/* Card container */
 .team-card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -6,38 +8,54 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
+  margin: 1rem;
+  max-width: 250px;
 }
 
+/* Hover effect */
 .team-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
 }
 
+/* Image styling */
 .team-card img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  border: 2px solid #eee;
+  transition: transform 0.3s ease;
 }
 
+/* Image zoom on hover */
+.team-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Name */
 .team-card h5 {
   margin-top: 0.5rem;
   font-weight: 600;
   font-size: 1.1rem;
+  color: #333;
 }
 
+/* Role */
 .team-card small {
   display: block;
   margin-top: 0.25rem;
   font-size: 0.85rem;
-  color: #555;
+  color: #777;
 }
 
+/* Responsive for small devices */
 @media (max-width: 576px) {
   .team-card {
     padding: 1rem;
+    max-width: 100%;
   }
 
   .team-card img {

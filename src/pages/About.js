@@ -39,7 +39,6 @@ function About() {
         />
       </Helmet>
 
-      <br />
       <h1 className="text-center fw-bold text-primary display-4 mb-3">
         About Nandi Softech Solutions
       </h1>
@@ -51,7 +50,7 @@ function About() {
         <div className="col-lg-6 mb-4 mb-lg-0">
           <img
             src={steveJobsImage}
-            alt="Mission and Vision"
+            alt="Vision Illustration"
             className="img-fluid rounded-4 shadow-lg w-100"
           />
         </div>
@@ -87,7 +86,7 @@ function About() {
         <h3 className="fst-italic mb-3">
           A Message from Our Founder – Arjun Sir
         </h3>
-        <blockquote className="fs-5">
+        <blockquote className="fs-5 mb-0">
           “I believe true innovation lies not only in creating new things but in
           empowering people through technology.”
         </blockquote>
@@ -114,7 +113,7 @@ function About() {
         </div>
       </div>
 
-      <div className="text-center mb-5">
+      <div className="text-center mt-5">
         <h2 className="text-primary mb-4">Leadership Team</h2>
         <div className="row g-4 justify-content-center">
           {teamMembers.map(({ id, name, role, bio, photo_url }) => (
@@ -122,13 +121,18 @@ function About() {
               <div className="card h-100 shadow-sm border-0 rounded-4 p-3">
                 <img
                   src={`http://localhost:5000/uploads/${photo_url}`}
-                  alt={name}
+                  alt={`${name}`}
                   className="rounded-circle border border-3 border-primary mx-auto d-block"
                   style={{
                     width: "120px",
                     height: "120px",
                     objectFit: "cover",
                   }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/default-user.png";
+                  }}
+                  loading="lazy"
                 />
                 <div className="card-body text-center">
                   <h5 className="fw-bold mb-1">{name}</h5>

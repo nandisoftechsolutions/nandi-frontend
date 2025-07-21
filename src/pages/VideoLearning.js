@@ -15,16 +15,19 @@ function VideoLearning() {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/managevideo`);
-        setVideos(res.data);
+        console.log('Fetched videos:', res.data);
 
-        const courseIds = [...new Set(res.data.map(v => v.course_id).filter(Boolean))];
+        const videoList = Array.isArray(res.data) ? res.data : (res.data.videos || []);
+        setVideos(videoList);
+
+        const courseIds = [...new Set(videoList.map(v => v.course_id).filter(Boolean))];
 
         const titleMap = {};
         await Promise.all(
           courseIds.map(async id => {
             try {
               const { data } = await axios.get(`${BASE_URL}/api/courses/${id}`);
-              titleMap[id.toString()] = data.title || 'Untitled Course';
+              titleMap[id.toString()] = data?.title || 'Untitled Course';
             } catch (err) {
               console.error(`Error fetching course ${id}:`, err);
               titleMap[id.toString()] = 'Untitled Course';
@@ -41,7 +44,7 @@ function VideoLearning() {
                 const { data } = await axios.get(`${BASE_URL}/api/courses/${courseId}/is-enrolled`, {
                   params: { userEmail: user.email },
                 });
-                enrollmentStatus[courseId.toString()] = data.enrolled;
+                enrollmentStatus[courseId.toString()] = data?.enrolled;
               } catch (err) {
                 console.error(`Enrollment check failed for course ${courseId}:`, err);
               }
@@ -51,20 +54,25 @@ function VideoLearning() {
         }
       } catch (error) {
         console.error('Error fetching videos:', error);
+        setVideos([]); // fallback to empty array to avoid crash
       }
     };
 
     fetchVideos();
   }, [user?.email]);
 
-  const groupedVideos = videos.reduce((acc, video) => {
-    const courseId = video.course_id ? video.course_id.toString() : 'uncategorized';
-    if (!acc[courseId]) acc[courseId] = [];
-    acc[courseId].push(video);
-    return acc;
-  }, {});
+  const groupedVideos = Array.isArray(videos)
+    ? videos.reduce((acc, video) => {
+        const courseId = video.course_id ? video.course_id.toString() : 'uncategorized';
+        if (!acc[courseId]) acc[courseId] = [];
+        acc[courseId].push(video);
+        return acc;
+      }, {})
+    : {};
 
-  if (!videos.length) return <div className="text-center py-5">Loading videos...</div>;
+  if (!Array.isArray(videos) || !videos.length) {
+    return <div className="text-center py-5">Loading videos...</div>;
+  }
 
   return (
     <div className="container py-5">
@@ -102,7 +110,12 @@ function VideoLearning() {
                         ) : (
                           <div
                             className="locked-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff', fontSize: '2rem', cursor: 'pointer' }}
+                            style={{
+                              backgroundColor: 'rgba(0,0,0,0.5)',
+                              color: '#fff',
+                              fontSize: '2rem',
+                              cursor: 'pointer',
+                            }}
                             onClick={() => navigate('/purchase')}
                           >
                             <i className="bi bi-lock-fill"></i>
@@ -114,11 +127,17 @@ function VideoLearning() {
                         <p className="text-muted mb-3 flex-grow-1">{video.description?.slice(0, 80)}...</p>
                         {user?.email ? (
                           isUnlocked ? (
-                            <button className="btn btn-info fw-semibold" onClick={() => navigate(`/video/${video.id}`)}>
+                            <button
+                              className="btn btn-info fw-semibold"
+                              onClick={() => navigate(`/video/${video.id}`)}
+                            >
                               🎓 Learn More
                             </button>
                           ) : (
-                            <button className="btn btn-outline-secondary fw-semibold" onClick={() => navigate('/purchase')}>
+                            <button
+                              className="btn btn-outline-secondary fw-semibold"
+                              onClick={() => navigate('/purchase')}
+                            >
                               🔒 Subscribe to unlock
                             </button>
                           )
