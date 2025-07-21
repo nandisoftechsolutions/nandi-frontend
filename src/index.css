@@ -1,53 +1,87 @@
-/* Reset default margins and paddings */
-* {
+/* ==========================
+   Global Reset and Base
+   ========================== */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Apply base styles to body */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   background-color: #f9f9f9;
   color: #333;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Base link styling */
+/* Links */
 a {
   color: inherit;
   text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: #007acc;
 }
 
-/* Remove default list styles */
-ul, ol {
+/* Lists */
+ul,
+ol {
   list-style: none;
+  padding-left: 0;
 }
 
-/* Base button style reset */
+/* Buttons */
 button {
   font-family: inherit;
+  font-size: 1rem;
   border: none;
   background: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* Code block styles */
+/* Inputs */
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Code */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: "source-code-pro", Menlo, Monaco, Consolas, "Courier New",
     monospace;
   background-color: #f4f4f4;
-  padding: 2px 4px;
+  padding: 0.2em 0.4em;
   border-radius: 4px;
+  font-size: 0.9em;
 }
 
-/* Image responsiveness */
+/* Images */
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }

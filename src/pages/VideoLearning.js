@@ -9,7 +9,7 @@ function VideoLearning() {
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   const [videos, setVideos] = useState([]);
   const [enrolledMap, setEnrolledMap] = useState({});
-  const [courseTitles, setCourseTitles] = useState({}); // course_id => title
+  const [courseTitles, setCourseTitles] = useState({});
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -19,44 +19,44 @@ function VideoLearning() {
 
         const courseIds = [...new Set(res.data.map(v => v.course_id).filter(Boolean))];
 
-        // Fetch course titles
         const titleMap = {};
-        await Promise.all(courseIds.map(async (id) => {
-          try {
-            const { data } = await axios.get(`${BASE_URL}/api/courses/${id}`);
-            titleMap[id.toString()] = data.title || 'Untitled Course';
-          } catch (err) {
-            console.error(`❌ Error fetching course ${id}`, err);
-            titleMap[id.toString()] = 'Untitled Course';
-          }
-        }));
+        await Promise.all(
+          courseIds.map(async id => {
+            try {
+              const { data } = await axios.get(`${BASE_URL}/api/courses/${id}`);
+              titleMap[id.toString()] = data.title || 'Untitled Course';
+            } catch (err) {
+              console.error(`Error fetching course ${id}:`, err);
+              titleMap[id.toString()] = 'Untitled Course';
+            }
+          })
+        );
         setCourseTitles(titleMap);
 
-        // Fetch enrollment status
         if (user?.email) {
           const enrollmentStatus = {};
-          await Promise.all(courseIds.map(async (courseId) => {
-            try {
-              const { data } = await axios.get(`${BASE_URL}/api/courses/${courseId}/is-enrolled`, {
-                params: { userEmail: user.email },
-              });
-              enrollmentStatus[courseId.toString()] = data.enrolled;
-            } catch (err) {
-              console.error(`Enrollment check failed for course ${courseId}:`, err);
-            }
-          }));
+          await Promise.all(
+            courseIds.map(async courseId => {
+              try {
+                const { data } = await axios.get(`${BASE_URL}/api/courses/${courseId}/is-enrolled`, {
+                  params: { userEmail: user.email },
+                });
+                enrollmentStatus[courseId.toString()] = data.enrolled;
+              } catch (err) {
+                console.error(`Enrollment check failed for course ${courseId}:`, err);
+              }
+            })
+          );
           setEnrolledMap(enrollmentStatus);
         }
-
       } catch (error) {
-        console.error('❌ Error fetching videos:', error);
+        console.error('Error fetching videos:', error);
       }
     };
 
     fetchVideos();
   }, [user?.email]);
 
-  // Group videos by stringified course ID
   const groupedVideos = videos.reduce((acc, video) => {
     const courseId = video.course_id ? video.course_id.toString() : 'uncategorized';
     if (!acc[courseId]) acc[courseId] = [];

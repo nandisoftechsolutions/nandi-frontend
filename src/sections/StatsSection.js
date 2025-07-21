@@ -1,3 +1,4 @@
+// src/components/StatsSection.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../api';
@@ -13,18 +14,23 @@ const StatsSection = ({ title = 'Our Achievements', stats = [] }) => {
   ];
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchStats = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/stats`);
-        if (Array.isArray(response.data)) {
+        if (Array.isArray(response.data) && isMounted) {
           setFetchedStats(response.data);
         }
-      } catch (err) {
-        console.error('Error fetching stats:', err);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
       }
     };
 
     fetchStats();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const displayStats = stats.length > 0 ? stats : (fetchedStats.length > 0 ? fetchedStats : defaultStats);

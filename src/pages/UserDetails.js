@@ -14,10 +14,10 @@ const UserDetails = () => {
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
 
-  const userData = JSON.parse(localStorage.getItem('user'));
-  const email = userData?.email;
-
   useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const email = userData?.email;
+
     if (!email) {
       setError('User email not found. Please log in again.');
       return;
@@ -25,13 +25,14 @@ const UserDetails = () => {
 
     const fetchData = async () => {
       try {
-        const userRes = await axios.get(`${BASE_URL}/api/user/${email}`);
+        const [userRes, ordersRes, subsRes] = await Promise.all([
+          axios.get(`${BASE_URL}/api/user/${email}`),
+          axios.get(`${BASE_URL}/api/user/${email}/orders`),
+          axios.get(`${BASE_URL}/api/user/${email}/subscriptions`)
+        ]);
+
         setUser(userRes.data);
-
-        const ordersRes = await axios.get(`${BASE_URL}/api/user/${email}/orders`);
         setOrders(ordersRes.data);
-
-        const subsRes = await axios.get(`${BASE_URL}/api/user/${email}/subscriptions`);
         setSubscriptions(subsRes.data);
       } catch (err) {
         console.error('❌ API Error:', err);
@@ -40,7 +41,7 @@ const UserDetails = () => {
     };
 
     fetchData();
-  }, [email]);
+  }, []);
 
   const submitFeedback = async () => {
     if (!feedback || rating === 0) {
@@ -69,11 +70,6 @@ const UserDetails = () => {
 
   return (
     <div className="container py-4">
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
       <h3 className="mb-3">Welcome, {user.name}</h3>
 
       <div className="card mb-4">

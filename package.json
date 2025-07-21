@@ -2,17 +2,8 @@
   "name": "frontend",
   "version": "1.0.0",
   "private": true,
-  "description": "Nandi Softech Solution Frontend",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject"
-  },
   "dependencies": {
-    "@craco/craco": "^7.1.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.8",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "file-saver": "^2.0.5",
@@ -24,9 +15,22 @@
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^6.22.0",
+    "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -40,15 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nandisoftechsolutions/react-frontend.git"
-  },
-  "keywords": [],
-  "author": "Nandi Softech Solutions",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nandisoftechsolutions/react-frontend/issues"
-  },
-  "homepage": "."
+  "devDependencies": {
+    "css-minimizer-webpack-plugin": "^7.0.2"
+  }
 }

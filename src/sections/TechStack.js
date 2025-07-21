@@ -1,6 +1,6 @@
 import React from 'react';
 import './TechStack.css';
-import bgImage from '../assets/sections/usertechnology.jpg'; 
+import bgImage from '../assets/sections/usertechnology.jpg';
 
 const TechStack = () => {
   const techs = ['React', 'Node.js', 'PostgreSQL', 'Bootstrap', 'Figma', 'AWS'];
@@ -14,13 +14,14 @@ const TechStack = () => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
+      aria-label="Technology Stack Section"
     >
       <div className="container-fluid py-5">
         <div className="row">
-          {/* Left spacer column (optional) */}
-          <div className="col-12 col-md-7"></div>
+          {/* Left spacer column (optional, remains empty on larger screens) */}
+          <div className="col-12 col-md-7" />
 
-          {/* Tech stack content */}
+          {/* Right content column */}
           <div className="col-12 col-md-5 d-flex flex-column align-items-start text-start tech-stack-content">
             <h1 className="mb-4 fw-bold">Technologies We Use</h1>
             {techs.map((tech, index) => (

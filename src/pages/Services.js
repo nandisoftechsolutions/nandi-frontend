@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "./Services.css";
 
+import "./Services.css";
 import servicesBg from "../assets/bgimage/servicesbg.png";
 
 const Services = () => {
@@ -43,7 +44,7 @@ const Services = () => {
   };
 
   return (
-    <div>
+    <>
       <Helmet>
         <title>Our Services | Nandi Softech</title>
         <meta
@@ -53,7 +54,7 @@ const Services = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <div
+      <section
         className="text-white d-flex align-items-center justify-content-center text-center"
         style={{
           height: "60vh",
@@ -69,10 +70,10 @@ const Services = () => {
             Explore our digital expertise crafted for your business success.
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Services Section */}
-      <div className="container my-5">
+      <section className="container my-5">
         <div className="row justify-content-center mb-4">
           <div className="col-12 text-center">
             <h2 className="services-heading fw-bold">What We Offer</h2>
@@ -86,7 +87,7 @@ const Services = () => {
         <div className="row gy-4 justify-content-center">
           {servicesList.map(({ icon, title, description }, idx) => (
             <div
-              key={idx}
+              key={title}
               className="col-6 col-sm-4 col-md-3 col-lg-2"
               role="button"
               aria-label={`Learn more about ${title}`}
@@ -94,15 +95,17 @@ const Services = () => {
               style={{ cursor: "pointer" }}
             >
               <div className="service-card text-center p-3 rounded-3 shadow-sm h-100">
-                <div className="service-icon fs-2 mb-2">{icon}</div>
+                <div className="service-icon fs-2 mb-2" aria-hidden="true">
+                  {icon}
+                </div>
                 <h6 className="fw-semibold">{title}</h6>
                 <p className="text-muted small">{description}</p>
               </div>
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 

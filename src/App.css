@@ -1,10 +1,18 @@
+/* App.css */
+
 .App {
   text-align: center;
+  padding: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .App-logo {
   height: 40vmin;
+  max-width: 100%;
   pointer-events: none;
+  display: block;
+  margin: 0 auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -22,14 +30,39 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  text-align: center;
   padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .App-header {
+    font-size: calc(10px + 1.5vmin);
+    padding: 15px;
+  }
+
+  .App-logo {
+    height: 30vmin;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .App-header {
+    font-size: calc(10px + 1vmin);
+    padding: 10px;
+  }
+
+  .App-logo {
+    height: 25vmin;
+  }
 }
 
 .App-link {
   color: #61dafb;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease;
 }
 
 .App-link:hover {

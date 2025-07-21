@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './VideoLearning.css';
-import BASE_URL from '../api';
+
+// Auto-detect BASE_URL for local and production
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || window.location.origin;
 
 function VideoLearning() {
   const [videos, setVideos] = useState([]);
@@ -71,7 +73,9 @@ function VideoLearning() {
 
                 <div className="card-body p-3">
                   <h5 className="card-title">{video.title}</h5>
-                  <p className="card-text text-muted">{video.description.slice(0, 80)}...</p>
+                  <p className="card-text text-muted">
+                    {video.description?.slice(0, 80)}...
+                  </p>
                   {username ? (
                     <button
                       onClick={() => navigate(`/video/${video.id}`)}

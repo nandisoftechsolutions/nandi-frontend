@@ -1,15 +1,29 @@
 {
   "short_name": "NandiApp",
-  "name": "Nandi Softech App",
+  "name": "Nandi Softech Solutions | Software Development & Online Courses",
   "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
     {
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "scope": "/",
+  "description": "Nandi Softech Solutions offers software development, automation testing, website development, and online IT training to empower individuals and businesses.",
+  "lang": "en"
 }

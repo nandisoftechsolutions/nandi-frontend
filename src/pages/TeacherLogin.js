@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import BASE_URL from '../api';
+import BASE_URL from '@/api'; // make sure your alias is configured or use relative path '../api'
 
 export default function TeacherLogin() {
   const [email, setEmail] = useState('');
@@ -19,12 +19,12 @@ export default function TeacherLogin() {
 
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/api/teacher/login`, {
+      const response = await axios.post(`${BASE_URL}/api/teacher/login`, {
         email: email.trim(),
         password: password.trim(),
       });
 
-      const { token, teacher } = res.data;
+      const { token, teacher } = response.data;
 
       localStorage.setItem('teacherToken', token);
       localStorage.setItem('teacher', JSON.stringify(teacher));
@@ -32,16 +32,16 @@ export default function TeacherLogin() {
 
       alert(`Welcome, ${teacher.name}`);
       navigate('/');
-    } catch (err) {
-      console.error('Login error:', err);
-      alert(err.response?.data?.message || 'Login failed');
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error.response?.data?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light">
+    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3">
       <div className="card shadow p-4 w-100" style={{ maxWidth: '420px' }}>
         <h3 className="text-center text-primary mb-4 fw-semibold">Teacher Login</h3>
 
@@ -54,6 +54,7 @@ export default function TeacherLogin() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
           />
         </div>
 
@@ -66,6 +67,7 @@ export default function TeacherLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="current-password"
           />
         </div>
 

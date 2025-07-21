@@ -14,18 +14,20 @@ const CTASection = ({
   return (
     <section className="py-5 bg-success text-white text-center">
       <div className="container">
-        <h2 className="mb-3">{title}</h2>
+        <h2 className="mb-3 fw-bold">{title}</h2>
         <p className="lead">{description}</p>
-        <div className="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-4">
+        <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
           <button
+            type="button"
             onClick={() => navigate(primaryBtnRoute)}
-            className="btn btn-light"
+            className="btn btn-light px-4 py-2"
           >
             {primaryBtnText}
           </button>
           <button
+            type="button"
             onClick={() => navigate(secondaryBtnRoute)}
-            className="btn btn-outline-light"
+            className="btn btn-outline-light px-4 py-2"
           >
             {secondaryBtnText}
           </button>

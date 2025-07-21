@@ -1,10 +1,12 @@
-// ==== TeamPage.css ====
+/* Updated TeamPage.css */
 .team-card {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  text-align: center;
+  padding: 1rem;
 }
 
 .team-card:hover {
@@ -12,14 +14,23 @@
   box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
 }
 
+.team-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
 .team-card h5 {
   margin-top: 0.5rem;
   font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .team-card small {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   font-size: 0.85rem;
   color: #555;
 }

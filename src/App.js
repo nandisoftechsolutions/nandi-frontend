@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+// Public Pages
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
@@ -26,6 +27,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import UserDetails from './pages/UserDetails';
 
+// Admin Pages
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import OrderManagement from './pages/Admin/OrderManagement';
@@ -42,29 +44,32 @@ import TeacherManage from './pages/Admin/TeacherManage';
 
 import './App.css';
 
+// Optional: Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
 const App = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const adminPaths = [
-    '/admin',
-    '/orders',
-    '/managejobs',
-    '/projectmanager',
-    '/managevideolearning',
-    '/manageblogs',
-    '/teammanage',
-    '/managemassage',
-    '/manageuser',
-    '/manageadmins',
-    '/manageteachers',
-  ];
-
-  const isAdminRoute = adminPaths.some((path) =>
-    location.pathname.toLowerCase().startsWith(path)
-  );
+  // Admin routes prefix for checking
+  const isAdminRoute = pathname.startsWith('/admin') ||
+    pathname.startsWith('/orders') ||
+    pathname.startsWith('/manage') ||
+    pathname.startsWith('/projectmanager') ||
+    pathname.startsWith('/teammanage') ||
+    pathname.startsWith('/teacherslogin') ||
+    pathname.startsWith('/manageteachers');
 
   return (
     <>
+      <ScrollToTop />
+
+      {/* Show Header/Navbar/Footer only for non-admin paths */}
       {!isAdminRoute && (
         <div className="overlay-wrapper">
           <Header />
@@ -112,7 +117,7 @@ const App = () => {
           <Route path="/teacherslogin" element={<TeacherLogin />} />
           <Route path="/manageteachers" element={<TeacherManage />} />
 
-          {/* 404 */}
+          {/* Fallback - 404 */}
           <Route
             path="*"
             element={
@@ -124,6 +129,7 @@ const App = () => {
         </Routes>
       </div>
 
+      {/* Footer only for non-admin routes */}
       {!isAdminRoute && <Footer />}
     </>
   );

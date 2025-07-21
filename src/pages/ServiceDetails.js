@@ -1,12 +1,14 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ServiceDetails.css";
 
 function ServiceDetails() {
   const location = useLocation();
-  const { serviceTitle } = location.state || { serviceTitle: "Our Service" };
+  const navigate = useNavigate();
+
+  const { serviceTitle } = location.state || {};
 
   const details = {
     "Website Development": {
@@ -30,16 +32,31 @@ function ServiceDetails() {
         "Beautiful, intuitive interfaces crafted with user experience and brand in mind.",
     },
     "SEO & Marketing": {
-      tech: ["Google Analytics", "SEO Tools", "Content Marketing", "Social Media"],
+      tech: [
+        "Google Analytics",
+        "SEO Tools",
+        "Content Marketing",
+        "Social Media",
+      ],
       content:
         "We optimize your online presence using proven SEO techniques and marketing strategies.",
     },
   };
 
-  const service = details[serviceTitle] || {
-    tech: [],
-    content: "No details available for this service yet.",
-  };
+  // Fallback if route accessed directly
+  if (!serviceTitle || !details[serviceTitle]) {
+    return (
+      <div className="container py-5 text-center">
+        <h2 className="text-danger mb-3">Service Not Found</h2>
+        <p>The service you're looking for doesn't exist or wasn't provided.</p>
+        <button className="btn btn-primary mt-3" onClick={() => navigate("/")}>
+          Go to Home
+        </button>
+      </div>
+    );
+  }
+
+  const service = details[serviceTitle];
 
   return (
     <div className="container py-5">
@@ -58,32 +75,30 @@ function ServiceDetails() {
             <p className="lead text-muted">{service.content}</p>
           </div>
 
-          {service.tech.length > 0 ? (
-            <div className="card border-0 shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title fw-semibold mb-3">
-                  Technologies We Use
-                </h5>
-                <ul className="list-group list-group-flush">
-                  {service.tech.map((tech, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item d-flex justify-content-between align-items-center"
+          <div className="card border-0 shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title fw-semibold mb-3">
+                Technologies We Use
+              </h5>
+              <ul className="list-group list-group-flush">
+                {service.tech.map((tech, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <span>{tech}</span>
+                    <span
+                      className="badge bg-primary rounded-pill"
+                      role="img"
+                      aria-label="Supported technology"
                     >
-                      <span>{tech}</span>
-                      <span className="badge bg-primary rounded-pill" aria-label="Supported">
-                        ✓
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      ✓
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          ) : (
-            <div className="alert alert-warning mt-4">
-              No technologies listed for this service yet.
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

@@ -13,8 +13,8 @@ const TestimonialsSection = () => (
       <h2 className="mb-4 text-primary">What Our Clients Say</h2>
       <div className="row justify-content-center">
         {testimonials.map((t, i) => (
-          <div key={i} className="col">
-            <div className="cardses h-100 shadow-sm border-1 testimonial-card">
+          <div key={i} className="col-12 col-md-6 col-lg-4 mb-4">
+            <div className="cardses h-100 shadow-sm border-1 testimonial-card rounded bg-white">
               <div className="card-body position-relative p-4">
                 <FaQuoteLeft className="text-primary mb-3 fs-3" />
                 <p className="card-text fst-italic text-dark">“{t.quote}”</p>

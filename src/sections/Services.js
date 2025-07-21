@@ -40,38 +40,37 @@ const Services = () => {
   };
 
   return (
-    <div className="services-container">
-     
-      
-      <div className="row justify-content-center mb-2">
-  <div className="col-12 text-center">
-    <h2 className="services-heading">Our Services</h2>
-    <p className="services-subtext">
-      We offer high-quality, modern, and tailored digital solutions for your business growth.
-    </p>
-  </div>
-</div>
+    <section className="services-container py-5 px-3">
+      <div className="row justify-content-center mb-4">
+        <div className="col-12 text-center">
+          <h2 className="services-heading mb-2">Our Services</h2>
+          <p className="services-subtext">
+            We offer high-quality, modern, and tailored digital solutions for your business growth.
+          </p>
+        </div>
+      </div>
 
-     
-      <div className="row justify-content-center gap-3">
+      <div className="row justify-content-center gy-4">
         {servicesList.map(({ icon, title, description }, idx) => (
           <div
             key={idx}
-            className="service-card text-center p-3 rounded-3 shadow-sm "
-            style={{
-              width: "180px",
-              flex: "0 0 auto",
-              cursor: "pointer",
-            }}
-            onClick={() => handleCardClick(title)}
+            className="col-6 col-sm-4 col-md-3 col-lg-2 d-flex justify-content-center"
           >
-            <div className="service-icon fs-3 mb-2">{icon}</div>
-            <h6 className="fw-semibold">{title}</h6>
-            <p className="text-muted small">{description}</p>
+            <div
+              className="service-card text-center p-3 rounded-3 shadow-sm w-100 h-100"
+              role="button"
+              onClick={() => handleCardClick(title)}
+              onKeyDown={(e) => e.key === "Enter" && handleCardClick(title)}
+              tabIndex={0}
+            >
+              <div className="service-icon fs-3 mb-2">{icon}</div>
+              <h6 className="fw-semibold">{title}</h6>
+              <p className="text-muted small">{description}</p>
+            </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

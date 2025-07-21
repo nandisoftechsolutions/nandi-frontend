@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
+import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import BASE_URL from "../api";
@@ -9,6 +10,8 @@ function Portfolio() {
   const [projects, setProjects] = useState([]);
   const [filter, setFilter] = useState("All");
   const [hoveredId, setHoveredId] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [modalProject, setModalProject] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -66,6 +69,11 @@ function Portfolio() {
     zIndex: 2,
   };
 
+  const handleSeeMore = (project) => {
+    setModalProject(project);
+    setModalShow(true);
+  };
+
   return (
     <div className="container py-5">
       <Helmet>
@@ -96,94 +104,110 @@ function Portfolio() {
 
       {/* Projects Grid */}
       <div className="row g-4">
-        {filtered.map(
-          ({
-            id,
-            title,
-            description,
-            full_image_url,
-            youtube_link,
-            demo_link,
-          }) => (
-            <div key={id} className="col-12 col-sm-6 col-lg-3">
-              <div
-                className="card h-100 position-relative"
-                style={
-                  hoveredId === id
-                    ? { ...cardStyle, ...cardHover }
-                    : cardStyle
-                }
-                onMouseEnter={() => setHoveredId(id)}
-                onMouseLeave={() => setHoveredId(null)}
-              >
-                {/* Project Image */}
-                {full_image_url ? (
-                  <img
-                    src={full_image_url}
-                    className="card-img-top rounded-0"
-                    alt={title}
-                    style={{ objectFit: "cover", height: "180px" }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      height: "180px",
-                      background: "#eee",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#888",
-                    }}
-                  >
-                    No Image Available
-                  </div>
-                )}
-
-                {/* Hover Overlay */}
+        {filtered.map((project) => (
+          <div key={project.id} className="col-12 col-sm-6 col-lg-3">
+            <div
+              className="card h-100 position-relative"
+              style={
+                hoveredId === project.id
+                  ? { ...cardStyle, ...cardHover }
+                  : cardStyle
+              }
+              onMouseEnter={() => setHoveredId(project.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
+              {/* Project Image */}
+              {project.full_image_url ? (
+                <img
+                  src={project.full_image_url}
+                  className="card-img-top rounded-0"
+                  alt={project.title}
+                  style={{ objectFit: "cover", height: "180px" }}
+                />
+              ) : (
                 <div
                   style={{
-                    ...overlayStyle,
-                    opacity: hoveredId === id ? 1 : 0,
+                    height: "180px",
+                    background: "#eee",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#888",
                   }}
                 >
-                  <div>
-                    <h5 className="mb-2">{title}</h5>
-                    <p className="small">{description?.slice(0, 80)}...</p>
-                  </div>
+                  No Image Available
                 </div>
+              )}
 
-                {/* Card Body */}
-                <div className="card-body">
-                  <h5 className="card-title text-primary">{title}</h5>
-                  <p className="text-muted small">{description?.slice(0, 80)}...</p>
-                  <div className="d-flex gap-2 mt-2">
-                    {youtube_link && (
-                      <a
-                        href={youtube_link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="badge bg-danger text-decoration-none"
-                      >
-                        🎥 YouTube
-                      </a>
-                    )}
-                    {demo_link && (
-                      <a
-                        href={demo_link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="badge bg-success text-decoration-none"
-                      >
-                        🚀 Live Demo
-                      </a>
-                    )}
-                  </div>
+              {/* Hover Overlay */}
+              <div
+                style={{
+                  ...overlayStyle,
+                  opacity: hoveredId === project.id ? 1 : 0,
+                }}
+              >
+                <div>
+                  <h5 className="mb-2">{project.title}</h5>
+                  <p className="small">
+                    {project.description?.slice(0, 80)}...
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="card-body">
+                <h5 className="card-title text-primary">{project.title}</h5>
+                <p className="text-muted small">
+                  {project.description?.slice(0, 80)}...
+                </p>
+                <button
+                  className="btn btn-link p-0 text-primary"
+                  onClick={() => handleSeeMore(project)}
+                >
+                  See More
+                </button>
+                <div className="d-flex gap-2 mt-2">
+                  {project.youtube_link && (
+                    <a
+                      href={project.youtube_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="badge bg-danger text-decoration-none"
+                    >
+                      🎥 YouTube
+                    </a>
+                  )}
+                  {project.demo_link && (
+                    <a
+                      href={project.demo_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="badge bg-success text-decoration-none"
+                    >
+                      🚀 Live Demo
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
-          )
-        )}
+          </div>
+        ))}
       </div>
+
+      {/* Modal for Description */}
+      <Modal show={modalShow} onHide={() => setModalShow(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalProject?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{modalProject?.description}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setModalShow(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

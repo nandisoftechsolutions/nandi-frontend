@@ -12,7 +12,7 @@ function Portfolio() {
     const fetchProjects = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/manageprojects`);
-        const updated = res.data.map(p => ({
+        const updated = res.data.map((p) => ({
           ...p,
           full_image_url: p.image_url ? `${BASE_URL}${p.image_url}` : '',
         }));
@@ -21,23 +21,29 @@ function Portfolio() {
         console.error('Error fetching projects:', err);
       }
     };
+
     fetchProjects();
   }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === 'left'
-        ? scrollLeft - clientWidth
-        : scrollLeft + clientWidth;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+      const scrollTo =
+        direction === 'left'
+          ? scrollRef.current.scrollLeft - scrollRef.current.clientWidth
+          : scrollRef.current.scrollLeft + scrollRef.current.clientWidth;
+
+      scrollRef.current.scrollTo({
+        left: scrollTo,
+        behavior: 'smooth',
+      });
     }
   };
 
   const serviceTypes = ['All', 'Website', 'Mobile App', 'Software'];
+
   const filtered = filter === 'All'
     ? projects
-    : projects.filter(p => p.service_type === filter);
+    : projects.filter((p) => p.service_type === filter);
 
   return (
     <section className="portfolio-section-wrapper py-5 bg-light">
@@ -49,7 +55,7 @@ function Portfolio() {
         <hr />
 
         <div className="text-center mb-4">
-          {serviceTypes.map(type => (
+          {serviceTypes.map((type) => (
             <button
               key={type}
               className={`btn btn-outline-primary mx-1 ${filter === type ? 'active' : ''}`}
@@ -61,10 +67,12 @@ function Portfolio() {
         </div>
 
         <div className="scroll-wrapper position-relative">
-          <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>&#10094;</button>
+          <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>
+            &#10094;
+          </button>
 
           <div className="scroll-container d-flex gap-3" ref={scrollRef}>
-            {filtered.map(project => (
+            {filtered.map((project) => (
               <div className="card project-card shadow-sm flex-shrink-0" key={project.id}>
                 <div className="image-wrapper">
                   {project.full_image_url ? (
@@ -73,6 +81,7 @@ function Portfolio() {
                       alt={project.title}
                       className="card-img-top"
                       onError={(e) => {
+                        e.target.onerror = null;
                         e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
                       }}
                     />
@@ -110,7 +119,9 @@ function Portfolio() {
             ))}
           </div>
 
-          <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>&#10095;</button>
+          <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>
+            &#10095;
+          </button>
         </div>
 
         <hr />

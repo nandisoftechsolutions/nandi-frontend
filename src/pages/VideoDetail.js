@@ -44,7 +44,7 @@ const VideoDetails = () => {
         setLikesData({ likes: likeRes.data.likes, dislikes: likeRes.data.dislikes });
         setUserLiked(likeRes.data.userLiked);
       } catch (err) {
-        console.error('❌ Error loading video details:', err);
+        console.error('Error loading video details:', err);
         alert('Failed to load video');
       }
     };
@@ -66,7 +66,7 @@ const VideoDetails = () => {
       setLikesData({ likes: res.data.likes, dislikes: res.data.dislikes });
       setUserLiked(res.data.userLiked);
     } catch (err) {
-      console.error('❌ Like failed:', err);
+      console.error('Like failed:', err);
     }
   };
 
@@ -87,8 +87,8 @@ const VideoDetails = () => {
 
   return (
     <div className="container-fluid py-4">
-      <br/>
-      <br/>
+      <br />
+      <br />
 
       <div className="row mb-4 align-items-center">
         <div className="col-12 col-md-6">
@@ -101,7 +101,7 @@ const VideoDetails = () => {
           </div>
         </div>
       </div>
-      <hr/>
+      <hr />
 
       <div className="row">
         <div className="col-lg-8 mb-4">
@@ -189,15 +189,15 @@ const VideoDetails = () => {
               }}
             >
               <img
-  src={`${BASE_URL}/uploads/${v.thumbnail}`}
-  alt={v.title}
-  style={{
-    width: '100%',
-    height: '140px',
-    objectFit: 'cover',
-    borderRadius: '0px' 
-  }}
-/>
+                src={`${BASE_URL}/uploads/${v.thumbnail}`}
+                alt={v.title}
+                style={{
+                  width: '100%',
+                  height: '140px',
+                  objectFit: 'cover',
+                  borderRadius: '0px'
+                }}
+              />
               <div className="card-body d-flex justify-content-between align-items-center">
                 <h6 className="card-title text-truncate mb-0">{v.title}</h6>
                 {!isEnrolled && idx > 1 && <BsLock />}

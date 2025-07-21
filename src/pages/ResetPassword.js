@@ -29,7 +29,8 @@ function ResetPassword() {
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -37,10 +38,11 @@ function ResetPassword() {
       <div className="card p-4 shadow-lg w-100" style={{ maxWidth: '450px' }}>
         <h3 className="text-center mb-4 text-success">🔒 Reset Password</h3>
 
-        <form onSubmit={handleVerify}>
+        <form onSubmit={handleVerify} noValidate>
           <div className="mb-3">
-            <label className="form-label">Email Address</label>
+            <label htmlFor="email" className="form-label">Email Address</label>
             <input
+              id="email"
               type="email"
               name="email"
               className="form-control"
@@ -52,8 +54,9 @@ function ResetPassword() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">OTP</label>
+            <label htmlFor="otp" className="form-label">OTP</label>
             <input
+              id="otp"
               type="text"
               name="otp"
               className="form-control"
@@ -65,8 +68,9 @@ function ResetPassword() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">New Password</label>
+            <label htmlFor="newPassword" className="form-label">New Password</label>
             <input
+              id="newPassword"
               type="password"
               name="newPassword"
               className="form-control"
