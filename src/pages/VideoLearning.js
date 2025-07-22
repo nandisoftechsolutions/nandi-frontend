@@ -8,13 +8,15 @@ const VideoLearning = () => {
     const fetchVideos = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/videos');
-        console.log("Fetched videos:", res.data);
+        const data = res.data;
+        console.log("Fetched videos:", data);
 
-        // Ensure it's an array before setting state
-        if (Array.isArray(res.data)) {
-          setVideos(res.data);
+        if (Array.isArray(data)) {
+          setVideos(data);
+        } else if (Array.isArray(data.videos)) {
+          setVideos(data.videos);
         } else {
-          console.warn("Expected an array but got:", typeof res.data);
+          console.warn("API returned unexpected data format:", data);
           setVideos([]);
         }
       } catch (error) {
@@ -34,7 +36,7 @@ const VideoLearning = () => {
       ) : (
         <ul>
           {videos.map((video) => (
-            <li key={video.id || video._id}>
+            <li key={video._id || video.id}>
               <h4>{video.title}</h4>
               <video width="400" controls>
                 <source src={video.url} type="video/mp4" />
