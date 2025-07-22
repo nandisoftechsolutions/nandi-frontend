@@ -1,53 +1,49 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const VideoLearning = () => {
-  const [groupedVideos, setGroupedVideos] = useState({});
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/videos")
-      .then((res) => {
-        const data = res.data;
+    const fetchVideos = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/videos');
+        console.log("Fetched videos:", res.data);
 
-        const grouped = data.reduce((acc, video) => {
-          const { subject } = video;
-          if (!acc[subject]) {
-            acc[subject] = [];
-          }
-          acc[subject].push(video);
-          return acc;
-        }, {});
+        // Ensure it's an array before setting state
+        if (Array.isArray(res.data)) {
+          setVideos(res.data);
+        } else {
+          console.warn("Expected an array but got:", typeof res.data);
+          setVideos([]);
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
 
-        setGroupedVideos(grouped);
-      })
-      .catch((error) => {
-        console.error("Error fetching videos:", error);
-      });
+    fetchVideos();
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Video Learning</h1>
-      {Object.keys(groupedVideos).map((subject) => (
-        <div key={subject} className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">{subject}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {groupedVideos[subject].map((video) => (
-              <div key={video.id} className="border rounded-lg p-4 shadow-md">
-                <h3 className="text-lg font-bold mb-2">{video.title}</h3>
-                <p className="mb-2">{video.description}</p>
-                <Link
-                  to={`/video/${video.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  Watch Video
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+    <div className="video-learning">
+      <h2>Video Learning</h2>
+
+      {videos.length === 0 ? (
+        <p>No videos available.</p>
+      ) : (
+        <ul>
+          {videos.map((video) => (
+            <li key={video.id || video._id}>
+              <h4>{video.title}</h4>
+              <video width="400" controls>
+                <source src={video.url} type="video/mp4" />
+                Your browser does not support HTML video.
+              </video>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
