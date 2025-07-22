@@ -89,6 +89,21 @@
   color: #2c5aa0;
 }
 
+.password-strength {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+}
+
+.strength-bar {
+  flex: 1;
+  background-color: #e9ecef;
+  border-radius: 2px;
+}
+
+.strength-bar.active {
+  background-color: #28a745;
+}
 
 @keyframes register-fadeIn {
   from {
