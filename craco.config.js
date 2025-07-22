@@ -8,12 +8,15 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
     },
     configure: (webpackConfig) => {
+      // Output file naming
       webpackConfig.output.filename = 'static/js/[name].js';
       webpackConfig.output.chunkFilename = 'static/js/[name].chunk.js';
+
+      // Optional: Enable source maps
       webpackConfig.devtool = 'source-map';
 
-      // Disable CSS minification to fix MIME error
-      if (webpackConfig.optimization && webpackConfig.optimization.minimizer) {
+      // Optional: Disable CSS minimization to fix MIME errors from Netlify
+      if (webpackConfig.optimization && Array.isArray(webpackConfig.optimization.minimizer)) {
         webpackConfig.optimization.minimizer = webpackConfig.optimization.minimizer.filter(
           (plugin) => !(plugin instanceof CssMinimizerPlugin)
         );

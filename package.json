@@ -7,6 +7,7 @@
     "axios": "^1.6.8",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "dotenv": "^17.2.0",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.23.6",
     "jspdf": "^3.0.1",
@@ -28,13 +29,12 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {

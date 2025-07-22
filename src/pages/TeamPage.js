@@ -34,7 +34,7 @@ const TeamPage = () => {
   if (loading) {
     return (
       <div className="container text-center py-5">
-        <div className="spinner-border text-primary" role="status" />
+        <div className="spinner-border text-primary" role="status"></div>
         <p className="mt-3">Loading team members...</p>
       </div>
     );
@@ -58,24 +58,24 @@ const TeamPage = () => {
           <div className="row g-4">
             {deptMembers.map((member) => (
               <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={member.id || member.name}>
-                <div className="card team-card text-center h-100 shadow-sm border-0 p-3">
-                  <img 
+                <div className="card h-100 shadow-sm border-0 text-center">
+                  <img
                     src={member?.photo_url || '/default-user.png'}
                     alt={member?.name || 'Team Member'}
-                    className="team-photo"
+                    className="card-img-top team-photo mx-auto mt-3"
+                    style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
                     loading="lazy"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/default-user.png';
                     }}
                   />
-                  <div className="card-body p-0">
-                    <h5 className="fw-semibold mb-1">{member?.name || 'Unnamed'}</h5>
-                    <p className="text-muted small mb-1">{member?.role || 'Member'}</p>
+                  <div className="card-body">
+                    <h5 className="card-title fw-semibold">{member?.name || 'Unnamed'}</h5>
+                    <p className="card-subtitle text-muted small">{member?.role || 'Team Member'}</p>
                     {member?.bio && (
-                      <p className="small text-secondary">{member.bio}</p>
+                      <p className="card-text small text-secondary mt-2">{member.bio}</p>
                     )}
-
                     {member?.linkedin && (
                       <a
                         href={member.linkedin}
@@ -86,7 +86,6 @@ const TeamPage = () => {
                         LinkedIn
                       </a>
                     )}
-
                     {member?.is_founder && (
                       <div className="badge bg-success mt-2">Founder</div>
                     )}
