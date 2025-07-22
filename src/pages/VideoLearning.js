@@ -16,9 +16,9 @@ function VideoLearning() {
     const fetchVideos = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/managevideo`);
-        
-        // Safe fallback parsing
+
         let videoList = [];
+
         if (Array.isArray(res.data)) {
           videoList = res.data;
         } else if (res.data && Array.isArray(res.data.videos)) {
@@ -27,12 +27,10 @@ function VideoLearning() {
 
         setVideos(videoList);
 
-        // Extract unique course IDs
         const courseIds = [
           ...new Set(videoList.map((v) => v.course_id).filter(Boolean))
         ];
 
-        // Fetch course titles
         const titleMap = {};
         await Promise.all(
           courseIds.map(async (id) => {
@@ -46,7 +44,6 @@ function VideoLearning() {
         );
         setCourseTitles(titleMap);
 
-        // Check enrollment status for each course
         if (user?.email) {
           const enrollmentStatus = {};
           await Promise.all(
@@ -64,7 +61,6 @@ function VideoLearning() {
           );
           setEnrolledMap(enrollmentStatus);
         }
-
       } catch (err) {
         console.error('Error fetching videos:', err);
         setVideos([]);
@@ -77,14 +73,15 @@ function VideoLearning() {
   }, [user?.email]);
 
   // Group videos by course_id
-  const groupedVideos = videos.reduce((acc, video) => {
-    const courseId = video.course_id?.toString() || 'uncategorized';
-    if (!acc[courseId]) acc[courseId] = [];
-    acc[courseId].push(video);
-    return acc;
-  }, {});
+  const groupedVideos = Array.isArray(videos)
+    ? videos.reduce((acc, video) => {
+        const courseId = video.course_id?.toString() || 'uncategorized';
+        if (!acc[courseId]) acc[courseId] = [];
+        acc[courseId].push(video);
+        return acc;
+      }, {})
+    : {};
 
-  // Render states
   if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
 
   if (!videos.length) return <div className="text-center py-5">🚫 No videos available</div>;
@@ -93,7 +90,7 @@ function VideoLearning() {
     <div className="container py-5">
       <h2 className="text-center mb-5 fw-bold">📚 Full Course Videos</h2>
 
-      {Object.entries(groupedVideos).map(([courseId, courseVideos], idx) => {
+      {Object.entries(groupedVideos || {}).map(([courseId, courseVideos], idx) => {
         const title = courseTitles[courseId] || 'Untitled Course';
         const isEnrolled = enrolledMap[courseId] || false;
 
