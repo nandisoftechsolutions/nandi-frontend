@@ -1,51 +1,78 @@
-import React, { useEffect, useState } from 'react';
+// File: VideoLearning.js
+
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const VideoLearning = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+
+  const getVideos = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/managevideo');
+      if (Array.isArray(res.data)) {
+        setVideos(res.data);
+      } else {
+        console.error('Unexpected response format:', res.data);
+        setVideos([]);
+      }
+    } catch (err) {
+      console.error('Error fetching videos:', err);
+      setVideos([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    axios.get('/api/videolist') // Update this URL based on your server route
-      .then((response) => {
-        const data = response.data;
-
-        if (Array.isArray(data)) {
-          setVideos(data);
-        } else {
-          console.error('Data is not an array:', data);
-          setError('Unexpected response format.');
-        }
-      })
-      .catch((err) => {
-        console.error('Error fetching videos:', err);
-        setError('Failed to load videos.');
-      })
-      .finally(() => setLoading(false));
+    getVideos();
   }, []);
 
-  if (loading) return <p>Loading videos...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  const groupByCourse = (videosArray) => {
+    return (Array.isArray(videosArray) ? videosArray : []).reduce((acc, video) => {
+      const course = video.course || 'Uncategorized';
+      if (!acc[course]) acc[course] = [];
+      acc[course].push(video);
+      return acc;
+    }, {});
+  };
+
+  const groupedVideos = groupByCourse(videos);
+
+  if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
+  if (!Array.isArray(videos) || videos.length === 0)
+    return <div className="text-center py-5">🚫 No videos available</div>;
 
   return (
-    <div className="video-container" style={{ padding: '20px' }}>
-      <h2>Video Learning</h2>
-      {videos.length === 0 ? (
-        <p>No videos available.</p>
-      ) : (
-        videos.map((video, index) => (
-          <div key={index} style={{ marginBottom: '20px' }}>
-            <h3>{video.title || `Video ${index + 1}`}</h3>
-            <video
-              src={video.url}
-              controls
-              width="100%"
-              style={{ maxWidth: '600px' }}
-            />
+    <div className="container py-5">
+      <h2 className="text-center mb-5 fw-bold">📚 Full Course Videos</h2>
+
+      {groupedVideos && typeof groupedVideos === 'object' &&
+        Object.entries(groupedVideos).map(([courseId, courseVideos], idx) => (
+          <div key={idx} className="mb-5">
+            <h4 className="mb-4 fw-bold text-primary">{courseId}</h4>
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+              {(Array.isArray(courseVideos) ? courseVideos : []).map((video, index) => (
+                <div className="col" key={index}>
+                  <div className="card h-100 shadow-sm">
+                    <div className="ratio ratio-16x9">
+                      <iframe
+                        src={video.url}
+                        title={video.title || `Video ${index + 1}`}
+                        allowFullScreen
+                        frameBorder="0"
+                      ></iframe>
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{video.title || 'Untitled Video'}</h5>
+                      <p className="card-text">{video.description || 'No description available.'}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        ))
-      )}
+        ))}
     </div>
   );
 };

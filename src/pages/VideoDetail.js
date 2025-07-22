@@ -21,24 +21,30 @@ const VideoDetails = () => {
 
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   const username = user?.name || '';
+  const userEmail = user?.email || '';
   const courseSlug = slugify(courseName || '', { lower: true });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/managevideo/${id}`);
-        setVideo(res.data);
-        setCourseName(res.data.course || '');
+        const { data: videoData } = await axios.get(`${BASE_URL}/api/managevideo/${id}`);
+        setVideo(videoData);
+        setCourseName(videoData.course || '');
 
-        if (user?.email) {
-          const enrollRes = await axios.get(`${BASE_URL}/api/courses/${res.data.course_id}/is-enrolled`, {
-            params: { userEmail: user.email },
+        if (userEmail && videoData.course_id) {
+          const enrollRes = await axios.get(`${BASE_URL}/api/courses/${videoData.course_id}/is-enrolled`, {
+            params: { userEmail },
           });
           setIsEnrolled(enrollRes.data.enrolled);
         }
 
-        const relatedRes = await axios.get(`${BASE_URL}/api/coursevideos/bycourse/${res.data.course_id}`);
-        setRelatedVideos(relatedRes.data.filter((v) => v.id !== +id));
+        if (videoData.course_id) {
+          const relatedRes = await axios.get(`${BASE_URL}/api/coursevideos/bycourse/${videoData.course_id}`);
+          const filtered = Array.isArray(relatedRes.data)
+            ? relatedRes.data.filter((v) => String(v.id) !== String(id))
+            : [];
+          setRelatedVideos(filtered);
+        }
 
         const likeRes = await axios.get(`${BASE_URL}/api/likes/${id}?user=${username}`);
         setLikesData({ likes: likeRes.data.likes, dislikes: likeRes.data.dislikes });
@@ -50,7 +56,7 @@ const VideoDetails = () => {
     };
 
     fetchData();
-  }, [id, username, user?.email]);
+  }, [id, username, userEmail]);
 
   const handleLike = async (isDislike) => {
     if (!username) return alert('Login to react');
@@ -72,18 +78,19 @@ const VideoDetails = () => {
 
   const handleCopy = () => {
     if (!username) return alert('Login to share');
-    navigator.clipboard.writeText(video.youtubelink || '');
+    navigator.clipboard.writeText(video?.youtubelink || '');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleCourseRedirect = () => {
+    if (!video?.course_id) return;
     navigate(`/course/${courseSlug}/coursedetails`, {
       state: { courseData: video.course_id },
     });
   };
 
-  if (!video) return <div className="text-center py-5">Loading...</div>;
+  if (!video) return <div className="text-center py-5">🔄 Loading...</div>;
 
   return (
     <div className="container-fluid py-4">
@@ -158,8 +165,8 @@ const VideoDetails = () => {
           </div>
 
           <div className="bg-light rounded p-3 mb-4">
-            {showMoreDesc ? video.description : `${video.description.slice(0, 200)}...`}
-            {video.description.length > 200 && (
+            {showMoreDesc ? video.description : `${video.description?.slice(0, 200)}...`}
+            {video.description?.length > 200 && (
               <span
                 className="text-primary ms-2"
                 role="button"
@@ -189,13 +196,13 @@ const VideoDetails = () => {
               }}
             >
               <img
-                src={`${BASE_URL}/uploads/${v.thumbnail}`}
+                src={v.thumbnail ? `${BASE_URL}/uploads/${v.thumbnail}` : '/default-thumbnail.jpg'}
                 alt={v.title}
                 style={{
                   width: '100%',
                   height: '140px',
                   objectFit: 'cover',
-                  borderRadius: '0px'
+                  borderRadius: '0px',
                 }}
               />
               <div className="card-body d-flex justify-content-between align-items-center">
