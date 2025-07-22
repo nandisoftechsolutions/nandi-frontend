@@ -1,182 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './VideoLearning.css';
-import BASE_URL from '../api';
+// File: VideoLearning.js
 
-function VideoLearning() {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+const VideoLearning = () => {
   const [videos, setVideos] = useState([]);
-  const [enrolledMap, setEnrolledMap] = useState({});
-  const [courseTitles, setCourseTitles] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [groupedVideos, setGroupedVideos] = useState({});
+  const [selectedCourse, setSelectedCourse] = useState("");
 
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/managevideo`);
+        const res = await axios.get("http://localhost:5000/api/videos");
+        setVideos(res.data);
 
-        let videoList = [];
+        console.log("Fetched videos from API:", res.data);
 
-        if (Array.isArray(res.data)) {
-          videoList = res.data;
-        } else if (res.data && Array.isArray(res.data.videos)) {
-          videoList = res.data.videos;
-        } else {
-          console.error('Unexpected response format from /api/managevideo:', res.data);
-          videoList = [];
-        }
+        const grouped = res.data.reduce((acc, video) => {
+          const courseId = video.course_id || "Unassigned";
+          if (!acc[courseId]) {
+            acc[courseId] = [];
+          }
+          acc[courseId].push(video);
+          return acc;
+        }, {});
+        setGroupedVideos(grouped);
 
-        setVideos(videoList);
-
-        const courseIds = Array.isArray(videoList)
-          ? [...new Set(videoList.map((v) => v.course_id).filter(Boolean))]
-          : [];
-
-        const titleMap = {};
-        await Promise.all(
-          courseIds.map(async (id) => {
-            try {
-              const { data } = await axios.get(`${BASE_URL}/api/courses/${id}`);
-              titleMap[id.toString()] = data?.title || 'Untitled Course';
-            } catch {
-              titleMap[id.toString()] = 'Untitled Course';
-            }
-          })
-        );
-        setCourseTitles(titleMap);
-
-        if (user?.email) {
-          const enrollmentStatus = {};
-          await Promise.all(
-            courseIds.map(async (courseId) => {
-              try {
-                const { data } = await axios.get(
-                  `${BASE_URL}/api/courses/${courseId}/is-enrolled`,
-                  { params: { userEmail: user.email } }
-                );
-                enrollmentStatus[courseId.toString()] = data?.enrolled;
-              } catch {
-                enrollmentStatus[courseId.toString()] = false;
-              }
-            })
-          );
-          setEnrolledMap(enrollmentStatus);
-        }
-      } catch (err) {
-        console.error('❌ Error fetching videos:', err);
-        setVideos([]);
-      } finally {
-        setLoading(false);
+        // Auto-select first course
+        const firstCourse = Object.keys(grouped)[0] || "";
+        setSelectedCourse(firstCourse);
+      } catch (error) {
+        console.error("Error fetching videos:", error);
       }
     };
 
     fetchVideos();
-  }, [user?.email]);
+  }, []);
 
-  const groupedVideos = Array.isArray(videos)
-    ? videos.reduce((acc, video) => {
-        const courseId = video.course_id?.toString() || 'uncategorized';
-        if (!acc[courseId]) acc[courseId] = [];
-        acc[courseId].push(video);
-        return acc;
-      }, {})
-    : {};
+  const handleCourseChange = (event) => {
+    setSelectedCourse(event.target.value);
+  };
 
-  if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
-  if (!videos.length) return <div className="text-center py-5">🚫 No videos available</div>;
+  const courseVideos = groupedVideos[selectedCourse];
 
   return (
-    <div className="container py-5">
-      <h2 className="text-center mb-5 fw-bold">📚 Full Course Videos</h2>
+    <div className="container my-5">
+      <h2 className="text-center mb-4">🎓 Learn with Videos</h2>
 
-      {Object.entries(groupedVideos).map(([courseId, courseVideos], idx) => {
-        const title = courseTitles[courseId] || 'Untitled Course';
-        const isEnrolled = enrolledMap[courseId] || false;
+      <div className="mb-3">
+        <label htmlFor="courseSelect" className="form-label fw-bold">
+          Select a Course:
+        </label>
+        <select
+          id="courseSelect"
+          className="form-select"
+          value={selectedCourse}
+          onChange={handleCourseChange}
+        >
+          {Object.keys(groupedVideos).map((courseId) => (
+            <option key={courseId} value={courseId}>
+              {courseId}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        return (
-          <div key={courseId || idx} className="mb-5">
-            <h2 className="fw-bold text-dark border-bottom pb-2">{title}</h2>
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-              {courseVideos.map((video, index) => {
-                const isUnlocked = isEnrolled || index < 2;
-
-                return (
-                  <div key={video._id || index} className="col">
-                    <div className="video-card h-100 shadow-sm rounded overflow-hidden">
-                      <div className="position-relative">
-                        <img
-                          src={
-                            video.thumbnail
-                              ? `${BASE_URL}/uploads/${video.thumbnail}`
-                              : '/default-thumbnail.jpg'
-                          }
-                          alt={video.title}
-                          className="w-100"
-                          style={{ objectFit: 'cover', height: '200px' }}
-                        />
-                        {isUnlocked ? (
-                          <div
-                            onClick={() => navigate(`/video/${video._id}`)}
-                            className="position-absolute top-50 start-50 translate-middle"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <i className="bi bi-play-circle-fill text-white fs-2"></i>
-                          </div>
-                        ) : (
-                          <div
-                            className="locked-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                            style={{
-                              backgroundColor: 'rgba(0,0,0,0.5)',
-                              color: '#fff',
-                              fontSize: '2rem',
-                              cursor: 'pointer',
-                            }}
-                            onClick={() => navigate('/purchase')}
-                          >
-                            <i className="bi bi-lock-fill"></i>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-3 d-flex flex-column">
-                        <h5 className="fw-semibold text-dark mb-2">{video.title}</h5>
-                        <p className="text-muted mb-3 flex-grow-1">
-                          {video.description?.slice(0, 80)}...
-                        </p>
-                        {user?.email ? (
-                          isUnlocked ? (
-                            <button
-                              className="btn btn-info fw-semibold"
-                              onClick={() => navigate(`/video/${video._id}`)}
-                            >
-                              🎓 Learn More
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-outline-secondary fw-semibold"
-                              onClick={() => navigate('/purchase')}
-                            >
-                              🔒 Subscribe to unlock
-                            </button>
-                          )
-                        ) : (
-                          <p className="text-muted text-center mt-2">
-                            🔒 Login to explore content
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {Array.isArray(courseVideos) ? (
+          courseVideos.map((video, index) => (
+            <div key={index} className="col">
+              <div className="card h-100 shadow-sm border-0">
+                <iframe
+                  className="card-img-top"
+                  height="200"
+                  src={video.video_url}
+                  title={video.video_title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+                <div className="card-body">
+                  <h5 className="card-title">{video.video_title}</h5>
+                </div>
+              </div>
             </div>
-            <hr className="mt-5 border-dark" />
+          ))
+        ) : (
+          <div className="col">
+            <p className="text-danger">⚠️ No videos available for this course.</p>
           </div>
-        );
-      })}
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default VideoLearning;
