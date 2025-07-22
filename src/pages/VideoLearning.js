@@ -1,80 +1,152 @@
-// File: VideoLearning.js
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './VideoLearning.css';
 
-const VideoLearning = () => {
+// Auto-detect BASE_URL for local and production
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || window.location.origin;
+
+function VideoLearning() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const navigate = useNavigate();
+  const scrollRef = useRef(null);
 
-  const getVideos = async () => {
+  useEffect(() => {
+    fetchVideos();
+
+    const interval = setInterval(() => {
+      const currentUser = localStorage.getItem('username');
+      setUsername(currentUser);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchVideos = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/managevideo');
-      if (Array.isArray(res.data)) {
-        setVideos(res.data);
-      } else {
-        console.error('Unexpected response format:', res.data);
-        setVideos([]);
+      setLoading(true);
+      setError(null);
+      const res = await axios.get(`${BASE_URL}/api/managevideo`);
+      
+      // Ensure the response data is an array
+      if (!Array.isArray(res.data)) {
+        throw new Error('Invalid data format: Expected an array');
       }
-    } catch (err) {
-      console.error('Error fetching videos:', err);
-      setVideos([]);
+      
+      setVideos(res.data);
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      setError(error.message || 'Failed to load videos');
+      setVideos([]); // Reset to empty array to prevent mapping errors
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    getVideos();
-  }, []);
-
-  const groupByCourse = (videosArray) => {
-    return (Array.isArray(videosArray) ? videosArray : []).reduce((acc, video) => {
-      const course = video.course || 'Uncategorized';
-      if (!acc[course]) acc[course] = [];
-      acc[course].push(video);
-      return acc;
-    }, {});
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = 320;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
   };
 
-  const groupedVideos = groupByCourse(videos);
+  if (loading) {
+    return (
+      <div className="blogs-section-wrapper py-5">
+        <div className="container text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-2">Loading videos...</p>
+        </div>
+      </div>
+    );
+  }
 
-  if (loading) return <div className="text-center py-5">🔄 Loading videos...</div>;
-  if (!Array.isArray(videos) || videos.length === 0)
-    return <div className="text-center py-5">🚫 No videos available</div>;
+  if (error) {
+    return (
+      <div className="blogs-section-wrapper py-5">
+        <div className="container text-center">
+          <div className="alert alert-danger">
+            <p>Error: {error}</p>
+            <button className="btn btn-primary" onClick={fetchVideos}>
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container py-5">
-      <h2 className="text-center mb-5 fw-bold">📚 Full Course Videos</h2>
+    <div className="blogs-section-wrapper py-5">
+      <div className="container">
+        <h2 className="text-center mb-4 fw-bold text-primary">📚 Course Videos</h2>
+        <hr />
 
-      {groupedVideos && typeof groupedVideos === 'object' &&
-        Object.entries(groupedVideos).map(([courseId, courseVideos], idx) => (
-          <div key={idx} className="mb-5">
-            <h4 className="mb-4 fw-bold text-primary">{courseId}</h4>
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-              {(Array.isArray(courseVideos) ? courseVideos : []).map((video, index) => (
-                <div className="col" key={index}>
-                  <div className="card h-100 shadow-sm">
-                    <div className="ratio ratio-16x9">
-                      <iframe
-                        src={video.url}
-                        title={video.title || `Video ${index + 1}`}
-                        allowFullScreen
-                        frameBorder="0"
-                      ></iframe>
+        {videos.length === 0 ? (
+          <div className="text-center py-4">
+            <p className="text-muted">No videos available yet.</p>
+            <button className="btn btn-primary" onClick={fetchVideos}>
+              Refresh
+            </button>
+          </div>
+        ) : (
+          <div className="scroll-wrapper position-relative">
+            <button className="arrow-btn left-arrow" onClick={() => scroll('left')}>&#10094;</button>
+
+            <div className="scroll-container d-flex gap-3" ref={scrollRef}>
+              {videos.map((video) => (
+                <div key={video.id || video._id} className="blog-card flex-shrink-0">
+                  <div className="image-wrapper position-relative">
+                    <img
+                      src={`${BASE_URL}/uploads/${video.thumbnail}`}
+                      alt={video.title}
+                      className="card-img-top w-100"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/320x180?text=No+Image';
+                      }}
+                    />
+                    <div className="play-button-overlay">
+                      <a href={video.youtubelink} target="_blank" rel="noopener noreferrer">
+                        <i className="bi bi-play-circle-fill play-icon"></i>
+                      </a>
                     </div>
-                    <div className="card-body">
-                      <h5 className="card-title">{video.title || 'Untitled Video'}</h5>
-                      <p className="card-text">{video.description || 'No description available.'}</p>
-                    </div>
+                  </div>
+
+                  <div className="card-body p-3">
+                    <h5 className="card-title">{video.title}</h5>
+                    <p className="card-text text-muted">
+                      {video.description?.slice(0, 80)}...
+                    </p>
+                    {username ? (
+                      <button
+                        onClick={() => navigate(`/video/${video.id || video._id}`)}
+                        className="btn btn-info w-100 mt-2 fw-semibold"
+                      >
+                        🎓 Learn More
+                      </button>
+                    ) : (
+                      <p className="text-muted mt-2 text-center">🔒 Login to explore full content</p>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+
+            <button className="arrow-btn right-arrow" onClick={() => scroll('right')}>&#10095;</button>
           </div>
-        ))}
+        )}
+      </div>
     </div>
   );
-};
+}
 
 export default VideoLearning;
