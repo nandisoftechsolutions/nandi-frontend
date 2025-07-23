@@ -3,7 +3,7 @@
   "name": "Nandi Softech Solutions | Software Development & Online Courses",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "favicon-nandi.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
@@ -19,11 +19,11 @@
     }
   ],
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "scope": "/",
   "description": "Nandi Softech Solutions offers software development, automation testing, website development, and online IT training to empower individuals and businesses.",
   "lang": "en"
 }

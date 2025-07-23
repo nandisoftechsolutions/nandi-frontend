@@ -25,17 +25,19 @@
     <priority>0.80</priority>
   </url>
 
-  <!-- Optional Pages (add only if routes exist) -->
+  <!-- Login Page -->
   <url>
     <loc>https://nandisoftechsolutions.in/login</loc>
     <priority>0.50</priority>
   </url>
 
+  <!-- Register Page -->
   <url>
     <loc>https://nandisoftechsolutions.in/register</loc>
     <priority>0.50</priority>
   </url>
 
+  <!-- Dashboard Page -->
   <url>
     <loc>https://nandisoftechsolutions.in/dashboard</loc>
     <priority>0.60</priority>
