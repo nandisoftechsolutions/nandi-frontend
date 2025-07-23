@@ -1,29 +1,34 @@
 {
-  "short_name": "NandiApp",
-  "name": "Nandi Softech Solutions | Software Development & Online Courses",
-  "icons": [
-    {
-      "src": "favicon-nandi.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "short_name": "Nandi Softech",
+  "name": "Nandi Softech Solutions",
+  "description": "Nandi Softech Solutions offers software development, automation testing, website development, and online IT training to empower individuals and businesses.",
+  "lang": "en",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "description": "Nandi Softech Solutions offers software development, automation testing, website development, and online IT training to empower individuals and businesses.",
-  "lang": "en"
+  "icons": [
+    {
+      "src": "favicon-nandi.ico",
+      "sizes": "16x16 24x24 32x32 64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "display_override": ["standalone", "browser"],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
